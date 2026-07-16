@@ -1,4 +1,4 @@
-[index.html](https://github.com/user-attachments/files/30073759/index.html)
+[index.html](https://github.com/user-attachments/files/30074072/index.html)
 <!doctype html>
 <html lang="id">
 <head>
@@ -461,11 +461,11 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 const WEEKLY_TARGET = 23400000;
 const SOURCE_SHEET_ID = "1qyGghBZrdfeTVbBGQwqWWFSjK2J_uvhy4kbcCg2CY-c";
 const WEEK_PERIODS = [
-  { name: "W 1 JUL", start: "2026-06-29", end: "2026-07-05", minimum: 0.50, scheme: "W1" },
-  { name: "W 2 JUL", start: "2026-07-06", end: "2026-07-12", minimum: 0.40, scheme: "W2" },
-  { name: "W 3 JUL", start: "2026-07-13", end: "2026-07-19", minimum: 0.40, scheme: "W2" },
-  { name: "W 4 JUL", start: "2026-07-20", end: "2026-07-26", minimum: 0.40, scheme: "W2" },
-  { name: "W 5 JUL", start: "2026-07-27", end: "2026-08-02", minimum: 0.40, scheme: "W2" },
+  { name: "W 1 JUL", weekNum: 27, minimum: 0.50, scheme: "W1" },
+  { name: "W 2 JUL", weekNum: 28, minimum: 0.40, scheme: "W2" },
+  { name: "W 3 JUL", weekNum: 29, minimum: 0.40, scheme: "W2" },
+  { name: "W 4 JUL", weekNum: 30, minimum: 0.40, scheme: "W2" },
+  { name: "W 5 JUL", weekNum: 31, minimum: 0.40, scheme: "W2" },
 ];
 
 const RATES = {
@@ -513,10 +513,14 @@ function parseDate(value) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-function weekFor(date) {
-  if (!date) return null;
-  const key = date.toISOString().slice(0, 10);
-  return WEEK_PERIODS.find(week => key >= week.start && key <= week.end) || null;
+function normalizeWeekName(value) {
+  return String(value || "").trim().replace(/\s+/g, " ").toUpperCase();
+}
+
+function weekFor(weekName, weekNum) {
+  const normalizedName = normalizeWeekName(weekName);
+  const normalizedNum = Number(weekNum);
+  return WEEK_PERIODS.find(week => week.name === normalizedName && week.weekNum === normalizedNum) || null;
 }
 
 function productBucket(row) {
@@ -540,6 +544,8 @@ function normalizeRows(rows) {
   const read = (row, name) => row[keys[name.toLowerCase()]];
   return rows.map(row => ({
     date: parseDate(read(row, "Date")),
+    weekName: normalizeWeekName(read(row, "Week name")),
+    weekNum: Number(read(row, "WeekNum")),
     invoice: String(read(row, "invoice") || ""),
     agent: String(read(row, "agent_name") || "").trim(),
     leader: String(read(row, "leader_name") || "").trim(),
@@ -547,7 +553,7 @@ function normalizeRows(rows) {
     product_type: String(read(row, "product_type") || "").trim(),
     product_group: String(read(row, "product_group") || "").trim(),
     revenue: parseAmount(read(row, "amount")),
-  })).filter(row => row.agent && row.team === "Layer 1" && weekFor(row.date));
+  })).filter(row => row.agent && row.team === "Layer 1" && weekFor(row.weekName, row.weekNum));
 }
 
 function chooseTier(th, week, product) {
@@ -559,7 +565,7 @@ function chooseTier(th, week, product) {
 function calculate(rows) {
   const agents = new Map();
   rows.forEach(row => {
-    const week = weekFor(row.date);
+    const week = weekFor(row.weekName, row.weekNum);
     const key = `${week.name}|${row.agent.toLowerCase()}`;
     if (!agents.has(key)) {
       agents.set(key, { key, week: week.name, weekMeta: week, agent: row.agent, leader: row.leader, revenue: 0, transactions: 0, products: {} });
@@ -744,7 +750,10 @@ function showToast(message) {
 async function loadFromGoogleSheet() {
   el("dataStatus").textContent = "Memuat data...";
   try {
-    const response = await fetch(`https://docs.google.com/spreadsheets/d/${SOURCE_SHEET_ID}/export?format=xlsx`);
+    const response = await fetch(
+      `https://docs.google.com/spreadsheets/d/${SOURCE_SHEET_ID}/export?format=xlsx&_=${Date.now()}`,
+      { cache: "no-store" }
+    );
     if (!response.ok) throw new Error("Google Sheet tidak dapat diakses. Pastikan link dibuka untuk publik.");
     await loadWorkbook(await response.arrayBuffer());
   } catch (error) {
