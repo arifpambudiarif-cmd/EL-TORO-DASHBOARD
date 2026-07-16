@@ -1,4 +1,4 @@
-[index.html](https://github.com/user-attachments/files/30074072/index.html)
+[index.html](https://github.com/user-attachments/files/30074599/index.html)
 <!doctype html>
 <html lang="id">
 <head>
@@ -97,6 +97,30 @@ main {
   width: min(1480px, calc(100% - 32px));
   margin: 18px auto 36px;
 }
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.tab-button {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: 7px 7px 0 0;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+}
+.tab-button.active {
+  background: #fff;
+  color: var(--teal);
+  border-color: var(--line);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
 .control-band {
   display: grid;
@@ -320,6 +344,80 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 }
 .toast.show { opacity: 1; transform: translateY(0); }
 
+.dodolan-filters { margin-top: 0; }
+.dodolan-board {
+  max-height: 680px;
+  overflow: auto;
+}
+.leader-group {
+  border-bottom: 1px solid var(--line);
+}
+.leader-group:last-child { border-bottom: 0; }
+.leader-summary {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  min-height: 42px;
+  padding: 9px 14px;
+  display: grid;
+  grid-template-columns: 24px minmax(220px, 1fr) 90px 150px;
+  gap: 10px;
+  align-items: center;
+  background: #e8eef4;
+  cursor: pointer;
+}
+.leader-toggle {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #91a4b8;
+  border-radius: 4px;
+  background: #fff;
+  color: #476176;
+  font-weight: 700;
+}
+.leader-summary span {
+  color: #475467;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: right;
+}
+.leader-group.collapsed .dodolan-table-wrap { display: none; }
+.dodolan-table-wrap { overflow-x: auto; }
+.dodolan-table th {
+  top: 42px;
+}
+.dodolan-table td:nth-child(2) {
+  min-width: 430px;
+  max-width: 560px;
+  white-space: normal;
+}
+.dodolan-table td:nth-child(3) {
+  min-width: 260px;
+  max-width: 420px;
+  white-space: normal;
+}
+.package-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 2px;
+  vertical-align: -1px;
+}
+.campaign-pill {
+  display: inline-block;
+  padding: 4px 7px;
+  border-radius: 5px;
+  line-height: 1.35;
+}
+.campaign-gold { background: #f6d66b; color: #533f00; }
+.campaign-green { background: #95c77b; color: #123d1c; }
+.campaign-purple { background: #bca8e8; color: #2e1f5e; }
+.campaign-blue { background: #9fc4df; color: #143d59; }
+.campaign-gray { background: #e4e7ec; color: #475467; }
+
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
   .divider { height: 1px; border-left: 0; border-top: 1px solid var(--line); }
@@ -328,6 +426,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   .rules-strip div:nth-child(2) { border-right: 0; }
   .rules-strip div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
   .content-grid { grid-template-columns: 1fr; }
+  .leader-summary { grid-template-columns: 24px minmax(140px, 1fr) 70px 120px; }
 }
 
 @media (max-width: 620px) {
@@ -361,6 +460,12 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   </header>
 
   <main>
+    <nav class="tabs" aria-label="Dashboard sections">
+      <button class="tab-button active" type="button" data-tab="incentivePanel">DS INCENTIVE ALL</button>
+      <button class="tab-button" type="button" data-tab="dodolanPanel">DODOLAN</button>
+    </nav>
+
+    <section id="incentivePanel" class="tab-panel active">
     <section class="rules-strip">
       <div><span>Scope</span><strong>Layer 1</strong></div>
       <div><span>Target mingguan</span><strong>Rp23.400.000</strong></div>
@@ -453,6 +558,42 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         </aside>
       </div>
     </section>
+    </section>
+
+    <section id="dodolanPanel" class="tab-panel">
+      <div class="filters dodolan-filters">
+        <div class="field">
+          <label for="dodolanWeekFilter">Week</label>
+          <select id="dodolanWeekFilter"></select>
+        </div>
+        <div class="field">
+          <label for="dodolanLeaderFilter">Leader</label>
+          <select id="dodolanLeaderFilter"></select>
+        </div>
+        <div class="field grow">
+          <label for="dodolanSearchFilter">Cari package, campaign, agent</label>
+          <input id="dodolanSearchFilter" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <article class="kpi"><span>Total revenue</span><strong id="dodolanRevenueKpi">Rp0</strong><small id="dodolanRevenueNote">0 transaksi</small></article>
+        <article class="kpi"><span>Total package</span><strong id="dodolanPackageKpi">0</strong><small>Package terjual</small></article>
+        <article class="kpi"><span>Leader aktif</span><strong id="dodolanLeaderKpi">0</strong><small>Dalam filter aktif</small></article>
+        <article class="kpi"><span>Agent aktif</span><strong id="dodolanAgentKpi">0</strong><small>Dalam filter aktif</small></article>
+      </div>
+
+      <section class="table-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>DODOLAN</h2>
+            <p id="dodolanCaption">Penjualan paket per leader dan agent</p>
+          </div>
+          <span id="dodolanRowCount" class="count-chip">0 rows</span>
+        </div>
+        <div id="dodolanBoard" class="dodolan-board"></div>
+      </section>
+    </section>
   </main>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -494,6 +635,7 @@ const RATES = {
 };
 
 let summary = [];
+let dodolanRows = [];
 let selectedKey = "";
 
 const el = id => document.getElementById(id);
@@ -549,11 +691,32 @@ function normalizeRows(rows) {
     invoice: String(read(row, "invoice") || ""),
     agent: String(read(row, "agent_name") || "").trim(),
     leader: String(read(row, "leader_name") || "").trim(),
+    packageName: String(read(row, "package_name") || "").trim(),
+    campaign: String(read(row, "campaign") || "").trim(),
     team: String(read(row, "category team") || "").trim(),
     product_type: String(read(row, "product_type") || "").trim(),
     product_group: String(read(row, "product_group") || "").trim(),
     revenue: parseAmount(read(row, "amount")),
   })).filter(row => row.agent && row.team === "Layer 1" && weekFor(row.weekName, row.weekNum));
+}
+
+function buildDodolanRows(rows) {
+  return rows.map(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    return {
+      ...row,
+      week: week.name,
+      packageName: row.packageName || row.product_type || "-",
+      campaign: row.campaign || "No Campaign",
+      product: productBucket(row),
+      txn: 1,
+    };
+  }).sort((a, b) =>
+    a.week.localeCompare(b.week) ||
+    a.leader.localeCompare(b.leader) ||
+    a.packageName.localeCompare(b.packageName) ||
+    b.revenue - a.revenue
+  );
 }
 
 function chooseTier(th, week, product) {
@@ -596,7 +759,9 @@ async function loadWorkbook(buffer) {
   const sheetName = workbook.SheetNames.find(name => name.trim().toUpperCase() === "RAW TRANSACTION") || workbook.SheetNames[0];
   const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
   if (!rows.length) throw new Error("Sheet tidak memiliki data.");
-  summary = calculate(normalizeRows(rows));
+  const normalized = normalizeRows(rows);
+  summary = calculate(normalized);
+  dodolanRows = buildDodolanRows(normalized);
   if (!summary.length) throw new Error("Tidak ada transaksi Layer 1 pada periode W1-W5 Juli.");
   prepareDashboard(sheetName, rows.length);
 }
@@ -609,8 +774,12 @@ function prepareDashboard(sheetName, rawCount) {
   el("dataStatus").classList.add("ready");
   const weeks = [...new Set(summary.map(row => row.week))];
   el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
+  el("dodolanWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
+  const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
+  el("dodolanLeaderFilter").innerHTML = `<option value="all">Semua leader</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
   render();
+  renderDodolan();
 }
 
 function aggregateAllWeeks(rows) {
@@ -705,6 +874,96 @@ function render() {
   if (selectedKey && !rows.some(row => row.key === selectedKey)) clearDetail();
 }
 
+function filteredDodolanRows() {
+  const week = el("dodolanWeekFilter").value;
+  const leader = el("dodolanLeaderFilter").value;
+  const query = el("dodolanSearchFilter").value.trim().toLowerCase();
+  return dodolanRows.filter(row =>
+    (week === "all" || row.week === week) &&
+    (leader === "all" || (row.leader || "-") === leader) &&
+    (!query || `${row.packageName} ${row.campaign} ${row.agent} ${row.leader}`.toLowerCase().includes(query))
+  );
+}
+
+function campaignClass(value) {
+  const text = String(value || "").toLowerCase();
+  if (text.includes("early") || text.includes("bird")) return "campaign-gold";
+  if (text.includes("renewal") || text.includes("perpanjang")) return "campaign-purple";
+  if (text.includes("special") || text.includes("reassign")) return "campaign-blue";
+  if (text.includes("no campaign")) return "campaign-gray";
+  return "campaign-green";
+}
+
+function renderDodolan() {
+  const rows = filteredDodolanRows();
+  const totalRevenue = rows.reduce((sum, row) => sum + row.revenue, 0);
+  const leaders = new Set(rows.map(row => row.leader || "-"));
+  const agents = new Set(rows.map(row => row.agent));
+
+  el("dodolanRevenueKpi").textContent = rupiah(totalRevenue);
+  el("dodolanRevenueNote").textContent = `${rows.length.toLocaleString("id-ID")} transaksi`;
+  el("dodolanPackageKpi").textContent = rows.length.toLocaleString("id-ID");
+  el("dodolanLeaderKpi").textContent = leaders.size.toLocaleString("id-ID");
+  el("dodolanAgentKpi").textContent = agents.size.toLocaleString("id-ID");
+  el("dodolanRowCount").textContent = `${rows.length.toLocaleString("id-ID")} rows`;
+  el("dodolanCaption").textContent = el("dodolanWeekFilter").value === "all" ? "Penjualan paket seluruh week" : `Penjualan paket ${el("dodolanWeekFilter").value}`;
+
+  const byLeader = new Map();
+  rows.forEach(row => {
+    const leader = row.leader || "-";
+    if (!byLeader.has(leader)) byLeader.set(leader, []);
+    byLeader.get(leader).push(row);
+  });
+
+  el("dodolanBoard").innerHTML = [...byLeader.entries()].map(([leader, leaderRows]) => {
+    const leaderRevenue = leaderRows.reduce((sum, row) => sum + row.revenue, 0);
+    return `
+      <section class="leader-group">
+        <div class="leader-summary">
+          <button class="leader-toggle" type="button" aria-label="Toggle leader">-</button>
+          <strong>${escapeHtml(leader)}</strong>
+          <span>${leaderRows.length.toLocaleString("id-ID")} TXN</span>
+          <span>${rupiah(leaderRevenue)}</span>
+        </div>
+        <div class="dodolan-table-wrap">
+          <table class="dodolan-table">
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th>Package Name</th>
+                <th>Campaign</th>
+                <th>Agent Name</th>
+                <th>TXN</th>
+                <th>Revenue</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${leaderRows.map(row => `
+                <tr>
+                  <td>${escapeHtml(row.week)}</td>
+                  <td><span class="package-dot ${campaignClass(row.campaign)}"></span>${escapeHtml(row.packageName)}</td>
+                  <td><span class="campaign-pill ${campaignClass(row.campaign)}">${escapeHtml(row.campaign)}</span></td>
+                  <td>${escapeHtml(row.agent)}</td>
+                  <td class="number">${row.txn}</td>
+                  <td class="money">${rupiah(row.revenue)}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    `;
+  }).join("") || `<div class="detail-empty">Tidak ada data pada filter ini.</div>`;
+
+  document.querySelectorAll(".leader-summary").forEach(summary => {
+    summary.addEventListener("click", () => {
+      const group = summary.closest(".leader-group");
+      group.classList.toggle("collapsed");
+      summary.querySelector(".leader-toggle").textContent = group.classList.contains("collapsed") ? "+" : "-";
+    });
+  });
+}
+
 function selectAgent(key) {
   selectedKey = key;
   const selectedWeek = el("weekFilter").value;
@@ -791,9 +1050,18 @@ function exportResults() {
   XLSX.writeFile(workbook, `oec_layer1_incentive_${new Date().toISOString().slice(0, 10)}.xlsx`);
 }
 
+function switchTab(tabId) {
+  document.querySelectorAll(".tab-button").forEach(button => button.classList.toggle("active", button.dataset.tab === tabId));
+  document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.toggle("active", panel.id === tabId));
+}
+
+document.querySelectorAll(".tab-button").forEach(button => button.addEventListener("click", () => switchTab(button.dataset.tab)));
 el("weekFilter").addEventListener("change", render);
 el("searchFilter").addEventListener("input", render);
 el("statusFilter").addEventListener("change", render);
+el("dodolanWeekFilter").addEventListener("change", renderDodolan);
+el("dodolanLeaderFilter").addEventListener("change", renderDodolan);
+el("dodolanSearchFilter").addEventListener("input", renderDodolan);
 el("exportButton").addEventListener("click", exportResults);
 loadFromGoogleSheet();
 
