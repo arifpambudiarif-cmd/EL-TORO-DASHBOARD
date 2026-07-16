@@ -1,1 +1,151 @@
 
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OEC Weekly Incentive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">OEC PERFORMANCE</p>
+      <h1>Weekly Incentive</h1>
+    </div>
+    <div class="top-actions">
+      <span id="dataStatus" class="status-dot">Belum ada data</span>
+      <button id="exportButton" class="icon-button" type="button" title="Export hasil ke Excel" disabled>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="control-band">
+      <div class="source-block">
+        <label for="sheetUrl">Google Sheet URL</label>
+        <div class="input-row">
+          <input id="sheetUrl" type="url" value="https://docs.google.com/spreadsheets/d/1qyGghBZrdfeTVbBGQwqWWFSjK2J_uvhy4kbcCg2CY-c/edit?gid=510126160">
+          <button id="loadSheetButton" class="primary-button" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6"/></svg>
+            Muat data
+          </button>
+        </div>
+        <p class="source-note">Sheet harus dapat diakses oleh siapa pun yang memiliki link. Data dibaca dari tab RAW TRANSACTION.</p>
+      </div>
+
+      <div class="divider"><span>atau</span></div>
+
+      <div class="upload-block">
+        <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" hidden>
+        <button id="fileButton" class="secondary-button" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M5 15v5h14v-5"/></svg>
+          Upload Excel / CSV
+        </button>
+        <p class="source-note">Gunakan file dengan kolom yang sama seperti RAW TRANSACTION.</p>
+      </div>
+    </section>
+
+    <section class="rules-strip">
+      <div><span>Scope</span><strong>Layer 1</strong></div>
+      <div><span>Target mingguan</span><strong>Rp23.400.000</strong></div>
+      <div><span>W1 minimum TH</span><strong>50%</strong></div>
+      <div><span>W2-W5 minimum TH</span><strong>40%</strong></div>
+    </section>
+
+    <section id="emptyState" class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg>
+      </div>
+      <h2>Muat raw transaksi untuk mulai</h2>
+      <p>Dashboard akan menghitung revenue, pencapaian target, tier TH, dan incentive setiap agent Layer 1.</p>
+    </section>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="filters">
+        <div class="field">
+          <label for="weekFilter">Week</label>
+          <select id="weekFilter"></select>
+        </div>
+        <div class="field grow">
+          <label for="searchFilter">Cari agent atau leader</label>
+          <input id="searchFilter" type="search" placeholder="Ketik nama...">
+        </div>
+        <div class="field">
+          <label for="statusFilter">Status</label>
+          <select id="statusFilter">
+            <option value="all">Semua</option>
+            <option value="eligible">Cair</option>
+            <option value="not-eligible">Belum cair</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <article class="kpi"><span>Total revenue</span><strong id="revenueKpi">Rp0</strong><small id="revenueNote">0 agent</small></article>
+        <article class="kpi"><span>Estimasi incentive</span><strong id="incentiveKpi">Rp0</strong><small id="incentiveNote">Berdasarkan rate produk</small></article>
+        <article class="kpi"><span>Agent mencapai minimum</span><strong id="eligibleKpi">0</strong><small id="eligibleNote">TH minimum 40%</small></article>
+        <article class="kpi"><span>Median TH</span><strong id="medianKpi">0%</strong><small>Target Rp23,4 juta / minggu</small></article>
+      </div>
+
+      <div class="content-grid">
+        <section class="table-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Incentive per agent</h2>
+              <p id="tableCaption">Ringkasan per minggu</p>
+            </div>
+            <span id="rowCount" class="count-chip">0 agent</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th>Leader</th>
+                  <th>Revenue</th>
+                  <th>TH</th>
+                  <th>Tier</th>
+                  <th>Incentive</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="summaryBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <aside class="detail-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Detail agent</h2>
+              <p>Klik baris agent untuk melihat produk</p>
+            </div>
+          </div>
+          <div id="detailEmpty" class="detail-empty">Belum ada agent dipilih.</div>
+          <div id="detailContent" hidden>
+            <div class="agent-head">
+              <div><strong id="detailName"></strong><span id="detailLeader"></span></div>
+              <span id="detailStatus" class="badge"></span>
+            </div>
+            <div class="progress-block">
+              <div><span>Pencapaian target</span><strong id="detailTh"></strong></div>
+              <div class="progress-track"><span id="detailProgress"></span></div>
+              <small id="detailRevenue"></small>
+            </div>
+            <div class="product-list" id="productList"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
