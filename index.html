@@ -439,6 +439,11 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
     linear-gradient(135deg, rgba(8,127,140,.12), rgba(20,125,100,.06)),
     #fff;
 }
+.agent-hero {
+  background:
+    linear-gradient(135deg, rgba(20,125,100,.14), rgba(246,214,107,.14)),
+    #fff;
+}
 .leaderboard-hero h2 {
   margin: 0;
   font-size: 25px;
@@ -599,6 +604,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       <button class="tab-button active" type="button" data-tab="incentivePanel">DS INCENTIVE ALL</button>
       <button class="tab-button" type="button" data-tab="dodolanPanel">DODOLAN</button>
       <button class="tab-button" type="button" data-tab="leaderboardPanel">LEADERBOARD</button>
+      <button class="tab-button" type="button" data-tab="agentLeaderboardPanel">AGENT L1</button>
     </nav>
 
     <section id="incentivePanel" class="tab-panel active">
@@ -762,6 +768,56 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         <div id="leaderboardList" class="leaderboard-list"></div>
       </section>
     </section>
+
+    <section id="agentLeaderboardPanel" class="tab-panel">
+      <div class="leaderboard-hero agent-hero">
+        <div>
+          <p class="eyebrow">LAYER 1 RACE</p>
+          <h2>Agent Leaderboard</h2>
+          <p>Ranking agent Layer 1 berdasarkan revenue, tersedia weekly dan monthly.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="agentLeaderboardTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="field">
+          <label for="agentLeaderboardMode">Mode</label>
+          <select id="agentLeaderboardMode">
+            <option value="monthly">Monthly Juli</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="agentLeaderboardWeek">Week</label>
+          <select id="agentLeaderboardWeek"></select>
+        </div>
+        <div class="field grow">
+          <label for="agentLeaderboardSearch">Cari agent atau leader</label>
+          <input id="agentLeaderboardSearch" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Agent aktif</span><strong id="agentLeaderboardAgentKpi">0</strong><small>Layer 1</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="agentLeaderboardTxnKpi">0</strong><small id="agentLeaderboardTxnNote">Monthly</small></article>
+        <article class="kpi"><span>Top agent</span><strong id="agentLeaderboardTopAgentKpi">-</strong><small id="agentLeaderboardTopRevenueKpi">Rp0</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="agentLeaderboardTotalToTargetKpi">0%</strong><small>Target Layer 1</small></article>
+      </div>
+
+      <section class="table-panel leaderboard-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Ranking Agent Layer 1</h2>
+            <p id="agentLeaderboardCaption">Monthly Juli</p>
+          </div>
+          <span id="agentLeaderboardCount" class="count-chip">0 agent</span>
+        </div>
+        <div id="agentLeaderboardList" class="leaderboard-list"></div>
+      </section>
+    </section>
   </main>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -774,6 +830,11 @@ const LEADERBOARD_WEEKLY_TARGETS = {
   S2S: 128800000,
   "Layer 1": 23400000,
   "Layer 2": 15800000,
+};
+const LEADERBOARD_TARGET_LABELS = {
+  S2S: "Prompter Inbound (S2S)",
+  "Layer 1": "Layer 1",
+  "Layer 2": "Layer 2",
 };
 const WEEK_PERIODS = [
   { name: "W 1 JUL", weekNum: 27, minimum: 0.50, scheme: "W1" },
@@ -811,6 +872,7 @@ const RATES = {
 let summary = [];
 let dodolanRows = [];
 let leaderboardRows = [];
+let layerOneRows = [];
 let selectedKey = "";
 
 const el = id => document.getElementById(id);
@@ -935,7 +997,7 @@ async function loadWorkbook(buffer) {
   const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
   if (!rows.length) throw new Error("Sheet tidak memiliki data.");
   const normalized = normalizeRows(rows);
-  const layerOneRows = normalized.filter(row => row.team === "Layer 1");
+  layerOneRows = normalized.filter(row => row.team === "Layer 1");
   summary = calculate(layerOneRows);
   dodolanRows = buildDodolanRows(layerOneRows);
   leaderboardRows = buildDodolanRows(normalized);
@@ -952,12 +1014,14 @@ function prepareDashboard(sheetName, rawCount) {
   const weeks = [...new Set(summary.map(row => row.week))];
   el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("dodolanWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
+  el("agentLeaderboardWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
   const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   el("dodolanLeaderFilter").innerHTML = `<option value="all">Semua leader</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
   render();
   renderDodolan();
   renderLeaderboard();
+  renderAgentLeaderboard();
 }
 
 function aggregateAllWeeks(rows) {
@@ -1146,6 +1210,7 @@ function renderDodolan() {
 function renderLeaderboard() {
   const byLeader = new Map();
   leaderboardRows.forEach(row => {
+    if (!LEADERBOARD_WEEKLY_TARGETS[row.team]) return;
     const leader = row.leader || "-";
     if (!byLeader.has(leader)) {
       byLeader.set(leader, { leader, revenue: 0, target: 0, txn: 0, agents: new Set(), weeks: new Set(), products: {}, teams: {} });
@@ -1189,7 +1254,7 @@ function renderLeaderboard() {
         <div class="rank-main">
           <div class="rank-title">
             <strong>${escapeHtml(row.leader)}</strong>
-            <span>${escapeHtml(row.primaryTeam)} · ${row.agents.size.toLocaleString("id-ID")} agent · ${row.txn.toLocaleString("id-ID")} TXN</span>
+            <span>${escapeHtml(LEADERBOARD_TARGET_LABELS[row.primaryTeam] || row.primaryTeam)} · ${row.agents.size.toLocaleString("id-ID")} agent · ${row.txn.toLocaleString("id-ID")} TXN</span>
           </div>
           <div class="rank-bar"><span style="width:${targetWidth}%"></span></div>
           <div class="rank-meta">
@@ -1201,6 +1266,75 @@ function renderLeaderboard() {
       </article>
     `;
   }).join("");
+}
+
+function renderAgentLeaderboard() {
+  const mode = el("agentLeaderboardMode").value;
+  const selectedWeek = el("agentLeaderboardWeek").value;
+  const query = el("agentLeaderboardSearch").value.trim().toLowerCase();
+  el("agentLeaderboardWeek").disabled = mode === "monthly";
+
+  const rows = layerOneRows.filter(row =>
+    (mode === "monthly" || weekFor(row.weekName, row.weekNum)?.name === selectedWeek) &&
+    (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
+  );
+
+  const byAgent = new Map();
+  rows.forEach(row => {
+    const key = row.agent.toLowerCase();
+    if (!byAgent.has(key)) {
+      byAgent.set(key, { agent: row.agent, leader: row.leader, revenue: 0, txn: 0, weeks: new Set(), products: {} });
+    }
+    const item = byAgent.get(key);
+    const week = weekFor(row.weekName, row.weekNum);
+    const product = productBucket(row);
+    item.revenue += row.revenue;
+    item.txn += 1;
+    item.weeks.add(week.name);
+    item.products[product] = (item.products[product] || 0) + row.revenue;
+  });
+
+  const agents = [...byAgent.values()].sort((a, b) => b.revenue - a.revenue);
+  const target = WEEKLY_TARGET * (mode === "monthly" ? JULY_WEEK_COUNT : 1);
+  const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
+  const totalTarget = target * agents.length;
+  const totalTxn = agents.reduce((sum, row) => sum + row.txn, 0);
+  const top = agents[0];
+
+  el("agentLeaderboardTotalRevenue").textContent = rupiah(totalRevenue);
+  el("agentLeaderboardAgentKpi").textContent = agents.length.toLocaleString("id-ID");
+  el("agentLeaderboardTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
+  el("agentLeaderboardTxnNote").textContent = mode === "monthly" ? "Monthly Juli" : selectedWeek;
+  el("agentLeaderboardTopAgentKpi").textContent = top ? top.agent : "-";
+  el("agentLeaderboardTopRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
+  el("agentLeaderboardTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
+  el("agentLeaderboardCount").textContent = `${agents.length} agent`;
+  el("agentLeaderboardCaption").textContent = mode === "monthly"
+    ? `Monthly Juli · target ${rupiah(target)} per agent`
+    : `${selectedWeek} · target ${rupiah(target)} per agent`;
+
+  el("agentLeaderboardList").innerHTML = agents.map((row, index) => {
+    const toTarget = target ? row.revenue / target : 0;
+    const width = Math.min(100, Math.max(4, toTarget * 100));
+    const topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+    return `
+      <article class="rank-card rank-${index + 1}">
+        <div class="rank-number">${index + 1}</div>
+        <div class="rank-main">
+          <div class="rank-title">
+            <strong>${escapeHtml(row.agent)}</strong>
+            <span>${escapeHtml(row.leader || "-")} · ${row.txn.toLocaleString("id-ID")} TXN</span>
+          </div>
+          <div class="rank-bar"><span style="width:${width}%"></span></div>
+          <div class="rank-meta">
+            <span>Target: ${rupiah(target)} · Top product: ${escapeHtml(topProduct)}</span>
+            <span>${percent(toTarget)} to target</span>
+          </div>
+        </div>
+        <div class="rank-revenue"><strong>${rupiah(row.revenue)}</strong><span>${percent(toTarget)} target</span></div>
+      </article>
+    `;
+  }).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`;
 }
 
 function selectAgent(key) {
@@ -1301,6 +1435,9 @@ el("statusFilter").addEventListener("change", render);
 el("dodolanWeekFilter").addEventListener("change", renderDodolan);
 el("dodolanLeaderFilter").addEventListener("change", renderDodolan);
 el("dodolanSearchFilter").addEventListener("input", renderDodolan);
+el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
+el("agentLeaderboardWeek").addEventListener("change", renderAgentLeaderboard);
+el("agentLeaderboardSearch").addEventListener("input", renderAgentLeaderboard);
 el("exportButton").addEventListener("click", exportResults);
 loadFromGoogleSheet();
 
