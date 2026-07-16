@@ -1,4 +1,4 @@
-[index.html](https://github.com/user-attachments/files/30074599/index.html)
+[index.html](https://github.com/user-attachments/files/30075526/index.html)
 <!doctype html>
 <html lang="id">
 <head>
@@ -31,7 +31,7 @@ body {
   color: var(--ink);
   background: var(--background);
   font-family: Inter, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 0;
 }
 
@@ -57,7 +57,7 @@ button { cursor: pointer; }
 }
 
 h1 { margin: 0; font-size: 24px; }
-h2 { margin: 0; font-size: 16px; }
+h2 { margin: 0; font-size: 15px; }
 
 .top-actions { display: flex; align-items: center; gap: 12px; }
 .status-dot { color: var(--muted); font-size: 12px; }
@@ -94,8 +94,8 @@ svg {
 }
 
 main {
-  width: min(1480px, calc(100% - 32px));
-  margin: 18px auto 36px;
+  width: min(1680px, calc(100% - 20px));
+  margin: 10px auto 28px;
 }
 
 .tabs {
@@ -190,7 +190,7 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
   border-radius: 8px;
   overflow: hidden;
 }
-.rules-strip div { padding: 13px 16px; border-right: 1px solid var(--line); }
+.rules-strip div { padding: 9px 12px; border-right: 1px solid var(--line); }
 .rules-strip div:last-child { border-right: 0; }
 .rules-strip span { display: block; color: var(--muted); font-size: 11px; }
 .rules-strip strong { display: block; margin-top: 4px; font-size: 14px; }
@@ -218,9 +218,9 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
 .dashboard { margin-top: 14px; }
 .filters {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   align-items: end;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .field { min-width: 190px; }
 .field.grow { flex: 1; }
@@ -229,24 +229,24 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 .kpi {
-  min-height: 108px;
-  padding: 15px;
+  min-height: 82px;
+  padding: 10px 12px;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 8px;
 }
 .kpi span { color: var(--muted); font-size: 11px; font-weight: 600; }
-.kpi strong { display: block; margin-top: 10px; font-size: 23px; }
-.kpi small { display: block; margin-top: 7px; color: var(--muted); font-size: 11px; }
+.kpi strong { display: block; margin-top: 8px; font-size: 19px; }
+.kpi small { display: block; margin-top: 5px; color: var(--muted); font-size: 10px; }
 
 .content-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 350px;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 8px;
   align-items: start;
 }
 .table-panel, .detail-panel {
@@ -255,8 +255,8 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
   border-radius: 8px;
 }
 .panel-heading {
-  min-height: 65px;
-  padding: 14px 16px;
+  min-height: 54px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
@@ -266,13 +266,13 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
 .panel-heading p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
 .count-chip { padding: 5px 8px; border-radius: 6px; background: #eef2f6; color: #475467; font-size: 11px; }
 
-.table-wrap { max-height: 580px; overflow: auto; }
+.table-wrap { max-height: 640px; overflow: auto; }
 table { width: 100%; border-collapse: collapse; white-space: nowrap; }
 th {
   position: sticky;
   top: 0;
   z-index: 1;
-  padding: 10px 12px;
+  padding: 7px 8px;
   background: #f8fafb;
   border-bottom: 1px solid var(--line);
   color: #667085;
@@ -280,7 +280,7 @@ th {
   text-align: left;
   text-transform: uppercase;
 }
-td { padding: 11px 12px; border-bottom: 1px solid #edf0f3; font-size: 12px; }
+td { padding: 8px 8px; border-bottom: 1px solid #edf0f3; font-size: 11px; }
 tbody tr { cursor: pointer; }
 tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 .money, .number { text-align: right; font-variant-numeric: tabular-nums; }
@@ -300,7 +300,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 .detail-panel { min-height: 300px; }
 .detail-empty { padding: 36px 18px; color: var(--muted); text-align: center; font-size: 12px; }
 .agent-head {
-  padding: 16px;
+  padding: 11px 12px;
   display: flex;
   justify-content: space-between;
   gap: 12px;
@@ -309,12 +309,12 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 }
 .agent-head strong { display: block; font-size: 14px; }
 .agent-head span:not(.badge) { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; }
-.progress-block { padding: 16px; border-bottom: 1px solid var(--line); }
+.progress-block { padding: 11px 12px; border-bottom: 1px solid var(--line); }
 .progress-block > div:first-child { display: flex; justify-content: space-between; font-size: 11px; }
 .progress-track { height: 8px; margin: 10px 0 7px; overflow: hidden; border-radius: 4px; background: #e8ecef; }
 .progress-track span { display: block; height: 100%; max-width: 100%; background: var(--teal); }
 .progress-block small { color: var(--muted); font-size: 10px; }
-.product-list { padding: 7px 16px 14px; }
+.product-list { padding: 6px 12px 10px; }
 .product-row {
   padding: 10px 0;
   display: grid;
@@ -346,7 +346,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 
 .dodolan-filters { margin-top: 0; }
 .dodolan-board {
-  max-height: 680px;
+  max-height: 720px;
   overflow: auto;
 }
 .leader-group {
@@ -357,11 +357,11 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   position: sticky;
   top: 0;
   z-index: 2;
-  min-height: 42px;
-  padding: 9px 14px;
+  min-height: 34px;
+  padding: 6px 10px;
   display: grid;
-  grid-template-columns: 24px minmax(220px, 1fr) 90px 150px;
-  gap: 10px;
+  grid-template-columns: 22px minmax(220px, 1fr) 76px 130px;
+  gap: 8px;
   align-items: center;
   background: #e8eef4;
   cursor: pointer;
@@ -386,17 +386,21 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 .leader-group.collapsed .dodolan-table-wrap { display: none; }
 .dodolan-table-wrap { overflow-x: auto; }
 .dodolan-table th {
-  top: 42px;
+  top: 34px;
 }
-.dodolan-table td:nth-child(2) {
-  min-width: 430px;
-  max-width: 560px;
+.dodolan-table {
+  table-layout: fixed;
+}
+.dodolan-table th:nth-child(1), .dodolan-table td:nth-child(1) { width: 64px; }
+.dodolan-table th:nth-child(2), .dodolan-table td:nth-child(2) {
+  width: auto;
   white-space: normal;
 }
-.dodolan-table td:nth-child(3) {
-  min-width: 260px;
-  max-width: 420px;
-  white-space: normal;
+.dodolan-table th:nth-child(3), .dodolan-table td:nth-child(3) { width: 170px; }
+.dodolan-table th:nth-child(4), .dodolan-table td:nth-child(4) { width: 52px; }
+.dodolan-table th:nth-child(5), .dodolan-table td:nth-child(5) { width: 120px; }
+.package-name {
+  line-height: 1.25;
 }
 .package-dot {
   display: inline-block;
@@ -406,17 +410,21 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   border-radius: 2px;
   vertical-align: -1px;
 }
-.campaign-pill {
-  display: inline-block;
-  padding: 4px 7px;
-  border-radius: 5px;
-  line-height: 1.35;
+.campaign-line {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 3px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  line-height: 1.25;
+  font-size: 10px;
 }
-.campaign-gold { background: #f6d66b; color: #533f00; }
-.campaign-green { background: #95c77b; color: #123d1c; }
-.campaign-purple { background: #bca8e8; color: #2e1f5e; }
-.campaign-blue { background: #9fc4df; color: #143d59; }
-.campaign-gray { background: #e4e7ec; color: #475467; }
+.campaign-gold { background-color: #f6d66b; color: #533f00; }
+.campaign-green { background-color: #95c77b; color: #123d1c; }
+.campaign-purple { background-color: #bca8e8; color: #2e1f5e; }
+.campaign-blue { background-color: #9fc4df; color: #143d59; }
+.campaign-gray { background-color: #e4e7ec; color: #475467; }
 
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
@@ -930,9 +938,8 @@ function renderDodolan() {
             <thead>
               <tr>
                 <th>Week</th>
-                <th>Package Name</th>
-                <th>Campaign</th>
-                <th>Agent Name</th>
+                <th>Package / Campaign</th>
+                <th>Agent</th>
                 <th>TXN</th>
                 <th>Revenue</th>
               </tr>
@@ -941,8 +948,10 @@ function renderDodolan() {
               ${leaderRows.map(row => `
                 <tr>
                   <td>${escapeHtml(row.week)}</td>
-                  <td><span class="package-dot ${campaignClass(row.campaign)}"></span>${escapeHtml(row.packageName)}</td>
-                  <td><span class="campaign-pill ${campaignClass(row.campaign)}">${escapeHtml(row.campaign)}</span></td>
+                  <td>
+                    <div class="package-name"><span class="package-dot ${campaignClass(row.campaign)}"></span>${escapeHtml(row.packageName)}</div>
+                    <div class="campaign-line ${campaignClass(row.campaign)}">${escapeHtml(row.campaign)}</div>
+                  </td>
                   <td>${escapeHtml(row.agent)}</td>
                   <td class="number">${row.txn}</td>
                   <td class="money">${rupiah(row.revenue)}</td>
