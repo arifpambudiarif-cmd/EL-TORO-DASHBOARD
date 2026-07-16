@@ -425,6 +425,124 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 .campaign-blue { background-color: #9fc4df; color: #143d59; }
 .campaign-gray { background-color: #e4e7ec; color: #475467; }
 
+.leaderboard-hero {
+  min-height: 120px;
+  margin-bottom: 8px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(8,127,140,.12), rgba(20,125,100,.06)),
+    #fff;
+}
+.leaderboard-hero h2 {
+  margin: 0;
+  font-size: 25px;
+}
+.leaderboard-hero p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+.hero-number {
+  min-width: 260px;
+  padding: 14px 16px;
+  border: 1px solid rgba(8,127,140,.22);
+  border-radius: 8px;
+  background: #fff;
+  text-align: right;
+}
+.hero-number span {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+.hero-number strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 24px;
+}
+.leaderboard-panel { overflow: hidden; }
+.leaderboard-list {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+.rank-card {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 170px;
+  gap: 12px;
+  align-items: center;
+  padding: 11px 12px;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  background: #fff;
+}
+.rank-card.rank-1 {
+  border-color: #e4bd31;
+  background: #fff9e6;
+}
+.rank-card.rank-2 {
+  border-color: #b8c2cc;
+  background: #f7f9fb;
+}
+.rank-card.rank-3 {
+  border-color: #d49a59;
+  background: #fff4ea;
+}
+.rank-number {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--teal);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+}
+.rank-1 .rank-number { background: #c99600; }
+.rank-2 .rank-number { background: #667085; }
+.rank-3 .rank-number { background: #b66b1f; }
+.rank-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rank-title strong { font-size: 14px; }
+.rank-title span, .rank-meta {
+  color: var(--muted);
+  font-size: 10px;
+}
+.rank-bar {
+  height: 8px;
+  margin: 8px 0 6px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #edf1f4;
+}
+.rank-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--teal);
+}
+.rank-1 .rank-bar span { background: #c99600; }
+.rank-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rank-revenue {
+  text-align: right;
+  font-size: 15px;
+  font-weight: 800;
+}
+
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
   .divider { height: 1px; border-left: 0; border-top: 1px solid var(--line); }
@@ -470,6 +588,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
     <nav class="tabs" aria-label="Dashboard sections">
       <button class="tab-button active" type="button" data-tab="incentivePanel">DS INCENTIVE ALL</button>
       <button class="tab-button" type="button" data-tab="dodolanPanel">DODOLAN</button>
+      <button class="tab-button" type="button" data-tab="leaderboardPanel">LEADERBOARD</button>
     </nav>
 
     <section id="incentivePanel" class="tab-panel active">
@@ -601,6 +720,38 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         <div id="dodolanBoard" class="dodolan-board"></div>
       </section>
     </section>
+
+    <section id="leaderboardPanel" class="tab-panel">
+      <div class="leaderboard-hero">
+        <div>
+          <p class="eyebrow">JULY RACE</p>
+          <h2>Revenue Leaderboard</h2>
+          <p>Total revenue all coach selama Juli dari semua layer, termasuk S2S.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="leaderboardTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Coach aktif</span><strong id="leaderboardLeaderKpi">0</strong><small>All layer termasuk S2S</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="leaderboardTxnKpi">0</strong><small>Seluruh week Juli</small></article>
+        <article class="kpi"><span>Top leader</span><strong id="leaderboardTopLeaderKpi">-</strong><small id="leaderboardTopRevenueKpi">Rp0</small></article>
+        <article class="kpi"><span>Top share</span><strong id="leaderboardTopShareKpi">0%</strong><small>Kontribusi top leader</small></article>
+      </div>
+
+      <section class="table-panel leaderboard-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Ranking Coach</h2>
+            <p>Revenue tertinggi menjadi posisi teratas</p>
+          </div>
+          <span id="leaderboardCount" class="count-chip">0 coach</span>
+        </div>
+        <div id="leaderboardList" class="leaderboard-list"></div>
+      </section>
+    </section>
   </main>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -643,6 +794,7 @@ const RATES = {
 
 let summary = [];
 let dodolanRows = [];
+let leaderboardRows = [];
 let selectedKey = "";
 
 const el = id => document.getElementById(id);
@@ -704,7 +856,7 @@ function normalizeRows(rows) {
     product_type: String(read(row, "product_type") || "").trim(),
     product_group: String(read(row, "product_group") || "").trim(),
     revenue: parseAmount(read(row, "amount")),
-  })).filter(row => row.agent && row.team === "Layer 1" && weekFor(row.weekName, row.weekNum));
+  })).filter(row => row.agent && weekFor(row.weekName, row.weekNum));
 }
 
 function buildDodolanRows(rows) {
@@ -767,8 +919,10 @@ async function loadWorkbook(buffer) {
   const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
   if (!rows.length) throw new Error("Sheet tidak memiliki data.");
   const normalized = normalizeRows(rows);
-  summary = calculate(normalized);
-  dodolanRows = buildDodolanRows(normalized);
+  const layerOneRows = normalized.filter(row => row.team === "Layer 1");
+  summary = calculate(layerOneRows);
+  dodolanRows = buildDodolanRows(layerOneRows);
+  leaderboardRows = buildDodolanRows(normalized);
   if (!summary.length) throw new Error("Tidak ada transaksi Layer 1 pada periode W1-W5 Juli.");
   prepareDashboard(sheetName, rows.length);
 }
@@ -787,6 +941,7 @@ function prepareDashboard(sheetName, rawCount) {
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
   render();
   renderDodolan();
+  renderLeaderboard();
 }
 
 function aggregateAllWeeks(rows) {
@@ -970,6 +1125,57 @@ function renderDodolan() {
       summary.querySelector(".leader-toggle").textContent = group.classList.contains("collapsed") ? "+" : "-";
     });
   });
+}
+
+function renderLeaderboard() {
+  const byLeader = new Map();
+  leaderboardRows.forEach(row => {
+    const leader = row.leader || "-";
+    if (!byLeader.has(leader)) {
+      byLeader.set(leader, { leader, revenue: 0, txn: 0, agents: new Set(), weeks: new Set(), products: {} });
+    }
+    const item = byLeader.get(leader);
+    item.revenue += row.revenue;
+    item.txn += 1;
+    item.agents.add(row.agent);
+    item.weeks.add(row.week);
+    item.products[row.product] = (item.products[row.product] || 0) + row.revenue;
+  });
+
+  const leaders = [...byLeader.values()].sort((a, b) => b.revenue - a.revenue);
+  const totalRevenue = leaders.reduce((sum, row) => sum + row.revenue, 0);
+  const totalTxn = leaders.reduce((sum, row) => sum + row.txn, 0);
+  const top = leaders[0];
+
+  el("leaderboardTotalRevenue").textContent = rupiah(totalRevenue);
+  el("leaderboardLeaderKpi").textContent = leaders.length.toLocaleString("id-ID");
+  el("leaderboardTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
+  el("leaderboardTopLeaderKpi").textContent = top ? top.leader : "-";
+  el("leaderboardTopRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
+  el("leaderboardTopShareKpi").textContent = top && totalRevenue ? percent(top.revenue / totalRevenue) : "0%";
+  el("leaderboardCount").textContent = `${leaders.length} coach`;
+
+  el("leaderboardList").innerHTML = leaders.map((row, index) => {
+    const share = totalRevenue ? row.revenue / totalRevenue : 0;
+    const topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+    return `
+      <article class="rank-card rank-${index + 1}">
+        <div class="rank-number">${index + 1}</div>
+        <div class="rank-main">
+          <div class="rank-title">
+            <strong>${escapeHtml(row.leader)}</strong>
+            <span>${row.agents.size.toLocaleString("id-ID")} agent · ${row.weeks.size.toLocaleString("id-ID")} week · ${row.txn.toLocaleString("id-ID")} TXN</span>
+          </div>
+          <div class="rank-bar"><span style="width:${Math.max(4, share * 100)}%"></span></div>
+          <div class="rank-meta">
+            <span>Top product: ${escapeHtml(topProduct)}</span>
+            <span>Share: ${percent(share)}</span>
+          </div>
+        </div>
+        <div class="rank-revenue">${rupiah(row.revenue)}</div>
+      </article>
+    `;
+  }).join("");
 }
 
 function selectAgent(key) {
