@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="id">
 <head>
@@ -25,31 +24,6 @@
   </header>
 
   <main>
-    <section class="control-band">
-      <div class="source-block">
-        <label for="sheetUrl">Google Sheet URL</label>
-        <div class="input-row">
-          <input id="sheetUrl" type="url" value="https://docs.google.com/spreadsheets/d/1qyGghBZrdfeTVbBGQwqWWFSjK2J_uvhy4kbcCg2CY-c/edit?gid=510126160">
-          <button id="loadSheetButton" class="primary-button" type="button">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6"/></svg>
-            Muat data
-          </button>
-        </div>
-        <p class="source-note">Sheet harus dapat diakses oleh siapa pun yang memiliki link. Data dibaca dari tab RAW TRANSACTION.</p>
-      </div>
-
-      <div class="divider"><span>atau</span></div>
-
-      <div class="upload-block">
-        <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" hidden>
-        <button id="fileButton" class="secondary-button" type="button">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M5 15v5h14v-5"/></svg>
-          Upload Excel / CSV
-        </button>
-        <p class="source-note">Gunakan file dengan kolom yang sama seperti RAW TRANSACTION.</p>
-      </div>
-    </section>
-
     <section class="rules-strip">
       <div><span>Scope</span><strong>Layer 1</strong></div>
       <div><span>Target mingguan</span><strong>Rp23.400.000</strong></div>
