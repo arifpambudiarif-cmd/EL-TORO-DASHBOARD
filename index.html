@@ -542,6 +542,18 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   justify-content: space-between;
   gap: 12px;
 }
+.action-note {
+  margin-top: 7px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  line-height: 1.35;
+}
+.action-win { background: var(--green-soft); color: var(--green); }
+.action-close { background: var(--teal-soft); color: var(--teal-dark); }
+.action-mid { background: #eef2f6; color: #344054; }
+.action-risk { background: var(--amber-soft); color: var(--amber); }
+.action-alert { background: var(--red-soft); color: var(--red); }
 .rank-revenue {
   text-align: right;
   font-size: 15px;
@@ -794,6 +806,10 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
           <label for="agentLeaderboardWeek">Week</label>
           <select id="agentLeaderboardWeek"></select>
         </div>
+        <div class="field">
+          <label for="agentLeaderboardCoach">Coach</label>
+          <select id="agentLeaderboardCoach"></select>
+        </div>
         <div class="field grow">
           <label for="agentLeaderboardSearch">Cari agent atau leader</label>
           <input id="agentLeaderboardSearch" type="search" placeholder="Ketik nama...">
@@ -1017,6 +1033,7 @@ function prepareDashboard(sheetName, rawCount) {
   el("agentLeaderboardWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
   const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   el("dodolanLeaderFilter").innerHTML = `<option value="all">Semua leader</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
+  el("agentLeaderboardCoach").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
   render();
   renderDodolan();
@@ -1271,11 +1288,13 @@ function renderLeaderboard() {
 function renderAgentLeaderboard() {
   const mode = el("agentLeaderboardMode").value;
   const selectedWeek = el("agentLeaderboardWeek").value;
+  const selectedCoach = el("agentLeaderboardCoach").value;
   const query = el("agentLeaderboardSearch").value.trim().toLowerCase();
   el("agentLeaderboardWeek").disabled = mode === "monthly";
 
   const rows = layerOneRows.filter(row =>
     (mode === "monthly" || weekFor(row.weekName, row.weekNum)?.name === selectedWeek) &&
+    (selectedCoach === "all" || (row.leader || "-") === selectedCoach) &&
     (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
   );
 
@@ -1330,11 +1349,35 @@ function renderAgentLeaderboard() {
             <span>Target: ${rupiah(target)} · Top product: ${escapeHtml(topProduct)}</span>
             <span>${percent(toTarget)} to target</span>
           </div>
+          ${mode === "weekly" ? weeklyActionBlock(row.revenue, target) : ""}
         </div>
         <div class="rank-revenue"><strong>${rupiah(row.revenue)}</strong><span>${percent(toTarget)} target</span></div>
       </article>
     `;
   }).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`;
+}
+
+function weeklyActionBlock(revenue, target) {
+  const gap = Math.max(0, target - revenue);
+  const today = new Date();
+  const day = today.getDay();
+  const daysLeft = Math.max(1, 7 - (day === 0 ? 7 : day));
+  const dailyNeed = gap / daysLeft;
+  const progress = target ? revenue / target : 0;
+
+  if (gap <= 0) {
+    return `<div class="action-note action-win"><strong>Action:</strong> Target weekly sudah aman. Jaga ritme closing, push upsell/renewal, dan bantu validasi pipeline teman satu squad.</div>`;
+  }
+  if (progress >= 0.8) {
+    return `<div class="action-note action-close"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Fokus follow-up hot leads, renewal/cicilan pending, dan closing paket high value hari ini.</div>`;
+  }
+  if (progress >= 0.5) {
+    return `<div class="action-note action-mid"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Prioritaskan 10 prospek terhangat, minta bantuan coach untuk objection handling, dan push BAON/RB yang siap bayar.</div>`;
+  }
+  if (progress >= 0.25) {
+    return `<div class="action-note action-risk"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Perbesar aktivitas: reaktivasi leads lama, follow-up semua unpaid invoice, dan buat daftar pipeline harian bersama coach.</div>`;
+  }
+  return `<div class="action-note action-alert"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Perlu recovery plan: tambah volume kontak, ambil leads prioritas, lakukan call blitz, dan review pitch dengan coach sebelum jam prime time.</div>`;
 }
 
 function selectAgent(key) {
@@ -1437,6 +1480,7 @@ el("dodolanLeaderFilter").addEventListener("change", renderDodolan);
 el("dodolanSearchFilter").addEventListener("input", renderDodolan);
 el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardWeek").addEventListener("change", renderAgentLeaderboard);
+el("agentLeaderboardCoach").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardSearch").addEventListener("input", renderAgentLeaderboard);
 el("exportButton").addEventListener("click", exportResults);
 loadFromGoogleSheet();
