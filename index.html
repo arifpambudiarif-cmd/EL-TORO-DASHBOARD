@@ -924,7 +924,19 @@ function normalizeWeekName(value) {
 function weekFor(weekName, weekNum) {
   const normalizedName = normalizeWeekName(weekName);
   const normalizedNum = Number(weekNum);
-  return WEEK_PERIODS.find(week => week.name === normalizedName && week.weekNum === normalizedNum) || null;
+  return WEEK_PERIODS.find(week =>
+    (normalizedName && week.name === normalizedName) ||
+    (Number.isFinite(normalizedNum) && week.weekNum === normalizedNum)
+  ) || null;
+}
+
+function normalizeTeam(value) {
+  const team = String(value || "").trim().replace(/\s+/g, " ");
+  const upper = team.toUpperCase();
+  if (upper === "LAYER 1") return "Layer 1";
+  if (upper === "LAYER 2") return "Layer 2";
+  if (upper === "PROMPTER INBOUND" || upper === "S2S") return "S2S";
+  return team;
 }
 
 function productBucket(row) {
@@ -955,7 +967,7 @@ function normalizeRows(rows) {
     leader: String(read(row, "Leader Name") || "").trim(),
     packageName: String(read(row, "Package Name") || "").trim(),
     campaign: String(read(row, "Campaign") || "").trim(),
-    team: String(read(row, "Kategori Team") || read(row, "category team") || "").trim(),
+    team: normalizeTeam(read(row, "Kategori Team") || read(row, "category team")),
     product_type: String(read(row, "Product Type") || "").trim(),
     product_group: String(read(row, "Product Group") || "").trim(),
     revenue: parseAmount(read(row, "Amount")),
@@ -1499,4 +1511,5 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
 
