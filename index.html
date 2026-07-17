@@ -24,6 +24,14 @@
   </header>
 
   <main>
+    <nav class="tabs" aria-label="Dashboard sections">
+      <button class="tab-button active" type="button" data-tab="incentivePanel">DS INCENTIVE ALL</button>
+      <button class="tab-button" type="button" data-tab="dodolanPanel">DODOLAN</button>
+      <button class="tab-button" type="button" data-tab="leaderboardPanel">LEADERBOARD COACH</button>
+      <button class="tab-button" type="button" data-tab="agentLeaderboardPanel">LEADERBOARD AGENT</button>
+    </nav>
+
+    <section id="incentivePanel" class="tab-panel active">
     <section class="rules-strip">
       <div><span>Scope</span><strong>Layer 1</strong></div>
       <div><span>Target mingguan</span><strong>Rp23.400.000</strong></div>
@@ -35,7 +43,7 @@
       <div class="empty-icon">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg>
       </div>
-      <h2>Muat Summary Juli untuk mulai</h2>
+      <h2>Muat raw transaksi untuk mulai</h2>
       <p>Dashboard akan menghitung revenue, pencapaian target, tier TH, dan incentive setiap agent Layer 1.</p>
     </section>
 
@@ -115,6 +123,128 @@
           </div>
         </aside>
       </div>
+    </section>
+    </section>
+
+    <section id="dodolanPanel" class="tab-panel">
+      <div class="filters dodolan-filters">
+        <div class="field">
+          <label for="dodolanWeekFilter">Week</label>
+          <select id="dodolanWeekFilter"></select>
+        </div>
+        <div class="field">
+          <label for="dodolanLeaderFilter">Leader</label>
+          <select id="dodolanLeaderFilter"></select>
+        </div>
+        <div class="field grow">
+          <label for="dodolanSearchFilter">Cari package, campaign, agent</label>
+          <input id="dodolanSearchFilter" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <article class="kpi"><span>Total revenue</span><strong id="dodolanRevenueKpi">Rp0</strong><small id="dodolanRevenueNote">0 transaksi</small></article>
+        <article class="kpi"><span>Total package</span><strong id="dodolanPackageKpi">0</strong><small>Package terjual</small></article>
+        <article class="kpi"><span>Leader aktif</span><strong id="dodolanLeaderKpi">0</strong><small>Dalam filter aktif</small></article>
+        <article class="kpi"><span>Agent aktif</span><strong id="dodolanAgentKpi">0</strong><small>Dalam filter aktif</small></article>
+      </div>
+
+      <section class="table-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>DODOLAN</h2>
+            <p id="dodolanCaption">Penjualan paket per leader dan agent</p>
+          </div>
+          <span id="dodolanRowCount" class="count-chip">0 rows</span>
+        </div>
+        <div id="dodolanBoard" class="dodolan-board"></div>
+      </section>
+    </section>
+
+    <section id="leaderboardPanel" class="tab-panel">
+      <div class="leaderboard-hero">
+        <div>
+          <p class="eyebrow">JULY RACE</p>
+          <h2>Revenue Leaderboard</h2>
+          <p>Total revenue all coach selama Juli dari semua layer, termasuk S2S.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="leaderboardTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Coach aktif</span><strong id="leaderboardLeaderKpi">0</strong><small>All layer termasuk S2S</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="leaderboardTxnKpi">0</strong><small>Seluruh week Juli</small></article>
+        <article class="kpi"><span>Top leader</span><strong id="leaderboardTopLeaderKpi">-</strong><small id="leaderboardTopRevenueKpi">Rp0</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="leaderboardTotalToTargetKpi">0%</strong><small>Target Juli = 5 minggu</small></article>
+      </div>
+
+      <section class="table-panel leaderboard-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Ranking Coach</h2>
+            <p>Revenue tertinggi menjadi posisi teratas</p>
+          </div>
+          <span id="leaderboardCount" class="count-chip">0 coach</span>
+        </div>
+        <div id="leaderboardList" class="leaderboard-list"></div>
+      </section>
+    </section>
+
+    <section id="agentLeaderboardPanel" class="tab-panel">
+      <div class="leaderboard-hero agent-hero">
+        <div>
+          <p class="eyebrow">LAYER 1 RACE</p>
+          <h2>Agent Leaderboard</h2>
+          <p>Ranking agent Layer 1 berdasarkan revenue, tersedia weekly dan monthly.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="agentLeaderboardTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="field">
+          <label for="agentLeaderboardMode">Mode</label>
+          <select id="agentLeaderboardMode">
+            <option value="monthly">Monthly Juli</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="agentLeaderboardWeek">Week</label>
+          <select id="agentLeaderboardWeek"></select>
+        </div>
+        <div class="field">
+          <label for="agentLeaderboardCoach">Coach</label>
+          <select id="agentLeaderboardCoach"></select>
+        </div>
+        <div class="field grow">
+          <label for="agentLeaderboardSearch">Cari agent atau leader</label>
+          <input id="agentLeaderboardSearch" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Agent aktif</span><strong id="agentLeaderboardAgentKpi">0</strong><small>Layer 1</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="agentLeaderboardTxnKpi">0</strong><small id="agentLeaderboardTxnNote">Monthly</small></article>
+        <article class="kpi"><span>Top agent</span><strong id="agentLeaderboardTopAgentKpi">-</strong><small id="agentLeaderboardTopRevenueKpi">Rp0</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="agentLeaderboardTotalToTargetKpi">0%</strong><small>Target Layer 1</small></article>
+      </div>
+
+      <section class="table-panel leaderboard-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Ranking Agent Layer 1</h2>
+            <p id="agentLeaderboardCaption">Monthly Juli</p>
+          </div>
+          <span id="agentLeaderboardCount" class="count-chip">0 agent</span>
+        </div>
+        <div id="agentLeaderboardList" class="leaderboard-list"></div>
+      </section>
     </section>
   </main>
 
