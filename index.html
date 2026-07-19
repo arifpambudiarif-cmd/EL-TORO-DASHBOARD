@@ -557,6 +557,106 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 .action-mid { background: #eef2f6; color: #344054; }
 .action-risk { background: var(--amber-soft); color: var(--amber); }
 .action-alert { background: var(--red-soft); color: var(--red); }
+.action-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 10px;
+}
+.action-hero {
+  background:
+    linear-gradient(135deg, rgba(8, 127, 140, .10), rgba(20, 125, 100, .08)),
+    #fff;
+}
+.action-list, .mini-list {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+.action-agent-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  background: #fff;
+}
+.action-agent-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: start;
+}
+.action-agent-head strong {
+  display: block;
+  font-size: 13px;
+}
+.action-agent-head span, .mini-row span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+.action-status {
+  display: inline-flex;
+  min-width: 92px;
+  justify-content: center;
+  padding: 4px 7px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.action-status.need { background: var(--red-soft); color: var(--red); }
+.action-status.near { background: var(--amber-soft); color: var(--amber); }
+.action-status.track { background: var(--teal-soft); color: var(--teal-dark); }
+.action-status.done { background: var(--green-soft); color: var(--green); }
+.action-agent-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+.action-agent-meta span {
+  padding: 4px 6px;
+  border-radius: 5px;
+  background: #f3f6f8;
+  color: #344054;
+  font-size: 10px;
+  font-weight: 700;
+}
+.action-money {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.action-money strong {
+  display: block;
+  font-size: 14px;
+}
+.action-money span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+.mini-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 10px;
+  border: 1px solid #e3e8ef;
+  border-radius: 7px;
+  background: #fff;
+}
+.mini-row strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mini-value {
+  text-align: right;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
 .rank-revenue {
   text-align: right;
   font-size: 15px;
@@ -582,6 +682,9 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   .rules-strip div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
   .content-grid { grid-template-columns: 1fr; }
   .leader-summary { grid-template-columns: 24px minmax(140px, 1fr) 70px 120px; }
+  .action-layout { grid-template-columns: 1fr; }
+  .action-agent-card { grid-template-columns: 1fr; }
+  .action-money { text-align: left; }
 }
 
 @media (max-width: 620px) {
@@ -617,6 +720,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   <main>
     <nav class="tabs" aria-label="Dashboard sections">
       <button class="tab-button active" type="button" data-tab="incentivePanel">DS INCENTIVE ALL</button>
+      <button class="tab-button" type="button" data-tab="actionPanel">ACTION CENTER</button>
       <button class="tab-button" type="button" data-tab="dodolanPanel">DODOLAN</button>
       <button class="tab-button" type="button" data-tab="leaderboardPanel">LEADERBOARD COACH</button>
       <button class="tab-button" type="button" data-tab="agentLeaderboardPanel">LEADERBOARD AGENT</button>
@@ -715,6 +819,81 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         </aside>
       </div>
     </section>
+    </section>
+
+    <section id="actionPanel" class="tab-panel">
+      <div class="leaderboard-hero action-hero">
+        <div>
+          <p class="eyebrow">DAILY OPERATING VIEW</p>
+          <h2>Action Center</h2>
+          <p>Prioritas agent, gap target, dan campaign yang perlu dipush untuk kerja harian coach.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Gap</span>
+          <strong id="actionTotalGap">Rp0</strong>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="actionWeekFilter">Week</label>
+          <select id="actionWeekFilter"></select>
+        </div>
+        <div class="field">
+          <label for="actionCoachFilter">Coach</label>
+          <select id="actionCoachFilter"></select>
+        </div>
+        <div class="field grow">
+          <label for="actionSearchFilter">Cari agent atau coach</label>
+          <input id="actionSearchFilter" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+      <div class="kpi-grid action-kpis">
+        <article class="kpi"><span>Need Push</span><strong id="actionNeedPushKpi">0</strong><small>TH di bawah 40%</small></article>
+        <article class="kpi"><span>Near Incentive</span><strong id="actionNearKpi">0</strong><small>TH 40%-49%</small></article>
+        <article class="kpi"><span>Daily Gap</span><strong id="actionDailyNeedKpi">Rp0</strong><small>Estimasi per hari</small></article>
+        <article class="kpi"><span>Top Coach Gap</span><strong id="actionTopCoachKpi">-</strong><small id="actionTopCoachGap">Rp0</small></article>
+      </div>
+      <div class="action-layout">
+        <section class="table-panel action-priority-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Priority Agent</h2>
+              <p id="actionAgentCaption">Agent dengan gap dan peluang terdekat.</p>
+            </div>
+            <span id="actionAgentCount" class="count-chip">0 agent</span>
+          </div>
+          <div id="actionAgentList" class="action-list"></div>
+        </section>
+        <aside class="action-side">
+          <section class="table-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Coach Risk</h2>
+                <p>Coach dengan akumulasi gap terbesar.</p>
+              </div>
+            </div>
+            <div id="actionCoachList" class="mini-list"></div>
+          </section>
+          <section class="table-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Campaign Signal</h2>
+                <p>Campaign dengan revenue/txn paling kuat.</p>
+              </div>
+            </div>
+            <div id="actionCampaignList" class="mini-list"></div>
+          </section>
+          <section class="table-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Product Focus</h2>
+                <p>Mix produk yang paling berkontribusi.</p>
+              </div>
+            </div>
+            <div id="actionProductList" class="mini-list"></div>
+          </section>
+        </aside>
+      </div>
     </section>
 
     <section id="dodolanPanel" class="tab-panel">
@@ -1052,11 +1231,14 @@ function prepareDashboard(sheetName, rawCount) {
   el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("dodolanWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("agentLeaderboardWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
+  el("actionWeekFilter").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
   const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   el("dodolanLeaderFilter").innerHTML = `<option value="all">Semua leader</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
   el("agentLeaderboardCoach").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
+  el("actionCoachFilter").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
   render();
+  renderActionCenter();
   renderDodolan();
   renderLeaderboard();
   renderAgentLeaderboard();
@@ -1163,6 +1345,148 @@ function filteredDodolanRows() {
     (leader === "all" || (row.leader || "-") === leader) &&
     (!query || `${row.packageName} ${row.campaign} ${row.agent} ${row.leader}`.toLowerCase().includes(query))
   );
+}
+
+
+function actionStatus(th) {
+  if (th >= 1) return { key: "done", label: "Over Target" };
+  if (th >= .5) return { key: "track", label: "On Track" };
+  if (th >= .4) return { key: "near", label: "Near Incentive" };
+  return { key: "need", label: "Need Push" };
+}
+
+function getISOWeekNumber(date) {
+  const copy = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = copy.getUTCDay() || 7;
+  copy.setUTCDate(copy.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(copy.getUTCFullYear(), 0, 1));
+  return Math.ceil((((copy - yearStart) / 86400000) + 1) / 7);
+}
+
+function weekDaysLeft(weekName) {
+  const currentWeek = WEEK_PERIODS.find(week => week.weekNum === getISOWeekNumber(new Date()));
+  if (!currentWeek || currentWeek.name !== weekName) return 7;
+  const day = new Date().getDay() || 7;
+  return Math.max(1, 7 - day + 1);
+}
+
+function aggregateActionAgents(rows, selectedWeek) {
+  const byAgent = new Map();
+  rows.forEach(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    if (!week || week.name !== selectedWeek) return;
+    const key = row.agent.toLowerCase();
+    if (!byAgent.has(key)) {
+      byAgent.set(key, { agent: row.agent, leader: row.leader || "-", revenue: 0, txn: 0, products: {}, campaigns: {} });
+    }
+    const item = byAgent.get(key);
+    const product = productBucket(row);
+    const campaign = row.campaign || "No Campaign";
+    item.revenue += row.revenue;
+    item.txn += 1;
+    item.products[product] = (item.products[product] || 0) + row.revenue;
+    item.campaigns[campaign] = (item.campaigns[campaign] || 0) + row.revenue;
+  });
+  return [...byAgent.values()].map(row => {
+    row.target = WEEKLY_TARGET;
+    row.gap = Math.max(0, row.target - row.revenue);
+    row.th = row.target ? row.revenue / row.target : 0;
+    row.aov = row.txn ? row.revenue / row.txn : 0;
+    row.neededTxn = row.aov ? Math.ceil(row.gap / row.aov) : null;
+    row.status = actionStatus(row.th);
+    row.topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+    row.topCampaign = Object.entries(row.campaigns).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+    return row;
+  }).sort((a, b) => {
+    const order = { need: 0, near: 1, track: 2, done: 3 };
+    return order[a.status.key] - order[b.status.key] || a.gap - b.gap || b.revenue - a.revenue;
+  });
+}
+
+function renderMiniAggregate(elementId, rows, keyFn, limit) {
+  const groups = new Map();
+  rows.forEach(row => {
+    const key = keyFn(row);
+    if (!groups.has(key)) groups.set(key, { key, revenue: 0, txn: 0 });
+    const item = groups.get(key);
+    item.revenue += row.revenue;
+    item.txn += 1;
+  });
+  const list = [...groups.values()].sort((a, b) => b.revenue - a.revenue).slice(0, limit);
+  el(elementId).innerHTML = list.map(row => `
+    <div class="mini-row">
+      <div><strong>${escapeHtml(row.key)}</strong><span>${row.txn.toLocaleString("id-ID")} TXN - AOV ${rupiah(row.revenue / row.txn)}</span></div>
+      <div class="mini-value">${rupiah(row.revenue)}</div>
+    </div>
+  `).join("") || `<div class="detail-empty">Tidak ada data.</div>`;
+}
+
+function renderActionCenter() {
+  const selectedWeek = el("actionWeekFilter").value;
+  const selectedCoach = el("actionCoachFilter").value;
+  const query = el("actionSearchFilter").value.trim().toLowerCase();
+  const daysLeft = weekDaysLeft(selectedWeek);
+  const agents = aggregateActionAgents(layerOneRows, selectedWeek).filter(row =>
+    (selectedCoach === "all" || row.leader === selectedCoach) &&
+    (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
+  );
+  const openAgents = agents.filter(row => row.gap > 0);
+  const totalGap = openAgents.reduce((sum, row) => sum + row.gap, 0);
+  const coachGap = new Map();
+  openAgents.forEach(row => coachGap.set(row.leader, (coachGap.get(row.leader) || 0) + row.gap));
+  const coachRows = [...coachGap.entries()].map(([leader, gap]) => ({ leader, gap })).sort((a, b) => b.gap - a.gap);
+  const topCoach = coachRows[0];
+
+  el("actionTotalGap").textContent = rupiah(totalGap);
+  el("actionNeedPushKpi").textContent = agents.filter(row => row.status.key === "need").length.toLocaleString("id-ID");
+  el("actionNearKpi").textContent = agents.filter(row => row.status.key === "near").length.toLocaleString("id-ID");
+  el("actionDailyNeedKpi").textContent = rupiah(totalGap / daysLeft);
+  el("actionTopCoachKpi").textContent = topCoach ? topCoach.leader : "-";
+  el("actionTopCoachGap").textContent = topCoach ? rupiah(topCoach.gap) : "Rp0";
+  el("actionAgentCount").textContent = `${agents.length} agent`;
+  el("actionAgentCaption").textContent = `${selectedWeek} - ${daysLeft} hari tersisa`;
+
+  el("actionAgentList").innerHTML = agents.slice(0, 16).map(row => {
+    const width = Math.min(100, Math.max(4, row.th * 100));
+    const action = row.status.key === "done"
+      ? "Pertahankan momentum dan bantu share winning script ke team."
+      : row.status.key === "near"
+        ? "Prioritas closing: follow-up invoice unpaid dan push produk high value."
+        : "Buat pipeline harian: hot leads, reaktivasi, dan check-in intensif dengan coach.";
+    return `
+      <article class="action-agent-card">
+        <div>
+          <div class="action-agent-head">
+            <div><strong>${escapeHtml(row.agent)}</strong><span>${escapeHtml(row.leader)}</span></div>
+            <span class="action-status ${row.status.key}">${row.status.label}</span>
+          </div>
+          <div class="rank-bar"><span style="width:${width}%"></span></div>
+          <div class="action-agent-meta">
+            <span>TH ${percent(row.th)}</span>
+            <span>${row.txn.toLocaleString("id-ID")} TXN</span>
+            <span>AOV ${rupiah(row.aov)}</span>
+            <span>${row.neededTxn ? `Butuh +/-${row.neededTxn} TXN` : "Butuh TXN baru"}</span>
+          </div>
+          <div class="action-note ${row.status.key === "done" ? "action-win" : row.status.key === "near" ? "action-close" : "action-risk"}">${action}</div>
+        </div>
+        <div class="action-money"><strong>${rupiah(row.gap)}</strong><span>Gap target</span><small>Top: ${escapeHtml(row.topProduct)}</small></div>
+      </article>
+    `;
+  }).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`;
+
+  el("actionCoachList").innerHTML = coachRows.slice(0, 6).map(row => {
+    const count = Math.max(1, agents.filter(agent => agent.leader === row.leader).length);
+    return `
+      <div class="mini-row">
+        <div><strong>${escapeHtml(row.leader)}</strong><span>${count.toLocaleString("id-ID")} agent open gap</span></div>
+        <div class="mini-value">${rupiah(row.gap)}</div>
+      </div>
+    `;
+  }).join("") || `<div class="detail-empty">Tidak ada gap pada filter ini.</div>`;
+
+  const weekRows = layerOneRows.filter(row => weekFor(row.weekName, row.weekNum)?.name === selectedWeek);
+  renderMiniAggregate("actionCampaignList", weekRows, row => row.campaign || "No Campaign", 6);
+  renderMiniAggregate("actionProductList", weekRows, row => productBucket(row), 6);
 }
 
 function campaignClass(value) {
@@ -1500,6 +1824,9 @@ el("statusFilter").addEventListener("change", render);
 el("dodolanWeekFilter").addEventListener("change", renderDodolan);
 el("dodolanLeaderFilter").addEventListener("change", renderDodolan);
 el("dodolanSearchFilter").addEventListener("input", renderDodolan);
+el("actionWeekFilter").addEventListener("change", renderActionCenter);
+el("actionCoachFilter").addEventListener("change", renderActionCenter);
+el("actionSearchFilter").addEventListener("input", renderActionCenter);
 el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardWeek").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardCoach").addEventListener("change", renderAgentLeaderboard);
@@ -1511,6 +1838,8 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
+
 
 
 
