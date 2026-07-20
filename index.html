@@ -1202,6 +1202,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 const WEEKLY_TARGET = 23400000;
 const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
 const SOURCE_TAB_NAME = "RAW";
+const SOURCE_GID = "0";
 const JULY_WEEK_COUNT = 5;
 const LEADERBOARD_WEEKLY_TARGETS = {
   S2S: 128800000,
@@ -1390,6 +1391,18 @@ async function loadWorkbook(buffer) {
   const sheetName = workbook.SheetNames.find(name => name.trim().toUpperCase() === SOURCE_TAB_NAME) || workbook.SheetNames[0];
   const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
   if (!rows.length) throw new Error("Sheet tidak memiliki data.");
+  loadRows(rows, sheetName);
+}
+
+function loadCsv(text) {
+  const workbook = XLSX.read(text, { type: "string", raw: false, cellDates: true });
+  const sheetName = workbook.SheetNames[0];
+  const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+  if (!rows.length) throw new Error("Sheet RAW tidak memiliki data.");
+  loadRows(rows, SOURCE_TAB_NAME);
+}
+
+function loadRows(rows, sheetName) {
   const normalized = normalizeRows(rows);
   layerOneRows = normalized.filter(row => row.team.toLowerCase() === "layer 1");
   summary = calculate(layerOneRows);
@@ -1498,7 +1511,7 @@ function render() {
   el("eligibleNote").textContent = selectedWeek === "all" ? "Memiliki incentive pada minimal 1 week" : `TH minimum ${percent(minimum)}`;
   el("medianKpi").textContent = percent(median);
   el("rowCount").textContent = `${rows.length} agent`;
-  el("tableCaption").textContent = selectedWeek === "all" ? "Total akumulasi seluruh week yang tersedia" : `${selectedWeek} · target Rp23.400.000`;
+  el("tableCaption").textContent = selectedWeek === "all" ? "Total akumulasi seluruh week yang tersedia" : `${selectedWeek} Â· target Rp23.400.000`;
 
   el("summaryBody").innerHTML = rows.map(row => `
     <tr data-key="${row.key}" class="${row.key === selectedKey ? "selected" : ""}">
@@ -1795,12 +1808,12 @@ function renderLeaderboard() {
         <div class="rank-main">
           <div class="rank-title">
             <strong>${escapeHtml(row.leader)}</strong>
-            <span>${escapeHtml(LEADERBOARD_TARGET_LABELS[row.primaryTeam] || row.primaryTeam)} · ${row.agentCount.toLocaleString("id-ID")} agent target · ${row.txn.toLocaleString("id-ID")} TXN</span>
+            <span>${escapeHtml(LEADERBOARD_TARGET_LABELS[row.primaryTeam] || row.primaryTeam)} Â· ${row.agentCount.toLocaleString("id-ID")} agent target Â· ${row.txn.toLocaleString("id-ID")} TXN</span>
           </div>
           <div class="rank-bar"><span style="width:${targetWidth}%"></span></div>
           <div class="rank-meta">
-            <span>Target Juli: ${rupiah(row.target)} · Top product: ${escapeHtml(topProduct)}</span>
-            <span>${percent(row.toTarget)} to target · Share ${percent(share)}</span>
+            <span>Target Juli: ${rupiah(row.target)} Â· Top product: ${escapeHtml(topProduct)}</span>
+            <span>${percent(row.toTarget)} to target Â· Share ${percent(share)}</span>
           </div>
         </div>
         <div class="rank-revenue"><strong>${rupiah(row.revenue)}</strong><span>${percent(row.toTarget)} target</span></div>
@@ -1954,15 +1967,15 @@ function weeklyActionBlock(revenue, target) {
     return `<div class="action-note action-win"><strong>Action:</strong> Target weekly sudah aman. Jaga ritme closing, push upsell/renewal, dan bantu validasi pipeline teman satu squad.</div>`;
   }
   if (progress >= 0.8) {
-    return `<div class="action-note action-close"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Fokus follow-up hot leads, renewal/cicilan pending, dan closing paket high value hari ini.</div>`;
+    return `<div class="action-note action-close"><strong>Gap ${rupiah(gap)}</strong> Â· butuh Â±${rupiah(dailyNeed)}/hari. Fokus follow-up hot leads, renewal/cicilan pending, dan closing paket high value hari ini.</div>`;
   }
   if (progress >= 0.5) {
-    return `<div class="action-note action-mid"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Prioritaskan 10 prospek terhangat, minta bantuan coach untuk objection handling, dan push BAON/RB yang siap bayar.</div>`;
+    return `<div class="action-note action-mid"><strong>Gap ${rupiah(gap)}</strong> Â· butuh Â±${rupiah(dailyNeed)}/hari. Prioritaskan 10 prospek terhangat, minta bantuan coach untuk objection handling, dan push BAON/RB yang siap bayar.</div>`;
   }
   if (progress >= 0.25) {
-    return `<div class="action-note action-risk"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Perbesar aktivitas: reaktivasi leads lama, follow-up semua unpaid invoice, dan buat daftar pipeline harian bersama coach.</div>`;
+    return `<div class="action-note action-risk"><strong>Gap ${rupiah(gap)}</strong> Â· butuh Â±${rupiah(dailyNeed)}/hari. Perbesar aktivitas: reaktivasi leads lama, follow-up semua unpaid invoice, dan buat daftar pipeline harian bersama coach.</div>`;
   }
-  return `<div class="action-note action-alert"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Perlu recovery plan: tambah volume kontak, ambil leads prioritas, lakukan call blitz, dan review pitch dengan coach sebelum jam prime time.</div>`;
+  return `<div class="action-note action-alert"><strong>Gap ${rupiah(gap)}</strong> Â· butuh Â±${rupiah(dailyNeed)}/hari. Perlu recovery plan: tambah volume kontak, ambil leads prioritas, lakukan call blitz, dan review pitch dengan coach sebelum jam prime time.</div>`;
 }
 
 function selectAgent(key) {
@@ -1974,7 +1987,7 @@ function selectAgent(key) {
   el("detailEmpty").hidden = true;
   el("detailContent").hidden = false;
   el("detailName").textContent = row.agent;
-  el("detailLeader").textContent = `${row.leader || "Tanpa leader"} · ${row.week}`;
+  el("detailLeader").textContent = `${row.leader || "Tanpa leader"} Â· ${row.week}`;
   el("detailStatus").textContent = row.eligible ? "CAIR" : "BELUM CAIR";
   el("detailStatus").className = `badge ${row.eligible ? "eligible" : "not-eligible"}`;
   el("detailTh").textContent = percent(row.th);
@@ -1983,7 +1996,7 @@ function selectAgent(key) {
   el("productList").innerHTML = row.productDetails.map(product => `
     <div class="product-row">
       <strong>${escapeHtml(product.product)}</strong>
-      <span>${row.allWeeks ? "Akumulasi rate dan tier tiap week" : `${percent(product.rate)} rate · tier ${product.tier ? percent(product.tier) : "-"}`}</span>
+      <span>${row.allWeeks ? "Akumulasi rate dan tier tiap week" : `${percent(product.rate)} rate Â· tier ${product.tier ? percent(product.tier) : "-"}`}</span>
       <div class="product-money"><strong>${rupiah(product.incentive)}</strong><span>${rupiah(product.revenue)}</span></div>
     </div>
   `).join("");
@@ -2011,11 +2024,11 @@ async function loadFromGoogleSheet() {
   el("dataStatus").textContent = "Memuat data...";
   try {
     const response = await fetch(
-      `https://docs.google.com/spreadsheets/d/${SOURCE_SHEET_ID}/export?format=xlsx&_=${Date.now()}`,
+      `https://docs.google.com/spreadsheets/d/${SOURCE_SHEET_ID}/export?format=csv&gid=${SOURCE_GID}&_=${Date.now()}`,
       { cache: "no-store" }
     );
     if (!response.ok) throw new Error("Google Sheet tidak dapat diakses. Pastikan link dibuka untuk publik.");
-    await loadWorkbook(await response.arrayBuffer());
+    loadCsv(await response.text());
   } catch (error) {
     el("dataStatus").textContent = "Gagal memuat data";
     showToast(error.message);
