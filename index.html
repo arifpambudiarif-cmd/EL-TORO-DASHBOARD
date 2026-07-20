@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>OEC Weekly Incentive</title>
+  <title>OEC Performance - Support EL TORO</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -427,6 +427,61 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 .campaign-purple { background-color: #bca8e8; color: #2e1f5e; }
 .campaign-blue { background-color: #9fc4df; color: #143d59; }
 .campaign-gray { background-color: #e4e7ec; color: #475467; }
+.campaign-hero {
+  background:
+    linear-gradient(135deg, rgba(155, 98, 0, .10), rgba(8, 127, 140, .08)),
+    #fff;
+}
+.campaign-rank-list {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+.campaign-rank-card {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 170px;
+  gap: 12px;
+  align-items: center;
+  padding: 11px 12px;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  background: #fff;
+}
+.campaign-rank-card.rank-1 { background: #fff9e6; border-color: #e4bd31; }
+.campaign-rank-card.rank-2 { background: #f7f9fb; border-color: #b8c2cc; }
+.campaign-rank-card.rank-3 { background: #fff4ea; border-color: #d49a59; }
+.campaign-rank-main {
+  min-width: 0;
+}
+.campaign-rank-main strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.campaign-rank-main span {
+  display: block;
+  margin: 3px 0 7px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.campaign-rank-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.campaign-rank-value strong {
+  display: block;
+  font-size: 14px;
+}
+.campaign-rank-value span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
 
 .leaderboard-hero {
   min-height: 120px;
@@ -837,7 +892,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   <header class="topbar">
     <div>
       <p class="eyebrow">OEC PERFORMANCE</p>
-      <h1>Weekly Incentive</h1>
+      <h1>Support EL TORO</h1>
     </div>
     <div class="top-actions">
       <span id="dataStatus" class="status-dot">Belum ada data</span>
@@ -851,6 +906,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
     <nav class="tabs" aria-label="Dashboard sections">
       <button class="tab-button active" type="button" data-tab="incentivePanel">DS INCENTIVE ALL</button>
       <button class="tab-button" type="button" data-tab="actionPanel">ACTION CENTER</button>
+      <button class="tab-button" type="button" data-tab="topCampaignPanel">TOP CAMPAIGN</button>
       <button class="tab-button" type="button" data-tab="dodolanPanel">DODOLAN</button>
       <button class="tab-button" type="button" data-tab="leaderboardPanel">LEADERBOARD COACH</button>
       <button class="tab-button" type="button" data-tab="agentLeaderboardPanel">LEADERBOARD AGENT</button>
@@ -1021,6 +1077,54 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
           </section>
         </aside>
       </div>
+    </section>
+
+    <section id="topCampaignPanel" class="tab-panel">
+      <div class="leaderboard-hero campaign-hero">
+        <div>
+          <p class="eyebrow">WEEKLY CAMPAIGN SIGNAL</p>
+          <h2>Top Campaign</h2>
+          <p>Campaign terbaik per minggu berdasarkan revenue, transaksi, dan AOV supaya agent tahu fokus kerja yang paling menjanjikan.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="topCampaignTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="topCampaignWeek">Week</label>
+          <select id="topCampaignWeek"></select>
+        </div>
+        <div class="field">
+          <label for="topCampaignSort">Sort by</label>
+          <select id="topCampaignSort">
+            <option value="revenue">Revenue</option>
+            <option value="txn">Txn</option>
+            <option value="aov">AOV</option>
+          </select>
+        </div>
+        <div class="field grow">
+          <label for="topCampaignSearch">Cari campaign atau produk</label>
+          <input id="topCampaignSearch" type="search" placeholder="Ketik campaign...">
+        </div>
+      </div>
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Campaign aktif</span><strong id="topCampaignCountKpi">0</strong><small id="topCampaignWeekNote">Weekly</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="topCampaignTxnKpi">0</strong><small>Layer 1</small></article>
+        <article class="kpi"><span>Top campaign</span><strong id="topCampaignNameKpi">-</strong><small id="topCampaignRevenueKpi">Rp0</small></article>
+        <article class="kpi"><span>Average AOV</span><strong id="topCampaignAovKpi">Rp0</strong><small>Revenue / txn</small></article>
+      </div>
+      <section class="table-panel leaderboard-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Ranking Campaign</h2>
+            <p id="topCampaignCaption">Campaign terbaik minggu ini.</p>
+          </div>
+          <span id="topCampaignCount" class="count-chip">0 campaign</span>
+        </div>
+        <div id="topCampaignList" class="campaign-rank-list"></div>
+      </section>
     </section>
 
     <section id="dodolanPanel" class="tab-panel">
@@ -1421,6 +1525,7 @@ function prepareDashboard(sheetName, rawCount) {
   const weeks = [...new Set(summary.map(row => row.week))];
   el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("dodolanWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
+  el("topCampaignWeek").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("agentLeaderboardWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
   el("compareWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
   el("actionWeekFilter").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
@@ -1431,6 +1536,7 @@ function prepareDashboard(sheetName, rawCount) {
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
   render();
   renderActionCenter();
+  renderTopCampaign();
   renderDodolan();
   renderLeaderboard();
   renderAgentLeaderboard();
@@ -1511,7 +1617,7 @@ function render() {
   el("eligibleNote").textContent = selectedWeek === "all" ? "Memiliki incentive pada minimal 1 week" : `TH minimum ${percent(minimum)}`;
   el("medianKpi").textContent = percent(median);
   el("rowCount").textContent = `${rows.length} agent`;
-  el("tableCaption").textContent = selectedWeek === "all" ? "Total akumulasi seluruh week yang tersedia" : `${selectedWeek} Â· target Rp23.400.000`;
+  el("tableCaption").textContent = selectedWeek === "all" ? "Total akumulasi seluruh week yang tersedia" : `${selectedWeek} · target Rp23.400.000`;
 
   el("summaryBody").innerHTML = rows.map(row => `
     <tr data-key="${row.key}" class="${row.key === selectedKey ? "selected" : ""}">
@@ -1689,6 +1795,60 @@ function campaignClass(value) {
   return "campaign-green";
 }
 
+
+function renderTopCampaign() {
+  const selectedWeek = el("topCampaignWeek").value;
+  const sortBy = el("topCampaignSort").value;
+  const query = el("topCampaignSearch").value.trim().toLowerCase();
+  const rows = dodolanRows.filter(row =>
+    (selectedWeek === "all" || row.week === selectedWeek) &&
+    (!query || `${row.campaign} ${row.product} ${row.packageName}`.toLowerCase().includes(query))
+  );
+  const groups = new Map();
+  rows.forEach(row => {
+    const key = row.campaign || "No Campaign";
+    if (!groups.has(key)) groups.set(key, { campaign: key, revenue: 0, txn: 0, products: {}, agents: new Set(), weeks: new Set() });
+    const item = groups.get(key);
+    item.revenue += row.revenue;
+    item.txn += row.txn || 1;
+    item.products[row.product] = (item.products[row.product] || 0) + row.revenue;
+    item.agents.add(row.agent);
+    item.weeks.add(row.week);
+  });
+  const campaigns = [...groups.values()].map(row => {
+    row.aov = row.txn ? row.revenue / row.txn : 0;
+    row.topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+    return row;
+  }).sort((a, b) => sortBy === "txn" ? b.txn - a.txn || b.revenue - a.revenue : sortBy === "aov" ? b.aov - a.aov || b.revenue - a.revenue : b.revenue - a.revenue || b.txn - a.txn);
+  const totalRevenue = campaigns.reduce((sum, row) => sum + row.revenue, 0);
+  const totalTxn = campaigns.reduce((sum, row) => sum + row.txn, 0);
+  const top = campaigns[0];
+  el("topCampaignTotalRevenue").textContent = rupiah(totalRevenue);
+  el("topCampaignCountKpi").textContent = campaigns.length.toLocaleString("id-ID");
+  el("topCampaignWeekNote").textContent = selectedWeek === "all" ? "Semua week" : selectedWeek;
+  el("topCampaignTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
+  el("topCampaignNameKpi").textContent = top ? top.campaign : "-";
+  el("topCampaignRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
+  el("topCampaignAovKpi").textContent = totalTxn ? rupiah(totalRevenue / totalTxn) : "Rp0";
+  el("topCampaignCount").textContent = `${campaigns.length} campaign`;
+  el("topCampaignCaption").textContent = `${selectedWeek === "all" ? "Semua week" : selectedWeek} - sort by ${sortBy.toUpperCase()}`;
+  el("topCampaignList").innerHTML = campaigns.slice(0, 20).map((row, index) => {
+    const share = totalRevenue ? row.revenue / totalRevenue : 0;
+    const width = Math.min(100, Math.max(4, share * 100));
+    return `
+      <article class="campaign-rank-card rank-${index + 1}">
+        <div class="rank-number">${index + 1}</div>
+        <div class="campaign-rank-main">
+          <strong>${escapeHtml(row.campaign)}</strong>
+          <span>${row.txn.toLocaleString("id-ID")} TXN - AOV ${rupiah(row.aov)} - Top product: ${escapeHtml(row.topProduct)}</span>
+          <div class="rank-bar"><span style="width:${width}%"></span></div>
+        </div>
+        <div class="campaign-rank-value"><strong>${rupiah(row.revenue)}</strong><span>Share ${percent(share)}</span></div>
+      </article>
+    `;
+  }).join("") || `<div class="detail-empty">Tidak ada campaign pada filter ini.</div>`;
+}
+
 function renderDodolan() {
   const rows = filteredDodolanRows();
   const totalRevenue = rows.reduce((sum, row) => sum + row.revenue, 0);
@@ -1808,12 +1968,12 @@ function renderLeaderboard() {
         <div class="rank-main">
           <div class="rank-title">
             <strong>${escapeHtml(row.leader)}</strong>
-            <span>${escapeHtml(LEADERBOARD_TARGET_LABELS[row.primaryTeam] || row.primaryTeam)} Â· ${row.agentCount.toLocaleString("id-ID")} agent target Â· ${row.txn.toLocaleString("id-ID")} TXN</span>
+            <span>${escapeHtml(LEADERBOARD_TARGET_LABELS[row.primaryTeam] || row.primaryTeam)} · ${row.agentCount.toLocaleString("id-ID")} agent target · ${row.txn.toLocaleString("id-ID")} TXN</span>
           </div>
           <div class="rank-bar"><span style="width:${targetWidth}%"></span></div>
           <div class="rank-meta">
-            <span>Target Juli: ${rupiah(row.target)} Â· Top product: ${escapeHtml(topProduct)}</span>
-            <span>${percent(row.toTarget)} to target Â· Share ${percent(share)}</span>
+            <span>Target Juli: ${rupiah(row.target)} · Top product: ${escapeHtml(topProduct)}</span>
+            <span>${percent(row.toTarget)} to target · Share ${percent(share)}</span>
           </div>
         </div>
         <div class="rank-revenue"><strong>${rupiah(row.revenue)}</strong><span>${percent(row.toTarget)} target</span></div>
@@ -1967,15 +2127,15 @@ function weeklyActionBlock(revenue, target) {
     return `<div class="action-note action-win"><strong>Action:</strong> Target weekly sudah aman. Jaga ritme closing, push upsell/renewal, dan bantu validasi pipeline teman satu squad.</div>`;
   }
   if (progress >= 0.8) {
-    return `<div class="action-note action-close"><strong>Gap ${rupiah(gap)}</strong> Â· butuh Â±${rupiah(dailyNeed)}/hari. Fokus follow-up hot leads, renewal/cicilan pending, dan closing paket high value hari ini.</div>`;
+    return `<div class="action-note action-close"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Fokus follow-up hot leads, renewal/cicilan pending, dan closing paket high value hari ini.</div>`;
   }
   if (progress >= 0.5) {
-    return `<div class="action-note action-mid"><strong>Gap ${rupiah(gap)}</strong> Â· butuh Â±${rupiah(dailyNeed)}/hari. Prioritaskan 10 prospek terhangat, minta bantuan coach untuk objection handling, dan push BAON/RB yang siap bayar.</div>`;
+    return `<div class="action-note action-mid"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Prioritaskan 10 prospek terhangat, minta bantuan coach untuk objection handling, dan push BAON/RB yang siap bayar.</div>`;
   }
   if (progress >= 0.25) {
-    return `<div class="action-note action-risk"><strong>Gap ${rupiah(gap)}</strong> Â· butuh Â±${rupiah(dailyNeed)}/hari. Perbesar aktivitas: reaktivasi leads lama, follow-up semua unpaid invoice, dan buat daftar pipeline harian bersama coach.</div>`;
+    return `<div class="action-note action-risk"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Perbesar aktivitas: reaktivasi leads lama, follow-up semua unpaid invoice, dan buat daftar pipeline harian bersama coach.</div>`;
   }
-  return `<div class="action-note action-alert"><strong>Gap ${rupiah(gap)}</strong> Â· butuh Â±${rupiah(dailyNeed)}/hari. Perlu recovery plan: tambah volume kontak, ambil leads prioritas, lakukan call blitz, dan review pitch dengan coach sebelum jam prime time.</div>`;
+  return `<div class="action-note action-alert"><strong>Gap ${rupiah(gap)}</strong> · butuh ±${rupiah(dailyNeed)}/hari. Perlu recovery plan: tambah volume kontak, ambil leads prioritas, lakukan call blitz, dan review pitch dengan coach sebelum jam prime time.</div>`;
 }
 
 function selectAgent(key) {
@@ -1987,7 +2147,7 @@ function selectAgent(key) {
   el("detailEmpty").hidden = true;
   el("detailContent").hidden = false;
   el("detailName").textContent = row.agent;
-  el("detailLeader").textContent = `${row.leader || "Tanpa leader"} Â· ${row.week}`;
+  el("detailLeader").textContent = `${row.leader || "Tanpa leader"} · ${row.week}`;
   el("detailStatus").textContent = row.eligible ? "CAIR" : "BELUM CAIR";
   el("detailStatus").className = `badge ${row.eligible ? "eligible" : "not-eligible"}`;
   el("detailTh").textContent = percent(row.th);
@@ -1996,7 +2156,7 @@ function selectAgent(key) {
   el("productList").innerHTML = row.productDetails.map(product => `
     <div class="product-row">
       <strong>${escapeHtml(product.product)}</strong>
-      <span>${row.allWeeks ? "Akumulasi rate dan tier tiap week" : `${percent(product.rate)} rate Â· tier ${product.tier ? percent(product.tier) : "-"}`}</span>
+      <span>${row.allWeeks ? "Akumulasi rate dan tier tiap week" : `${percent(product.rate)} rate · tier ${product.tier ? percent(product.tier) : "-"}`}</span>
       <div class="product-money"><strong>${rupiah(product.incentive)}</strong><span>${rupiah(product.revenue)}</span></div>
     </div>
   `).join("");
@@ -2073,6 +2233,9 @@ document.querySelectorAll(".tab-button").forEach(button => button.addEventListen
 el("weekFilter").addEventListener("change", render);
 el("searchFilter").addEventListener("input", render);
 el("statusFilter").addEventListener("change", render);
+el("topCampaignWeek").addEventListener("change", renderTopCampaign);
+el("topCampaignSort").addEventListener("change", renderTopCampaign);
+el("topCampaignSearch").addEventListener("input", renderTopCampaign);
 el("dodolanWeekFilter").addEventListener("change", renderDodolan);
 el("dodolanLeaderFilter").addEventListener("change", renderDodolan);
 el("dodolanSearchFilter").addEventListener("input", renderDodolan);
@@ -2093,6 +2256,7 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
 
 
 
