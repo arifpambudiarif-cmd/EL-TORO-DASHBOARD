@@ -480,6 +480,89 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   gap: 8px;
   padding: 10px;
 }
+.leaderboard-list.compare-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+.compare-column {
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.compare-column-head {
+  min-height: 58px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e3e8ef;
+}
+.compare-column-head h3 {
+  margin: 0 0 3px;
+  font-size: 15px;
+}
+.compare-column-head span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+.compare-column-head strong {
+  font-size: 14px;
+  white-space: nowrap;
+}
+.compare-agent-list {
+  display: grid;
+  gap: 7px;
+  padding: 8px;
+}
+.compare-agent-card {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 128px;
+  gap: 9px;
+  align-items: center;
+  padding: 9px;
+  border: 1px solid #e3e8ef;
+  border-radius: 7px;
+  background: #fff;
+}
+.compare-agent-card.rank-1 { background: #fff9e6; border-color: #e4bd31; }
+.compare-agent-card.rank-2 { background: #f7f9fb; border-color: #b8c2cc; }
+.compare-agent-card.rank-3 { background: #fff4ea; border-color: #d49a59; }
+.compare-agent-main {
+  min-width: 0;
+}
+.compare-agent-main strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.compare-agent-main span {
+  display: block;
+  margin: 2px 0 6px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.compare-agent-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.compare-agent-value strong {
+  display: block;
+  font-size: 12px;
+}
+.compare-agent-value span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
 .rank-card {
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) 170px;
@@ -636,6 +719,50 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   font-size: 10px;
   font-weight: 700;
 }
+.simple-action-card {
+  grid-template-columns: minmax(0, 1fr) 190px;
+}
+.action-readout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin: 10px 0 8px;
+}
+.action-readout div {
+  padding: 8px;
+  border: 1px solid #e3e8ef;
+  border-radius: 7px;
+  background: #f8fafc;
+}
+.action-readout span {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+.action-readout strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 13px;
+}
+.action-next-step {
+  margin-top: 9px;
+  padding: 10px;
+  border-radius: 7px;
+  background: #eef7f7;
+  color: #0f4f59;
+}
+.action-next-step strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.action-next-step p {
+  margin: 0;
+  line-height: 1.45;
+  color: #0f4f59;
+}
 .mini-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -685,6 +812,9 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   .action-layout { grid-template-columns: 1fr; }
   .action-agent-card { grid-template-columns: 1fr; }
   .action-money { text-align: left; }
+  .leaderboard-list.compare-grid { grid-template-columns: 1fr; }
+  .compare-agent-card { grid-template-columns: 34px minmax(0, 1fr); }
+  .compare-agent-value { grid-column: 2; text-align: left; }
 }
 
 @media (max-width: 620px) {
@@ -724,6 +854,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       <button class="tab-button" type="button" data-tab="dodolanPanel">DODOLAN</button>
       <button class="tab-button" type="button" data-tab="leaderboardPanel">LEADERBOARD COACH</button>
       <button class="tab-button" type="button" data-tab="agentLeaderboardPanel">LEADERBOARD AGENT</button>
+      <button class="tab-button" type="button" data-tab="compareTeamPanel">COMPARE TEAM</button>
     </nav>
 
     <section id="incentivePanel" class="tab-panel active">
@@ -825,8 +956,8 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       <div class="leaderboard-hero action-hero">
         <div>
           <p class="eyebrow">DAILY OPERATING VIEW</p>
-          <h2>Action Center</h2>
-          <p>Prioritas agent, gap target, dan campaign yang perlu dipush untuk kerja harian coach.</p>
+          <h2>Action Center Tim Arif Pambudi</h2>
+          <p>Halaman action harian untuk agent: lihat gap, transaksi yang dibutuhkan, dan fokus kerja hari ini.</p>
         </div>
         <div class="hero-number">
           <span>Total Gap</span>
@@ -838,12 +969,8 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
           <label for="actionWeekFilter">Week</label>
           <select id="actionWeekFilter"></select>
         </div>
-        <div class="field">
-          <label for="actionCoachFilter">Coach</label>
-          <select id="actionCoachFilter"></select>
-        </div>
         <div class="field grow">
-          <label for="actionSearchFilter">Cari agent atau coach</label>
+          <label for="actionSearchFilter">Cari agent</label>
           <input id="actionSearchFilter" type="search" placeholder="Ketik nama...">
         </div>
       </div>
@@ -851,14 +978,14 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         <article class="kpi"><span>Need Push</span><strong id="actionNeedPushKpi">0</strong><small>TH di bawah 40%</small></article>
         <article class="kpi"><span>Near Incentive</span><strong id="actionNearKpi">0</strong><small>TH 40%-49%</small></article>
         <article class="kpi"><span>Daily Gap</span><strong id="actionDailyNeedKpi">Rp0</strong><small>Estimasi per hari</small></article>
-        <article class="kpi"><span>Top Coach Gap</span><strong id="actionTopCoachKpi">-</strong><small id="actionTopCoachGap">Rp0</small></article>
+        <article class="kpi"><span>Next Action</span><strong id="actionTopCoachKpi">-</strong><small id="actionTopCoachGap">Rp0</small></article>
       </div>
       <div class="action-layout">
         <section class="table-panel action-priority-panel">
           <div class="panel-heading">
             <div>
-              <h2>Priority Agent</h2>
-              <p id="actionAgentCaption">Agent dengan gap dan peluang terdekat.</p>
+              <h2>Action List Agent</h2>
+              <p id="actionAgentCaption">Urutan kerja agent tim Arif Pambudi.</p>
             </div>
             <span id="actionAgentCount" class="count-chip">0 agent</span>
           </div>
@@ -868,8 +995,8 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
           <section class="table-panel">
             <div class="panel-heading">
               <div>
-                <h2>Coach Risk</h2>
-                <p>Coach dengan akumulasi gap terbesar.</p>
+                <h2>Team Snapshot</h2>
+                <p>Ringkasan performa tim minggu ini.</p>
               </div>
             </div>
             <div id="actionCoachList" class="mini-list"></div>
@@ -1014,6 +1141,57 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
           <span id="agentLeaderboardCount" class="count-chip">0 agent</span>
         </div>
         <div id="agentLeaderboardList" class="leaderboard-list"></div>
+      </section>
+    </section>
+
+    <section id="compareTeamPanel" class="tab-panel">
+      <div class="leaderboard-hero agent-hero">
+        <div>
+          <p class="eyebrow">TEAM COMPARISON</p>
+          <h2>Arif Pambudi vs Coach Pembanding</h2>
+          <p>Bandingkan ranking 1-12 agent tim Arif Pambudi dengan tim coach lain.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="compareTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="compareMode">Mode</label>
+          <select id="compareMode">
+            <option value="monthly">Monthly Juli</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="compareWeek">Week</label>
+          <select id="compareWeek"></select>
+        </div>
+        <div class="field">
+          <label for="compareCoach">Compare dengan</label>
+          <select id="compareCoach"></select>
+        </div>
+        <div class="field grow">
+          <label for="compareSearch">Cari agent</label>
+          <input id="compareSearch" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Agent dibandingkan</span><strong id="compareAgentKpi">0</strong><small>Top 12 per tim</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="compareTxnKpi">0</strong><small id="compareTxnNote">Monthly</small></article>
+        <article class="kpi"><span>Top agent</span><strong id="compareTopAgentKpi">-</strong><small id="compareTopRevenueKpi">Rp0</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="compareTotalToTargetKpi">0%</strong><small>Target Layer 1</small></article>
+      </div>
+      <section class="table-panel leaderboard-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Comparison Ranking</h2>
+            <p id="compareCaption">Monthly Juli</p>
+          </div>
+          <span id="compareCount" class="count-chip">0 agent</span>
+        </div>
+        <div id="compareList" class="leaderboard-list compare-grid"></div>
       </section>
     </section>
   </main>
@@ -1231,17 +1409,19 @@ function prepareDashboard(sheetName, rawCount) {
   el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("dodolanWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("agentLeaderboardWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
+  el("compareWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
   el("actionWeekFilter").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
   const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   el("dodolanLeaderFilter").innerHTML = `<option value="all">Semua leader</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
   el("agentLeaderboardCoach").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
-  el("actionCoachFilter").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
+  el("compareCoach").innerHTML = leaders.filter(leader => leader.toLowerCase() !== "arif pambudi").map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("");
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
   render();
   renderActionCenter();
   renderDodolan();
   renderLeaderboard();
   renderAgentLeaderboard();
+  renderCompareTeam();
 }
 
 function aggregateAllWeeks(rows) {
@@ -1423,70 +1603,68 @@ function renderMiniAggregate(elementId, rows, keyFn, limit) {
 
 function renderActionCenter() {
   const selectedWeek = el("actionWeekFilter").value;
-  const selectedCoach = el("actionCoachFilter").value;
   const query = el("actionSearchFilter").value.trim().toLowerCase();
   const daysLeft = weekDaysLeft(selectedWeek);
-  const agents = aggregateActionAgents(layerOneRows, selectedWeek).filter(row =>
-    (selectedCoach === "all" || row.leader === selectedCoach) &&
-    (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
+  const arifRows = layerOneRows.filter(row => (row.leader || "").trim().toLowerCase() === "arif pambudi");
+  const agents = aggregateActionAgents(arifRows, selectedWeek).filter(row =>
+    !query || `${row.agent} ${row.leader}`.toLowerCase().includes(query)
   );
   const openAgents = agents.filter(row => row.gap > 0);
   const totalGap = openAgents.reduce((sum, row) => sum + row.gap, 0);
-  const coachGap = new Map();
-  openAgents.forEach(row => coachGap.set(row.leader, (coachGap.get(row.leader) || 0) + row.gap));
-  const coachRows = [...coachGap.entries()].map(([leader, gap]) => ({ leader, gap })).sort((a, b) => b.gap - a.gap);
-  const topCoach = coachRows[0];
+  const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
+  const target = WEEKLY_TARGET * Math.max(1, agents.length);
+  const nextAction = openAgents[0];
 
   el("actionTotalGap").textContent = rupiah(totalGap);
   el("actionNeedPushKpi").textContent = agents.filter(row => row.status.key === "need").length.toLocaleString("id-ID");
   el("actionNearKpi").textContent = agents.filter(row => row.status.key === "near").length.toLocaleString("id-ID");
   el("actionDailyNeedKpi").textContent = rupiah(totalGap / daysLeft);
-  el("actionTopCoachKpi").textContent = topCoach ? topCoach.leader : "-";
-  el("actionTopCoachGap").textContent = topCoach ? rupiah(topCoach.gap) : "Rp0";
+  el("actionTopCoachKpi").textContent = nextAction ? nextAction.agent : "Semua aman";
+  el("actionTopCoachGap").textContent = nextAction ? `Next action - ${rupiah(nextAction.gap)} gap` : "Tidak ada gap";
   el("actionAgentCount").textContent = `${agents.length} agent`;
-  el("actionAgentCaption").textContent = `${selectedWeek} - ${daysLeft} hari tersisa`;
+  el("actionAgentCaption").textContent = `Tim Arif Pambudi - ${selectedWeek} - ${daysLeft} hari tersisa`;
 
-  el("actionAgentList").innerHTML = agents.slice(0, 16).map(row => {
+  el("actionAgentList").innerHTML = agents.map(row => {
     const width = Math.min(100, Math.max(4, row.th * 100));
+    const neededTxn = row.neededTxn ? `${row.neededTxn} transaksi lagi` : "mulai dari 1 transaksi baru";
+    const dailyNeed = row.gap / daysLeft;
     const action = row.status.key === "done"
-      ? "Pertahankan momentum dan bantu share winning script ke team."
+      ? "Jaga ritme. Share script/campaign yang berhasil ke teman satu tim."
       : row.status.key === "near"
-        ? "Prioritas closing: follow-up invoice unpaid dan push produk high value."
-        : "Buat pipeline harian: hot leads, reaktivasi, dan check-in intensif dengan coach.";
+        ? `Fokus hari ini: closing ${neededTxn}. Prioritaskan unpaid invoice dan user yang sudah tanya harga.`
+        : `Fokus hari ini: tambah pipeline dan kejar minimal ${rupiah(dailyNeed)} revenue. Mulai dari hot leads, reaktivasi, lalu unpaid invoice.`;
     return `
-      <article class="action-agent-card">
+      <article class="action-agent-card simple-action-card">
         <div>
           <div class="action-agent-head">
-            <div><strong>${escapeHtml(row.agent)}</strong><span>${escapeHtml(row.leader)}</span></div>
+            <div><strong>${escapeHtml(row.agent)}</strong><span>Tim Arif Pambudi</span></div>
             <span class="action-status ${row.status.key}">${row.status.label}</span>
           </div>
-          <div class="rank-bar"><span style="width:${width}%"></span></div>
-          <div class="action-agent-meta">
-            <span>TH ${percent(row.th)}</span>
-            <span>${row.txn.toLocaleString("id-ID")} TXN</span>
-            <span>AOV ${rupiah(row.aov)}</span>
-            <span>${row.neededTxn ? `Butuh +/-${row.neededTxn} TXN` : "Butuh TXN baru"}</span>
+          <div class="action-readout">
+            <div><span>Revenue</span><strong>${rupiah(row.revenue)}</strong></div>
+            <div><span>Gap</span><strong>${rupiah(row.gap)}</strong></div>
+            <div><span>TH</span><strong>${percent(row.th)}</strong></div>
           </div>
-          <div class="action-note ${row.status.key === "done" ? "action-win" : row.status.key === "near" ? "action-close" : "action-risk"}">${action}</div>
+          <div class="rank-bar"><span style="width:${width}%"></span></div>
+          <div class="action-next-step"><strong>Action hari ini</strong><p>${action}</p></div>
         </div>
-        <div class="action-money"><strong>${rupiah(row.gap)}</strong><span>Gap target</span><small>Top: ${escapeHtml(row.topProduct)}</small></div>
+        <div class="action-money">
+          <strong>${neededTxn}</strong>
+          <span>Estimasi kebutuhan</span>
+          <small>AOV ${rupiah(row.aov)} - ${row.txn.toLocaleString("id-ID")} TXN</small>
+        </div>
       </article>
     `;
-  }).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`;
+  }).join("") || `<div class="detail-empty">Tidak ada agent Arif Pambudi pada filter ini.</div>`;
 
-  el("actionCoachList").innerHTML = coachRows.slice(0, 6).map(row => {
-    const count = Math.max(1, agents.filter(agent => agent.leader === row.leader).length);
-    return `
-      <div class="mini-row">
-        <div><strong>${escapeHtml(row.leader)}</strong><span>${count.toLocaleString("id-ID")} agent open gap</span></div>
-        <div class="mini-value">${rupiah(row.gap)}</div>
-      </div>
-    `;
-  }).join("") || `<div class="detail-empty">Tidak ada gap pada filter ini.</div>`;
-
-  const weekRows = layerOneRows.filter(row => weekFor(row.weekName, row.weekNum)?.name === selectedWeek);
-  renderMiniAggregate("actionCampaignList", weekRows, row => row.campaign || "No Campaign", 6);
-  renderMiniAggregate("actionProductList", weekRows, row => productBucket(row), 6);
+  const weekRows = arifRows.filter(row => weekFor(row.weekName, row.weekNum)?.name === selectedWeek);
+  el("actionCoachList").innerHTML = `
+    <div class="mini-row"><div><strong>Total revenue tim</strong><span>${agents.length.toLocaleString("id-ID")} agent aktif</span></div><div class="mini-value">${rupiah(totalRevenue)}</div></div>
+    <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(WEEKLY_TARGET)} per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
+    <div class="mini-row"><div><strong>Pencapaian tim</strong><span>Revenue / target</span></div><div class="mini-value">${percent(target ? totalRevenue / target : 0)}</div></div>
+  `;
+  renderMiniAggregate("actionCampaignList", weekRows, row => row.campaign || "No Campaign", 5);
+  renderMiniAggregate("actionProductList", weekRows, row => productBucket(row), 5);
 }
 
 function campaignClass(value) {
@@ -1631,25 +1809,71 @@ function renderLeaderboard() {
   }).join("");
 }
 
+function aggregateAgentsByCoach(rows, coach, mode, selectedWeek, query) {
+  const byAgent = new Map();
+  rows.forEach(row => {
+    if ((row.leader || "-") !== coach) return;
+    const week = weekFor(row.weekName, row.weekNum);
+    if (mode === "weekly" && week?.name !== selectedWeek) return;
+    if (query && !`${row.agent}`.toLowerCase().includes(query)) return;
+    const key = row.agent.toLowerCase();
+    if (!byAgent.has(key)) {
+      byAgent.set(key, { agent: row.agent, leader: row.leader, revenue: 0, txn: 0, weeks: new Set(), products: {} });
+    }
+    const item = byAgent.get(key);
+    const product = productBucket(row);
+    item.revenue += row.revenue;
+    item.txn += 1;
+    item.weeks.add(week.name);
+    item.products[product] = (item.products[product] || 0) + row.revenue;
+  });
+  return [...byAgent.values()].sort((a, b) => b.revenue - a.revenue).slice(0, 12);
+}
+
+function renderTeamColumn(title, agents, target) {
+  return `
+    <section class="compare-column">
+      <div class="compare-column-head">
+        <div><h3>${escapeHtml(title)}</h3><span>${agents.length.toLocaleString("id-ID")} agent</span></div>
+        <strong>${rupiah(agents.reduce((sum, row) => sum + row.revenue, 0))}</strong>
+      </div>
+      <div class="compare-agent-list">
+        ${agents.map((row, index) => {
+          const toTarget = target ? row.revenue / target : 0;
+          const width = Math.min(100, Math.max(4, toTarget * 100));
+          const topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+          return `
+            <article class="compare-agent-card rank-${index + 1}">
+              <div class="rank-number">${index + 1}</div>
+              <div class="compare-agent-main">
+                <strong>${escapeHtml(row.agent)}</strong>
+                <span>${row.txn.toLocaleString("id-ID")} TXN - ${escapeHtml(topProduct)}</span>
+                <div class="rank-bar"><span style="width:${width}%"></span></div>
+              </div>
+              <div class="compare-agent-value"><strong>${rupiah(row.revenue)}</strong><span>${percent(toTarget)}</span></div>
+            </article>
+          `;
+        }).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`}
+      </div>
+    </section>
+  `;
+}
+
 function renderAgentLeaderboard() {
   const mode = el("agentLeaderboardMode").value;
   const selectedWeek = el("agentLeaderboardWeek").value;
   const selectedCoach = el("agentLeaderboardCoach").value;
   const query = el("agentLeaderboardSearch").value.trim().toLowerCase();
   el("agentLeaderboardWeek").disabled = mode === "monthly";
-
   const rows = layerOneRows.filter(row =>
     (mode === "monthly" || weekFor(row.weekName, row.weekNum)?.name === selectedWeek) &&
     (selectedCoach === "all" || (row.leader || "-") === selectedCoach) &&
     (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
   );
-
   const byAgent = new Map();
   rows.forEach(row => {
     const key = row.agent.toLowerCase();
-    if (!byAgent.has(key)) {
-      byAgent.set(key, { agent: row.agent, leader: row.leader, revenue: 0, txn: 0, weeks: new Set(), products: {} });
-    }
+    if (!byAgent.has(key)) byAgent.set(key, { agent: row.agent, leader: row.leader, revenue: 0, txn: 0, weeks: new Set(), products: {} });
     const item = byAgent.get(key);
     const week = weekFor(row.weekName, row.weekNum);
     const product = productBucket(row);
@@ -1658,14 +1882,12 @@ function renderAgentLeaderboard() {
     item.weeks.add(week.name);
     item.products[product] = (item.products[product] || 0) + row.revenue;
   });
-
   const agents = [...byAgent.values()].sort((a, b) => b.revenue - a.revenue);
   const target = WEEKLY_TARGET * (mode === "monthly" ? JULY_WEEK_COUNT : 1);
   const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
   const totalTarget = target * agents.length;
   const totalTxn = agents.reduce((sum, row) => sum + row.txn, 0);
   const top = agents[0];
-
   el("agentLeaderboardTotalRevenue").textContent = rupiah(totalRevenue);
   el("agentLeaderboardAgentKpi").textContent = agents.length.toLocaleString("id-ID");
   el("agentLeaderboardTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
@@ -1674,10 +1896,8 @@ function renderAgentLeaderboard() {
   el("agentLeaderboardTopRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("agentLeaderboardTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
   el("agentLeaderboardCount").textContent = `${agents.length} agent`;
-  el("agentLeaderboardCaption").textContent = mode === "monthly"
-    ? `Monthly Juli · target ${rupiah(target)} per agent`
-    : `${selectedWeek} · target ${rupiah(target)} per agent`;
-
+  el("agentLeaderboardCaption").textContent = mode === "monthly" ? `Monthly Juli - target ${rupiah(target)} per agent` : `${selectedWeek} - target ${rupiah(target)} per agent`;
+  el("agentLeaderboardList").classList.remove("compare-grid");
   el("agentLeaderboardList").innerHTML = agents.map((row, index) => {
     const toTarget = target ? row.revenue / target : 0;
     const width = Math.min(100, Math.max(4, toTarget * 100));
@@ -1686,21 +1906,40 @@ function renderAgentLeaderboard() {
       <article class="rank-card rank-${index + 1}">
         <div class="rank-number">${index + 1}</div>
         <div class="rank-main">
-          <div class="rank-title">
-            <strong>${escapeHtml(row.agent)}</strong>
-            <span>${escapeHtml(row.leader || "-")} · ${row.txn.toLocaleString("id-ID")} TXN</span>
-          </div>
+          <div class="rank-title"><strong>${escapeHtml(row.agent)}</strong><span>${escapeHtml(row.leader || "-")} - ${row.txn.toLocaleString("id-ID")} TXN</span></div>
           <div class="rank-bar"><span style="width:${width}%"></span></div>
-          <div class="rank-meta">
-            <span>Target: ${rupiah(target)} · Top product: ${escapeHtml(topProduct)}</span>
-            <span>${percent(toTarget)} to target</span>
-          </div>
+          <div class="rank-meta"><span>Target: ${rupiah(target)} - Top product: ${escapeHtml(topProduct)}</span><span>${percent(toTarget)} to target</span></div>
           ${mode === "weekly" ? weeklyActionBlock(row.revenue, target) : ""}
         </div>
         <div class="rank-revenue"><strong>${rupiah(row.revenue)}</strong><span>${percent(toTarget)} target</span></div>
-      </article>
-    `;
+      </article>`;
   }).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`;
+}
+
+function renderCompareTeam() {
+  const mode = el("compareMode").value;
+  const selectedWeek = el("compareWeek").value;
+  const compareCoach = el("compareCoach").value;
+  const query = el("compareSearch").value.trim().toLowerCase();
+  el("compareWeek").disabled = mode === "monthly";
+  const target = WEEKLY_TARGET * (mode === "monthly" ? JULY_WEEK_COUNT : 1);
+  const arifAgents = aggregateAgentsByCoach(layerOneRows, "Arif Pambudi", mode, selectedWeek, query);
+  const compareAgents = aggregateAgentsByCoach(layerOneRows, compareCoach, mode, selectedWeek, query);
+  const allAgents = [...arifAgents, ...compareAgents];
+  const totalRevenue = allAgents.reduce((sum, row) => sum + row.revenue, 0);
+  const totalTarget = target * allAgents.length;
+  const totalTxn = allAgents.reduce((sum, row) => sum + row.txn, 0);
+  const top = [...allAgents].sort((a, b) => b.revenue - a.revenue)[0];
+  el("compareTotalRevenue").textContent = rupiah(totalRevenue);
+  el("compareAgentKpi").textContent = allAgents.length.toLocaleString("id-ID");
+  el("compareTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
+  el("compareTxnNote").textContent = mode === "monthly" ? "Monthly Juli" : selectedWeek;
+  el("compareTopAgentKpi").textContent = top ? top.agent : "-";
+  el("compareTopRevenueKpi").textContent = top ? `${top.leader} - ${rupiah(top.revenue)}` : "Rp0";
+  el("compareTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
+  el("compareCount").textContent = `${arifAgents.length} vs ${compareAgents.length} agent`;
+  el("compareCaption").textContent = mode === "monthly" ? `Monthly Juli - Arif Pambudi vs ${compareCoach}` : `${selectedWeek} - Arif Pambudi vs ${compareCoach}`;
+  el("compareList").innerHTML = renderTeamColumn("Arif Pambudi", arifAgents, target) + renderTeamColumn(compareCoach, compareAgents, target);
 }
 
 function weeklyActionBlock(revenue, target) {
@@ -1825,12 +2064,15 @@ el("dodolanWeekFilter").addEventListener("change", renderDodolan);
 el("dodolanLeaderFilter").addEventListener("change", renderDodolan);
 el("dodolanSearchFilter").addEventListener("input", renderDodolan);
 el("actionWeekFilter").addEventListener("change", renderActionCenter);
-el("actionCoachFilter").addEventListener("change", renderActionCenter);
 el("actionSearchFilter").addEventListener("input", renderActionCenter);
 el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardWeek").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardCoach").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardSearch").addEventListener("input", renderAgentLeaderboard);
+el("compareMode").addEventListener("change", renderCompareTeam);
+el("compareWeek").addEventListener("change", renderCompareTeam);
+el("compareCoach").addEventListener("change", renderCompareTeam);
+el("compareSearch").addEventListener("input", renderCompareTeam);
 el("exportButton").addEventListener("click", exportResults);
 loadFromGoogleSheet();
 
@@ -1838,6 +2080,9 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
+
+
 
 
 
