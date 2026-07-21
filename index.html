@@ -1184,6 +1184,10 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 
       <div class="filters">
         <div class="field">
+          <label for="leaderboardWeekFilter">Week</label>
+          <select id="leaderboardWeekFilter"></select>
+        </div>
+        <div class="field">
           <label for="leaderboardLayerFilter">Layer</label>
           <select id="leaderboardLayerFilter">
             <option value="all">Semua layer</option>
@@ -1196,9 +1200,9 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 
       <div class="kpi-grid leaderboard-kpis">
         <article class="kpi"><span>Coach aktif</span><strong id="leaderboardLeaderKpi">0</strong><small id="leaderboardLayerNote">All layer termasuk S2S</small></article>
-        <article class="kpi"><span>Total transaksi</span><strong id="leaderboardTxnKpi">0</strong><small>Seluruh week Juli</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="leaderboardTxnKpi">0</strong><small id="leaderboardTxnNote">Seluruh week Juli</small></article>
         <article class="kpi"><span>Top leader</span><strong id="leaderboardTopLeaderKpi">-</strong><small id="leaderboardTopRevenueKpi">Rp0</small></article>
-        <article class="kpi"><span>Total to target</span><strong id="leaderboardTotalToTargetKpi">0%</strong><small>Target Juli = 5 minggu</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="leaderboardTotalToTargetKpi">0%</strong><small id="leaderboardTargetNote">Target Juli = semua week</small></article>
       </div>
 
       <section class="table-panel leaderboard-panel">
@@ -1399,6 +1403,7 @@ let summary = [];
 let dodolanRows = [];
 let leaderboardRows = [];
 let layerOneRows = [];
+let targetRows = [];
 let selectedKey = "";
 
 const el = id => document.getElementById(id);
@@ -1486,6 +1491,39 @@ function totalLeaderboardTarget(team, activeWeeks) {
   return activeWeeks.reduce((sum, weekName) => sum + leaderboardTargetForTeam(team, weekName), 0);
 }
 
+function normalizeTargetRows(rows) {
+  const keys = {};
+  Object.keys(rows[0] || {}).forEach(key => { keys[key.trim().toLowerCase()] = key; });
+  const read = (row, name) => row[keys[name.toLowerCase()]];
+  return rows.map(row => {
+    const weekNum = Number(read(row, "WEEK"));
+    const week = weekFor("", weekNum);
+    return {
+      agent: String(read(row, "Agent") || "").trim(),
+      leader: String(read(row, "Coach") || "").trim(),
+      team: normalizeTeam(read(row, "KATEGORI")),
+      week: week?.name || "",
+      weekNum,
+      target: parseAmount(read(row, "Target")),
+    };
+  }).filter(row => row.agent && row.week && row.target >= 0);
+}
+
+function targetForAgentWeek(agent, week) {
+  const key = String(agent || "").trim().toLowerCase();
+  const found = targetRows.find(row => row.agent.toLowerCase() === key && row.week === week?.name);
+  return found ? found.target : weeklyTargetForWeek(week);
+}
+
+function targetForLeaderTeamWeeks(leader, team, weeks) {
+  const leaderKey = String(leader || "").trim().toLowerCase();
+  const selectedWeeks = new Set(weeks);
+  const total = targetRows
+    .filter(row => row.leader.toLowerCase() === leaderKey && row.team === team && selectedWeeks.has(row.week))
+    .reduce((sum, row) => sum + row.target, 0);
+  return total || totalLeaderboardTarget(team, weeks) * (LEADERBOARD_AGENT_COUNTS[team] || 1);
+}
+
 function normalizeRows(rows) {
   const keys = {};
   Object.keys(rows[0] || {}).forEach(key => { keys[key.trim().toLowerCase()] = key; });
@@ -1547,7 +1585,7 @@ function calculate(rows) {
   });
 
   return [...agents.values()].map(item => {
-    item.target = weeklyTargetForWeek(item.weekMeta);
+    item.target = targetForAgentWeek(item.agent, item.weekMeta);
     item.th = item.target ? item.revenue / item.target : 0;
     item.eligible = item.th >= item.weekMeta.minimum;
     item.tier = chooseTier(item.th, item.weekMeta, Object.keys(item.products)[0] || "Others");
@@ -1565,15 +1603,17 @@ async function loadWorkbook(buffer) {
   const workbook = XLSX.read(buffer, { type: "array", cellDates: true });
   const sheetName = workbook.SheetNames.find(name => name.trim().toUpperCase() === SOURCE_TAB_NAME) || workbook.SheetNames[0];
   const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+  const targetSheetName = workbook.SheetNames.find(name => name.trim().toUpperCase() === "TARGET AGENT");
+  const targetSheetRows = targetSheetName ? XLSX.utils.sheet_to_json(workbook.Sheets[targetSheetName], { defval: "" }) : [];
   if (!rows.length) throw new Error("Sheet tidak memiliki data.");
-  loadRows(rows, sheetName);
+  loadRows(rows, sheetName, targetSheetRows);
 }
 
 function loadCsv(text) {
   const [headers, ...lines] = text.replace(/^\uFEFF/, "").split(/\r?\n/).filter(line => line.trim() !== "").map(parseCsvLine);
   const rows = lines.map(values => Object.fromEntries(headers.map((header, index) => [header, values[index] ?? ""])));
   if (!rows.length) throw new Error("Sheet RAW tidak memiliki data.");
-  loadRows(rows, SOURCE_TAB_NAME);
+  loadRows(rows, SOURCE_TAB_NAME, []);
 }
 
 function parseCsvLine(line) {
@@ -1600,7 +1640,9 @@ function parseCsvLine(line) {
   return values;
 }
 
-function loadRows(rows, sheetName) {
+function loadRows(rows, sheetName, targetSheetRows = []) {
+  targetRows = normalizeTargetRows(targetSheetRows);
+  console.info(`Loaded ${targetRows.length.toLocaleString("id-ID")} target rows from TARGET AGENT.`);
   const normalized = normalizeRows(rows);
   layerOneRows = normalized.filter(row => row.team.toLowerCase() === "layer 1");
   summary = calculate(layerOneRows);
@@ -1619,6 +1661,7 @@ function prepareDashboard(sheetName, rawCount) {
   const weeks = [...new Set(summary.map(row => row.week))];
   el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("dodolanWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
+  el("leaderboardWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("topCampaignWeek").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("agentLeaderboardWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
   el("compareWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
@@ -1676,7 +1719,7 @@ function aggregateAllWeeks(rows) {
   });
 
   return [...agents.values()].map(item => {
-    item.target = availableWeeks.reduce((sum, weekName) => sum + weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === weekName)), 0);
+    item.target = availableWeeks.reduce((sum, weekName) => sum + targetForAgentWeek(item.agent, WEEK_PERIODS.find(week => week.name === weekName)), 0);
     item.th = item.target ? item.revenue / item.target : 0;
     item.eligible = item.incentive > 0;
     item.tier = null;
@@ -1785,7 +1828,7 @@ function aggregateActionAgents(rows, selectedWeek) {
     item.campaigns[campaign] = (item.campaigns[campaign] || 0) + row.revenue;
   });
   return [...byAgent.values()].map(row => {
-    row.target = weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek));
+    row.target = targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
     row.gap = Math.max(0, row.target - row.revenue);
     row.th = row.target ? row.revenue / row.target : 0;
     row.neededTxn = row.aov ? Math.ceil(row.gap / row.aov) : null;
@@ -1828,7 +1871,7 @@ function renderActionCenter() {
   const openAgents = agents.filter(row => row.gap > 0);
   const totalGap = openAgents.reduce((sum, row) => sum + row.gap, 0);
   const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
-  const target = weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek)) * Math.max(1, agents.length);
+  const target = agents.reduce((sum, row) => sum + row.target, 0) || weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek)) * Math.max(1, agents.length);
   const nextAction = openAgents[0];
 
   el("actionTotalGap").textContent = rupiah(totalGap);
@@ -1876,7 +1919,7 @@ function renderActionCenter() {
   const weekRows = arifRows.filter(row => weekFor(row.weekName, row.weekNum)?.name === selectedWeek);
   el("actionCoachList").innerHTML = `
     <div class="mini-row"><div><strong>Total revenue tim</strong><span>${agents.length.toLocaleString("id-ID")} agent aktif</span></div><div class="mini-value">${rupiah(totalRevenue)}</div></div>
-    <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek)))} per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
+    <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(target / Math.max(1, agents.length))} avg per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
     <div class="mini-row"><div><strong>Pencapaian tim</strong><span>Revenue / target</span></div><div class="mini-value">${percent(target ? totalRevenue / target : 0)}</div></div>
   `;
   renderMiniAggregate("actionCampaignList", weekRows, row => row.campaign || "No Campaign", 5);
@@ -2030,10 +2073,12 @@ function renderDodolan() {
 }
 
 function renderLeaderboard() {
+  const selectedWeek = el("leaderboardWeekFilter").value;
   const selectedLayer = el("leaderboardLayerFilter").value;
   const byLeader = new Map();
   leaderboardRows.forEach(row => {
     if (!LEADERBOARD_WEEKLY_TARGETS[row.team]) return;
+    if (selectedWeek !== "all" && row.week !== selectedWeek) return;
     if (selectedLayer !== "all" && row.team !== selectedLayer) return;
     const leader = row.leader || "-";
     if (!byLeader.has(leader)) {
@@ -2056,7 +2101,7 @@ function renderLeaderboard() {
     row.activeWeeks = [...row.weeks];
     row.weeklyTarget = row.activeWeeks.length ? totalLeaderboardTarget(row.primaryTeam, row.activeWeeks) / row.activeWeeks.length : leaderboardTargetForTeam(row.primaryTeam);
     row.agentCount = selectedLayer === "all" ? (LEADERBOARD_AGENT_COUNTS[row.primaryTeam] || row.agents.size) : row.agents.size;
-    row.target = totalLeaderboardTarget(row.primaryTeam, row.activeWeeks) * row.agentCount;
+    row.target = targetForLeaderTeamWeeks(row.leader, row.primaryTeam, row.activeWeeks);
     row.toTarget = row.target ? row.revenue / row.target : 0;
   });
   const totalRevenue = leaders.reduce((sum, row) => sum + row.revenue, 0);
@@ -2067,10 +2112,12 @@ function renderLeaderboard() {
   el("leaderboardTotalRevenue").textContent = rupiah(totalRevenue);
   el("leaderboardLeaderKpi").textContent = leaders.length.toLocaleString("id-ID");
   el("leaderboardTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
+  el("leaderboardTxnNote").textContent = selectedWeek === "all" ? "Seluruh week Juli" : selectedWeek;
   el("leaderboardTopLeaderKpi").textContent = top ? top.leader : "-";
   el("leaderboardTopRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("leaderboardTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
-  el("leaderboardLayerNote").textContent = selectedLayer === "all" ? "All layer termasuk S2S" : selectedLayer;
+  el("leaderboardTargetNote").textContent = selectedWeek === "all" ? "Target Juli = semua week" : `Target ${selectedWeek}`;
+  el("leaderboardLayerNote").textContent = `${selectedWeek === "all" ? "Semua week" : selectedWeek} - ${selectedLayer === "all" ? "Semua layer" : selectedLayer}`;
   el("leaderboardCount").textContent = `${leaders.length} coach`;
 
   el("leaderboardList").innerHTML = leaders.map((row, index) => {
@@ -2087,7 +2134,7 @@ function renderLeaderboard() {
           </div>
           <div class="rank-bar"><span style="width:${targetWidth}%"></span></div>
           <div class="rank-meta">
-            <span>Target Juli: ${rupiah(row.target)} · Top product: ${escapeHtml(topProduct)}</span>
+            <span>${selectedWeek === "all" ? "Target Juli" : `Target ${selectedWeek}`}: ${rupiah(row.target)} - Top product: ${escapeHtml(topProduct)}</span>
             <span>${percent(row.toTarget)} to target · Share ${percent(share)}</span>
           </div>
         </div>
@@ -2127,7 +2174,8 @@ function renderTeamColumn(title, agents, target) {
       </div>
       <div class="compare-agent-list">
         ${agents.map((row, index) => {
-          const toTarget = target ? row.revenue / target : 0;
+          const rowTarget = typeof target === "function" ? target(row) : target;
+          const toTarget = rowTarget ? row.revenue / rowTarget : 0;
           const width = Math.min(100, Math.max(4, toTarget * 100));
           const topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
           return `
@@ -2171,9 +2219,10 @@ function renderAgentLeaderboard() {
     item.products[product] = (item.products[product] || 0) + row.revenue;
   });
   const agents = [...byAgent.values()].sort((a, b) => b.revenue - a.revenue);
-  const target = mode === "monthly" ? WEEK_PERIODS.reduce((sum, week) => sum + weeklyTargetForWeek(week), 0) : weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek));
+  const targetForRow = row => mode === "monthly" ? WEEK_PERIODS.reduce((sum, week) => sum + targetForAgentWeek(row.agent, week), 0) : targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
+  const target = agents.length ? agents.reduce((sum, row) => sum + targetForRow(row), 0) / agents.length : 0;
   const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
-  const totalTarget = target * agents.length;
+  const totalTarget = agents.reduce((sum, row) => sum + targetForRow(row), 0);
   const totalTxn = agents.reduce((sum, row) => sum + row.txn, 0);
   const top = agents[0];
   el("agentLeaderboardTotalRevenue").textContent = rupiah(totalRevenue);
@@ -2187,7 +2236,8 @@ function renderAgentLeaderboard() {
   el("agentLeaderboardCaption").textContent = mode === "monthly" ? `Monthly Juli - target ${rupiah(target)} per agent` : `${selectedWeek} - target ${rupiah(target)} per agent`;
   el("agentLeaderboardList").classList.remove("compare-grid");
   el("agentLeaderboardList").innerHTML = agents.map((row, index) => {
-    const toTarget = target ? row.revenue / target : 0;
+    const rowTarget = targetForRow(row);
+    const toTarget = rowTarget ? row.revenue / rowTarget : 0;
     const width = Math.min(100, Math.max(4, toTarget * 100));
     const topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
     return `
@@ -2196,8 +2246,8 @@ function renderAgentLeaderboard() {
         <div class="rank-main">
           <div class="rank-title"><strong>${escapeHtml(row.agent)}</strong><span>${escapeHtml(row.leader || "-")} - ${row.txn.toLocaleString("id-ID")} TXN</span></div>
           <div class="rank-bar"><span style="width:${width}%"></span></div>
-          <div class="rank-meta"><span>Target: ${rupiah(target)} - Top product: ${escapeHtml(topProduct)}</span><span>${percent(toTarget)} to target</span></div>
-          ${mode === "weekly" ? weeklyActionBlock(row.revenue, target) : ""}
+          <div class="rank-meta"><span>Target: ${rupiah(rowTarget)} - Top product: ${escapeHtml(topProduct)}</span><span>${percent(toTarget)} to target</span></div>
+          ${mode === "weekly" ? weeklyActionBlock(row.revenue, rowTarget) : ""}
         </div>
         <div class="rank-revenue"><strong>${rupiah(row.revenue)}</strong><span>${percent(toTarget)} target</span></div>
       </article>`;
@@ -2210,12 +2260,12 @@ function renderCompareTeam() {
   const compareCoach = el("compareCoach").value;
   const query = el("compareSearch").value.trim().toLowerCase();
   el("compareWeek").disabled = mode === "monthly";
-  const target = mode === "monthly" ? WEEK_PERIODS.reduce((sum, week) => sum + weeklyTargetForWeek(week), 0) : weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek));
+  const targetForRow = row => mode === "monthly" ? WEEK_PERIODS.reduce((sum, week) => sum + targetForAgentWeek(row.agent, week), 0) : targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
   const arifAgents = aggregateAgentsByCoach(layerOneRows, "Arif Pambudi", mode, selectedWeek, query);
   const compareAgents = aggregateAgentsByCoach(layerOneRows, compareCoach, mode, selectedWeek, query);
   const allAgents = [...arifAgents, ...compareAgents];
   const totalRevenue = allAgents.reduce((sum, row) => sum + row.revenue, 0);
-  const totalTarget = target * allAgents.length;
+  const totalTarget = allAgents.reduce((sum, row) => sum + targetForRow(row), 0);
   const totalTxn = allAgents.reduce((sum, row) => sum + row.txn, 0);
   const top = [...allAgents].sort((a, b) => b.revenue - a.revenue)[0];
   el("compareTotalRevenue").textContent = rupiah(totalRevenue);
@@ -2227,7 +2277,7 @@ function renderCompareTeam() {
   el("compareTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
   el("compareCount").textContent = `${arifAgents.length} vs ${compareAgents.length} agent`;
   el("compareCaption").textContent = mode === "monthly" ? `Monthly Juli - Arif Pambudi vs ${compareCoach}` : `${selectedWeek} - Arif Pambudi vs ${compareCoach}`;
-  el("compareList").innerHTML = renderTeamColumn("Arif Pambudi", arifAgents, target) + renderTeamColumn(compareCoach, compareAgents, target);
+  el("compareList").innerHTML = renderTeamColumn("Arif Pambudi", arifAgents, targetForRow) + renderTeamColumn(compareCoach, compareAgents, targetForRow);
 }
 
 function weeklyActionBlock(revenue, target) {
@@ -2299,11 +2349,11 @@ async function loadFromGoogleSheet() {
   el("dataStatus").textContent = "Memuat data...";
   try {
     const response = await fetch(
-      `https://docs.google.com/spreadsheets/d/${SOURCE_SHEET_ID}/export?format=csv&gid=${SOURCE_GID}&_=${Date.now()}`,
+      `https://docs.google.com/spreadsheets/d/${SOURCE_SHEET_ID}/export?format=xlsx&_=${Date.now()}`,
       { cache: "no-store" }
     );
     if (!response.ok) throw new Error("Google Sheet tidak dapat diakses. Pastikan link dibuka untuk publik.");
-    loadCsv(await response.text());
+    await loadWorkbook(await response.arrayBuffer());
   } catch (error) {
     el("dataStatus").textContent = "Gagal memuat data";
     showToast(error.message);
@@ -2356,6 +2406,7 @@ el("topCampaignSearch").addEventListener("input", renderTopCampaign);
 el("dodolanWeekFilter").addEventListener("change", renderDodolan);
 el("dodolanLeaderFilter").addEventListener("change", renderDodolan);
 el("dodolanSearchFilter").addEventListener("input", renderDodolan);
+el("leaderboardWeekFilter").addEventListener("change", renderLeaderboard);
 el("leaderboardLayerFilter").addEventListener("change", renderLeaderboard);
 el("actionWeekFilter").addEventListener("change", renderActionCenter);
 el("actionSearchFilter").addEventListener("input", renderActionCenter);
@@ -2374,6 +2425,8 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
+
 
 
 
