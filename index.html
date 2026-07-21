@@ -916,9 +916,9 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
     <section id="incentivePanel" class="tab-panel active">
     <section class="rules-strip">
       <div><span>Scope</span><strong>Layer 1</strong></div>
-      <div><span>Target mingguan</span><strong>Rp23.400.000</strong></div>
+      <div><span>Target L1 W1-W3</span><strong>Rp23.400.000</strong></div>
       <div><span>W1 minimum TH</span><strong>50%</strong></div>
-      <div><span>W2-W5 minimum TH</span><strong>40%</strong></div>
+      <div><span>W4-W5 target L1</span><strong>Rp18.200.000</strong></div>
     </section>
 
     <section id="emptyState" class="empty-state">
@@ -952,8 +952,8 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       <div class="kpi-grid">
         <article class="kpi"><span>Total revenue</span><strong id="revenueKpi">Rp0</strong><small id="revenueNote">0 agent</small></article>
         <article class="kpi"><span>Estimasi incentive</span><strong id="incentiveKpi">Rp0</strong><small id="incentiveNote">Berdasarkan rate produk</small></article>
-        <article class="kpi"><span>Agent mencapai minimum</span><strong id="eligibleKpi">0</strong><small id="eligibleNote">TH minimum 40%</small></article>
-        <article class="kpi"><span>Median TH</span><strong id="medianKpi">0%</strong><small>Target Rp23,4 juta / minggu</small></article>
+        <article class="kpi"><span>Agent mencapai minimum</span><strong id="eligibleKpi">0</strong><small id="eligibleNote">TH mengikuti skema week</small></article>
+        <article class="kpi"><span>Median TH</span><strong id="medianKpi">0%</strong><small>Target mengikuti week</small></article>
       </div>
 
       <div class="content-grid">
@@ -1031,8 +1031,8 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         </div>
       </div>
       <div class="kpi-grid action-kpis">
-        <article class="kpi"><span>Need Push</span><strong id="actionNeedPushKpi">0</strong><small>TH di bawah 40%</small></article>
-        <article class="kpi"><span>Near Incentive</span><strong id="actionNearKpi">0</strong><small>TH 40%-49%</small></article>
+        <article class="kpi"><span>Need Push</span><strong id="actionNeedPushKpi">0</strong><small>TH di bawah minimum</small></article>
+        <article class="kpi"><span>Near Incentive</span><strong id="actionNearKpi">0</strong><small>Mendekati minimum TH</small></article>
         <article class="kpi"><span>Daily Gap</span><strong id="actionDailyNeedKpi">Rp0</strong><small>Estimasi per hari</small></article>
         <article class="kpi"><span>Next Action</span><strong id="actionTopCoachKpi">-</strong><small id="actionTopCoachGap">Rp0</small></article>
       </div>
@@ -1323,6 +1323,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
 const WEEKLY_TARGET = 23400000;
+const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000 };
 const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
 const SOURCE_TAB_NAME = "RAW";
 const SOURCE_GID = "0";
@@ -1331,6 +1332,11 @@ const LEADERBOARD_WEEKLY_TARGETS = {
   S2S: 128800000,
   "Layer 1": 23400000,
   "Layer 2": 15800000,
+};
+const LEADERBOARD_WEEKLY_TARGETS_W4 = {
+  S2S: 110000000,
+  "Layer 1": 18200000,
+  "Layer 2": 10400000,
 };
 const LEADERBOARD_AGENT_COUNTS = {
   S2S: 11,
@@ -1346,8 +1352,8 @@ const WEEK_PERIODS = [
   { name: "W 1 JUL", weekNum: 27, minimum: 0.50, scheme: "W1" },
   { name: "W 2 JUL", weekNum: 28, minimum: 0.40, scheme: "W2" },
   { name: "W 3 JUL", weekNum: 29, minimum: 0.40, scheme: "W2" },
-  { name: "W 4 JUL", weekNum: 30, minimum: 0.40, scheme: "W2" },
-  { name: "W 5 JUL", weekNum: 31, minimum: 0.40, scheme: "W2" },
+  { name: "W 4 JUL", weekNum: 30, minimum: 0.50, scheme: "W4" },
+  { name: "W 5 JUL", weekNum: 31, minimum: 0.50, scheme: "W4" },
 ];
 
 const RATES = {
@@ -1358,6 +1364,7 @@ const RATES = {
     "BAON Reg": { 0: 0, .5: .037, .75: .0433, 1: .097, 1.25: .12 },
     "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
     "RB": { 0: 0, .5: .0383, .75: .045, 1: .1013, 1.25: .1275 },
+    "RGP Online": { 0: 0, .5: .003, .75: .005, 1: .01, 1.25: .01 },
     "RGP Offline": { 0: 0, .5: .003, .75: .005, 1: .01, 1.25: .01 },
     "Math Champs Online": { 0: 0, .5: .01, .75: .01, 1: .01, 1.25: .01 },
     "Skill Academy": { 0: 0, .5: .02, .75: .02, 1: .02, 1.25: .02 },
@@ -1369,9 +1376,22 @@ const RATES = {
     "BAON Reg": { 0: 0, .4: .024, .5: .037, .75: .0433, 1: .097, 1.25: .12 },
     "Others": { 0: 0, .4: .01, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
     "RB": { 0: 0, .4: .025, .5: .0383, .75: .045, 1: .1013, 1.25: .1275 },
+    "RGP Online": { 0: 0, .4: .002, .5: .003, .75: .005, 1: .01, 1.25: .01 },
     "RGP Offline": { 0: 0, .4: .002, .5: .003, .75: .005, 1: .01, 1.25: .01 },
     "Math Champs Online": { 0: 0, .4: .0065, .5: .01, .75: .01, 1: .01, 1.25: .01 },
     "Skill Academy": { 0: 0, .4: .013, .5: .02, .75: .02, 1: .02, 1.25: .02 },
+  },
+  W4: {
+    "BAC & Mathchamps Offline": { 0: 0, .5: .017, .75: .025, 1: .037, 1.25: .043, 1.5: .0515, 2: .074 },
+    "BAON Elite": { 0: 0, .5: .019, .75: .025, 1: .042, 1.25: .047, 1.5: .056, 2: .0835 },
+    "BAON Prem": { 0: 0, .5: .034, .75: .039, 1: .0885, 1.25: .1055, 1.5: .126, 2: .177 },
+    "BAON Reg": { 0: 0, .5: .029, .75: .034, 1: .075, 1.25: .0935, 1.5: .112, 2: .151 },
+    "Others": { 0: 0, .5: .0155, .75: .0175, 1: .019, 1.25: .012, 1.5: .0195, 2: .019 },
+    "RB": { 0: 0, .5: .03, .75: .035, 1: .079, 1.25: .0995, 1.5: .119, 2: .158 },
+    "RGP Online": { 0: 0, .5: .009, .75: .015, 1: .03, 1.25: .035, 1.5: .035, 2: .035 },
+    "RGP Offline": { 0: 0, .5: .003, .75: .005, 1: .01, 1.25: .01, 1.5: .01, 2: .01 },
+    "Math Champs Online": { 0: 0, .5: .01, .75: .01, 1: .01, 1.25: .01, 1.5: .01, 2: .01 },
+    "Skill Academy": { 0: 0, .5: .02, .75: .02, 1: .02, 1.25: .02, 1.5: .02, 2: .02 },
   },
 };
 
@@ -1446,9 +1466,24 @@ function productBucket(row) {
   if (lower === "brain academy" || lower === "math champs") return "BAC & Mathchamps Offline";
   if (lower === "math champs online") return "Math Champs Online";
   if (lower === "ruangbelajar" || group === "RB") return "RB";
+  if (lower.includes("ruangguru privat") && lower.includes("online")) return "RGP Online";
   if (lower === "ruangguru privat" || group === "RGP") return "RGP Offline";
   if (lower === "skill academy") return "Skill Academy";
   return "Others";
+}
+
+function weeklyTargetForWeek(week) {
+  return WEEKLY_TARGET_BY_SCHEME[week?.scheme] || WEEKLY_TARGET;
+}
+
+function leaderboardTargetForTeam(team, weekName = null) {
+  const week = WEEK_PERIODS.find(item => item.name === weekName);
+  const targets = week?.scheme === "W4" ? LEADERBOARD_WEEKLY_TARGETS_W4 : LEADERBOARD_WEEKLY_TARGETS;
+  return targets[team] || 0;
+}
+
+function totalLeaderboardTarget(team, activeWeeks) {
+  return activeWeeks.reduce((sum, weekName) => sum + leaderboardTargetForTeam(team, weekName), 0);
 }
 
 function normalizeRows(rows) {
@@ -1512,7 +1547,8 @@ function calculate(rows) {
   });
 
   return [...agents.values()].map(item => {
-    item.th = item.revenue / WEEKLY_TARGET;
+    item.target = weeklyTargetForWeek(item.weekMeta);
+    item.th = item.target ? item.revenue / item.target : 0;
     item.eligible = item.th >= item.weekMeta.minimum;
     item.tier = chooseTier(item.th, item.weekMeta, Object.keys(item.products)[0] || "Others");
     item.productDetails = Object.entries(item.products).map(([product, revenue]) => {
@@ -1640,7 +1676,7 @@ function aggregateAllWeeks(rows) {
   });
 
   return [...agents.values()].map(item => {
-    item.target = WEEKLY_TARGET * availableWeeks.length;
+    item.target = availableWeeks.reduce((sum, weekName) => sum + weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === weekName)), 0);
     item.th = item.target ? item.revenue / item.target : 0;
     item.eligible = item.incentive > 0;
     item.tier = null;
@@ -1668,7 +1704,9 @@ function render() {
   const thValues = rows.map(row => row.th).sort((a, b) => a - b);
   const median = thValues.length ? thValues[Math.floor(thValues.length / 2)] : 0;
   const selectedWeek = el("weekFilter").value;
-  const minimum = selectedWeek === "W 1 JUL" ? .5 : .4;
+  const selectedWeekMeta = WEEK_PERIODS.find(week => week.name === selectedWeek);
+  const minimum = selectedWeekMeta?.minimum || .5;
+  const selectedTarget = selectedWeekMeta ? weeklyTargetForWeek(selectedWeekMeta) : null;
 
   el("revenueKpi").textContent = rupiah(totalRevenue);
   el("revenueNote").textContent = `${rows.length} agent`;
@@ -1677,7 +1715,7 @@ function render() {
   el("eligibleNote").textContent = selectedWeek === "all" ? "Memiliki incentive pada minimal 1 week" : `TH minimum ${percent(minimum)}`;
   el("medianKpi").textContent = percent(median);
   el("rowCount").textContent = `${rows.length} agent`;
-  el("tableCaption").textContent = selectedWeek === "all" ? "Total akumulasi seluruh week yang tersedia" : `${selectedWeek} · target Rp23.400.000`;
+  el("tableCaption").textContent = selectedWeek === "all" ? "Total akumulasi seluruh week yang tersedia" : `${selectedWeek} - target ${rupiah(selectedTarget)}`;
 
   el("summaryBody").innerHTML = rows.map(row => `
     <tr data-key="${row.key}" class="${row.key === selectedKey ? "selected" : ""}">
@@ -1707,10 +1745,10 @@ function filteredDodolanRows() {
 }
 
 
-function actionStatus(th) {
+function actionStatus(th, minimum = .5) {
   if (th >= 1) return { key: "done", label: "Over Target" };
-  if (th >= .5) return { key: "track", label: "On Track" };
-  if (th >= .4) return { key: "near", label: "Near Incentive" };
+  if (th >= minimum) return { key: "track", label: "On Track" };
+  if (th >= Math.max(0, minimum - .1)) return { key: "near", label: "Near Incentive" };
   return { key: "need", label: "Need Push" };
 }
 
@@ -1747,11 +1785,11 @@ function aggregateActionAgents(rows, selectedWeek) {
     item.campaigns[campaign] = (item.campaigns[campaign] || 0) + row.revenue;
   });
   return [...byAgent.values()].map(row => {
-    row.target = WEEKLY_TARGET;
+    row.target = weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek));
     row.gap = Math.max(0, row.target - row.revenue);
     row.th = row.target ? row.revenue / row.target : 0;
     row.neededTxn = row.aov ? Math.ceil(row.gap / row.aov) : null;
-    row.status = actionStatus(row.th);
+    row.status = actionStatus(row.th, WEEK_PERIODS.find(week => week.name === selectedWeek)?.minimum || .5);
     row.topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
     row.topCampaign = Object.entries(row.campaigns).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
     return row;
@@ -1790,7 +1828,7 @@ function renderActionCenter() {
   const openAgents = agents.filter(row => row.gap > 0);
   const totalGap = openAgents.reduce((sum, row) => sum + row.gap, 0);
   const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
-  const target = WEEKLY_TARGET * Math.max(1, agents.length);
+  const target = weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek)) * Math.max(1, agents.length);
   const nextAction = openAgents[0];
 
   el("actionTotalGap").textContent = rupiah(totalGap);
@@ -1838,7 +1876,7 @@ function renderActionCenter() {
   const weekRows = arifRows.filter(row => weekFor(row.weekName, row.weekNum)?.name === selectedWeek);
   el("actionCoachList").innerHTML = `
     <div class="mini-row"><div><strong>Total revenue tim</strong><span>${agents.length.toLocaleString("id-ID")} agent aktif</span></div><div class="mini-value">${rupiah(totalRevenue)}</div></div>
-    <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(WEEKLY_TARGET)} per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
+    <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek)))} per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
     <div class="mini-row"><div><strong>Pencapaian tim</strong><span>Revenue / target</span></div><div class="mini-value">${percent(target ? totalRevenue / target : 0)}</div></div>
   `;
   renderMiniAggregate("actionCampaignList", weekRows, row => row.campaign || "No Campaign", 5);
@@ -2015,9 +2053,10 @@ function renderLeaderboard() {
     row.primaryTeam = selectedLayer === "all"
       ? Object.entries(row.teams).sort((a, b) => b[1] - a[1])[0]?.[0] || "-"
       : selectedLayer;
-    row.weeklyTarget = LEADERBOARD_WEEKLY_TARGETS[row.primaryTeam] || 0;
+    row.activeWeeks = [...row.weeks];
+    row.weeklyTarget = row.activeWeeks.length ? totalLeaderboardTarget(row.primaryTeam, row.activeWeeks) / row.activeWeeks.length : leaderboardTargetForTeam(row.primaryTeam);
     row.agentCount = selectedLayer === "all" ? (LEADERBOARD_AGENT_COUNTS[row.primaryTeam] || row.agents.size) : row.agents.size;
-    row.target = row.weeklyTarget * row.agentCount * JULY_WEEK_COUNT;
+    row.target = totalLeaderboardTarget(row.primaryTeam, row.activeWeeks) * row.agentCount;
     row.toTarget = row.target ? row.revenue / row.target : 0;
   });
   const totalRevenue = leaders.reduce((sum, row) => sum + row.revenue, 0);
@@ -2132,7 +2171,7 @@ function renderAgentLeaderboard() {
     item.products[product] = (item.products[product] || 0) + row.revenue;
   });
   const agents = [...byAgent.values()].sort((a, b) => b.revenue - a.revenue);
-  const target = WEEKLY_TARGET * (mode === "monthly" ? JULY_WEEK_COUNT : 1);
+  const target = mode === "monthly" ? WEEK_PERIODS.reduce((sum, week) => sum + weeklyTargetForWeek(week), 0) : weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek));
   const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
   const totalTarget = target * agents.length;
   const totalTxn = agents.reduce((sum, row) => sum + row.txn, 0);
@@ -2171,7 +2210,7 @@ function renderCompareTeam() {
   const compareCoach = el("compareCoach").value;
   const query = el("compareSearch").value.trim().toLowerCase();
   el("compareWeek").disabled = mode === "monthly";
-  const target = WEEKLY_TARGET * (mode === "monthly" ? JULY_WEEK_COUNT : 1);
+  const target = mode === "monthly" ? WEEK_PERIODS.reduce((sum, week) => sum + weeklyTargetForWeek(week), 0) : weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek));
   const arifAgents = aggregateAgentsByCoach(layerOneRows, "Arif Pambudi", mode, selectedWeek, query);
   const compareAgents = aggregateAgentsByCoach(layerOneRows, compareCoach, mode, selectedWeek, query);
   const allAgents = [...arifAgents, ...compareAgents];
@@ -2335,6 +2374,7 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
 
 
 
