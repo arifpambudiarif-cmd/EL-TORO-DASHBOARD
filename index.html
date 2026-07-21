@@ -1174,7 +1174,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         <div>
           <p class="eyebrow">JULY RACE</p>
           <h2>Revenue Leaderboard</h2>
-          <p>Total revenue all coach selama Juli dari semua layer, termasuk S2S.</p>
+          <p>Total revenue coach selama Juli, bisa difilter per layer termasuk S2S.</p>
         </div>
         <div class="hero-number">
           <span>Total Revenue</span>
@@ -1182,8 +1182,20 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         </div>
       </div>
 
+      <div class="filters">
+        <div class="field">
+          <label for="leaderboardLayerFilter">Layer</label>
+          <select id="leaderboardLayerFilter">
+            <option value="all">Semua layer</option>
+            <option value="S2S">S2S</option>
+            <option value="Layer 1">Layer 1</option>
+            <option value="Layer 2">Layer 2</option>
+          </select>
+        </div>
+      </div>
+
       <div class="kpi-grid leaderboard-kpis">
-        <article class="kpi"><span>Coach aktif</span><strong id="leaderboardLeaderKpi">0</strong><small>All layer termasuk S2S</small></article>
+        <article class="kpi"><span>Coach aktif</span><strong id="leaderboardLeaderKpi">0</strong><small id="leaderboardLayerNote">All layer termasuk S2S</small></article>
         <article class="kpi"><span>Total transaksi</span><strong id="leaderboardTxnKpi">0</strong><small>Seluruh week Juli</small></article>
         <article class="kpi"><span>Top leader</span><strong id="leaderboardTopLeaderKpi">-</strong><small id="leaderboardTopRevenueKpi">Rp0</small></article>
         <article class="kpi"><span>Total to target</span><strong id="leaderboardTotalToTargetKpi">0%</strong><small>Target Juli = 5 minggu</small></article>
@@ -1980,9 +1992,11 @@ function renderDodolan() {
 }
 
 function renderLeaderboard() {
+  const selectedLayer = el("leaderboardLayerFilter").value;
   const byLeader = new Map();
   leaderboardRows.forEach(row => {
     if (!LEADERBOARD_WEEKLY_TARGETS[row.team]) return;
+    if (selectedLayer !== "all" && row.team !== selectedLayer) return;
     const leader = row.leader || "-";
     if (!byLeader.has(leader)) {
       byLeader.set(leader, { leader, revenue: 0, target: 0, txn: 0, agents: new Set(), weeks: new Set(), products: {}, teams: {} });
@@ -1998,9 +2012,11 @@ function renderLeaderboard() {
 
   const leaders = [...byLeader.values()].sort((a, b) => b.revenue - a.revenue);
   leaders.forEach(row => {
-    row.primaryTeam = Object.entries(row.teams).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+    row.primaryTeam = selectedLayer === "all"
+      ? Object.entries(row.teams).sort((a, b) => b[1] - a[1])[0]?.[0] || "-"
+      : selectedLayer;
     row.weeklyTarget = LEADERBOARD_WEEKLY_TARGETS[row.primaryTeam] || 0;
-    row.agentCount = LEADERBOARD_AGENT_COUNTS[row.primaryTeam] || row.agents.size;
+    row.agentCount = selectedLayer === "all" ? (LEADERBOARD_AGENT_COUNTS[row.primaryTeam] || row.agents.size) : row.agents.size;
     row.target = row.weeklyTarget * row.agentCount * JULY_WEEK_COUNT;
     row.toTarget = row.target ? row.revenue / row.target : 0;
   });
@@ -2015,6 +2031,7 @@ function renderLeaderboard() {
   el("leaderboardTopLeaderKpi").textContent = top ? top.leader : "-";
   el("leaderboardTopRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("leaderboardTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
+  el("leaderboardLayerNote").textContent = selectedLayer === "all" ? "All layer termasuk S2S" : selectedLayer;
   el("leaderboardCount").textContent = `${leaders.length} coach`;
 
   el("leaderboardList").innerHTML = leaders.map((row, index) => {
@@ -2300,6 +2317,7 @@ el("topCampaignSearch").addEventListener("input", renderTopCampaign);
 el("dodolanWeekFilter").addEventListener("change", renderDodolan);
 el("dodolanLeaderFilter").addEventListener("change", renderDodolan);
 el("dodolanSearchFilter").addEventListener("input", renderDodolan);
+el("leaderboardLayerFilter").addEventListener("change", renderLeaderboard);
 el("actionWeekFilter").addEventListener("change", renderActionCenter);
 el("actionSearchFilter").addEventListener("input", renderActionCenter);
 el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
@@ -2317,6 +2335,7 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
 
 
 
