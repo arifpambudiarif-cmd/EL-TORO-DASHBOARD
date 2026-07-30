@@ -423,6 +423,18 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   line-height: 1.25;
   font-size: 10px;
 }
+.assigned-date-line {
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 3px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: #eef6ff;
+  color: #315f88;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.25;
+}
 .campaign-gold { background-color: #f6d66b; color: #533f00; }
 .campaign-green { background-color: #95c77b; color: #123d1c; }
 .campaign-purple { background-color: #bca8e8; color: #2e1f5e; }
@@ -1497,6 +1509,17 @@ function parseDate(value) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+function formatAssignedDate(value) {
+  const date = parseDate(value);
+  if (!date) return String(value || "").trim();
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    timeZone: "Asia/Jakarta",
+  }).format(date);
+}
+
 function normalizeWeekName(value) {
   return String(value || "").trim().replace(/\s+/g, " ").toUpperCase();
 }
@@ -1595,6 +1618,7 @@ function normalizeRows(rows) {
     leader: String(read(row, "Leader Name") || "").trim(),
     packageName: String(read(row, "Package Name") || "").trim(),
     campaign: String(read(row, "Campaign") || "").trim(),
+    assignedDate: formatAssignedDate(read(row, "Assigned Date") || read(row, "assigned_date")),
     team: normalizeTeam(read(row, "Kategori Team") || read(row, "category team")),
     product_type: String(read(row, "Product Type") || "").trim(),
     product_group: String(read(row, "Product Group") || "").trim(),
@@ -1610,6 +1634,7 @@ function buildDodolanRows(rows) {
       week: week.name,
       packageName: row.packageName || row.product_type || "-",
       campaign: row.campaign || "No Campaign",
+      assignedDate: row.assignedDate || "-",
       product: productBucket(row),
       txn: 1,
     };
@@ -2121,6 +2146,7 @@ function renderDodolan() {
                   <td>
                     <div class="package-name"><span class="package-dot ${campaignClass(row.campaign)}"></span>${escapeHtml(row.packageName)}</div>
                     <div class="campaign-line ${campaignClass(row.campaign)}">${escapeHtml(row.campaign)}</div>
+                    <div class="assigned-date-line">Assigned: ${escapeHtml(row.assignedDate || "-")}</div>
                   </td>
                   <td>${escapeHtml(row.agent)}</td>
                   <td class="number">${row.txn}</td>
