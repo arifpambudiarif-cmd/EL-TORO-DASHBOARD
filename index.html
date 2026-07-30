@@ -6,20 +6,24 @@
   <title>OEC Performance - Support EL TORO</title>
         <style>
 :root {
-  --ink: #172033;
-  --muted: #667085;
-  --line: #d8dee8;
-  --background: #f4f6f8;
+  --ink: #06223a;
+  --muted: #4e7190;
+  --line: #c7d8e8;
+  --background: #eef6fb;
   --panel: #ffffff;
-  --teal: #087f8c;
-  --teal-dark: #076571;
-  --teal-soft: #e5f5f4;
-  --green: #147d64;
-  --green-soft: #e8f6f0;
-  --amber: #9b6200;
+  --teal: #18bfe8;
+  --teal-dark: #0b6f96;
+  --teal-soft: #e3f7ff;
+  --green: #16c995;
+  --green-soft: #e4fbf4;
+  --amber: #b36a00;
   --amber-soft: #fff4d8;
   --red: #b42318;
   --red-soft: #fff0ee;
+  --pink: #ff2aa1;
+  --purple: #9650dc;
+  --orange: #ff9f2f;
+  --blue: #367ff0;
 }
 
 * { box-sizing: border-box; }
@@ -28,7 +32,7 @@
 body {
   margin: 0;
   color: var(--ink);
-  background: var(--background);
+  background: linear-gradient(180deg, #eaf7fd 0, #f6fbff 220px, #eef6fb 100%);
   font-family: Inter, Arial, sans-serif;
   font-size: 12px;
   letter-spacing: 0;
@@ -40,7 +44,7 @@ button { cursor: pointer; }
 .topbar {
   min-height: 78px;
   padding: 14px max(24px, calc((100vw - 1480px) / 2));
-  background: #fff;
+  background: linear-gradient(90deg, #fff 0%, #effaff 52%, #fff4fb 100%);
   border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
@@ -115,7 +119,7 @@ main {
 }
 .tab-button.active {
   background: #fff;
-  color: var(--teal);
+  color: var(--teal-dark);
   border-color: var(--line);
 }
 .tab-panel { display: none; }
@@ -234,7 +238,7 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
 .kpi {
   min-height: 82px;
   padding: 10px 12px;
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff, #f7fcff);
   border: 1px solid var(--line);
   border-radius: 8px;
 }
@@ -615,6 +619,58 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   font-size: 10px;
   font-weight: 700;
 }
+
+.compare-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+  background: #f8fcff;
+}
+.compare-breakdown > div { min-width: 0; }
+.compare-breakdown strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--teal-dark);
+  font-size: 11px;
+}
+.mini-bars { display: grid; gap: 5px; }
+.mini-bar-row {
+  display: grid;
+  grid-template-columns: 92px minmax(80px, 1fr) 88px;
+  gap: 6px;
+  align-items: center;
+  font-size: 10px;
+}
+.mini-bar-row > span {
+  overflow: hidden;
+  color: #36739a;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mini-bar-row div {
+  height: 13px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #e8f0f7;
+}
+.mini-bar-row i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+}
+.mini-bar-row b {
+  color: #06304d;
+  font-size: 9px;
+  text-align: right;
+}
+.bar-color-1 { background: var(--teal); }
+.bar-color-2 { background: var(--pink); }
+.bar-color-3 { background: var(--green); }
+.bar-color-4 { background: #ffc447; }
+.bar-color-5 { background: var(--purple); }
+.bar-color-6 { background: var(--blue); }
 .rank-card {
   display: grid;
   grid-template-columns: 44px minmax(0, 1fr) 170px;
@@ -672,7 +728,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   display: block;
   height: 100%;
   border-radius: 4px;
-  background: var(--teal);
+  background: linear-gradient(90deg, var(--teal), var(--pink));
 }
 .rank-1 .rank-bar span { background: #c99600; }
 .rank-meta {
@@ -1406,6 +1462,11 @@ let selectedKey = "";
 const el = id => document.getElementById(id);
 const rupiah = value => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value || 0);
 const percent = value => `${new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format((value || 0) * 100)}%`;
+const formatUpdateTime = date => new Intl.DateTimeFormat("id-ID", {
+  dateStyle: "medium",
+  timeStyle: "short",
+  timeZone: "Asia/Jakarta",
+}).format(date);
 
 function parseAmount(value) {
   if (typeof value === "number") return Number.isFinite(value) ? Math.round(value) : 0;
@@ -1578,7 +1639,9 @@ function calculate(rows) {
     const product = productBucket(row);
     item.revenue += row.revenue;
     item.transactions += row.invoice ? 1 : 0;
-    item.products[product] = (item.products[product] || 0) + row.revenue;
+    if (!item.products[product]) item.products[product] = { revenue: 0, txn: 0 };
+    item.products[product].revenue += row.revenue;
+    item.products[product].txn += 1;
   });
 
   return [...agents.values()].map(item => {
@@ -1586,10 +1649,11 @@ function calculate(rows) {
     item.th = item.target ? item.revenue / item.target : 0;
     item.eligible = item.th >= item.weekMeta.minimum;
     item.tier = chooseTier(item.th, item.weekMeta, Object.keys(item.products)[0] || "Others");
-    item.productDetails = Object.entries(item.products).map(([product, revenue]) => {
+    item.productDetails = Object.entries(item.products).map(([product, detail]) => {
       const tier = chooseTier(item.th, item.weekMeta, product);
       const rate = RATES[item.weekMeta.scheme][product]?.[tier] || 0;
-      return { product, revenue, tier, rate, incentive: revenue * rate };
+      const incentive = detail.revenue * rate;
+      return { product, revenue: detail.revenue, txn: detail.txn, tier, rate, incentive, incentivePerTxn: detail.txn ? incentive / detail.txn : 0 };
     }).sort((a, b) => b.revenue - a.revenue);
     item.incentive = item.productDetails.reduce((total, product) => total + product.incentive, 0);
     return item;
@@ -1653,7 +1717,7 @@ function prepareDashboard(sheetName, rawCount) {
   el("emptyState").hidden = true;
   el("dashboard").hidden = false;
   el("exportButton").disabled = false;
-  el("dataStatus").textContent = `${rawCount.toLocaleString("id-ID")} summary rows`;
+  el("dataStatus").textContent = `Update ${formatUpdateTime(new Date())}`;
   el("dataStatus").classList.add("ready");
   const weeks = [...new Set(summary.map(row => row.week))];
   el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
@@ -1708,10 +1772,11 @@ function aggregateAllWeeks(rows) {
 
     row.productDetails.forEach(product => {
       if (!item.products[product.product]) {
-        item.products[product.product] = { product: product.product, revenue: 0, incentive: 0 };
+        item.products[product.product] = { product: product.product, revenue: 0, incentive: 0, txn: 0 };
       }
       item.products[product.product].revenue += product.revenue;
       item.products[product.product].incentive += product.incentive;
+      item.products[product.product].txn += product.txn || 0;
     });
   });
 
@@ -1720,7 +1785,10 @@ function aggregateAllWeeks(rows) {
     item.th = item.target ? item.revenue / item.target : 0;
     item.eligible = item.incentive > 0;
     item.tier = null;
-    item.productDetails = Object.values(item.products).sort((a, b) => b.incentive - a.incentive);
+    item.productDetails = Object.values(item.products).map(product => ({
+      ...product,
+      incentivePerTxn: product.txn ? product.incentive / product.txn : 0,
+    })).sort((a, b) => b.incentive - a.incentive);
     return item;
   }).sort((a, b) => b.incentive - a.incentive || b.revenue - a.revenue);
 }
@@ -1930,6 +1998,12 @@ function campaignClass(value) {
   if (text.includes("special") || text.includes("reassign")) return "campaign-blue";
   if (text.includes("no campaign")) return "campaign-gray";
   return "campaign-green";
+}
+
+function campaignCode(value) {
+  const text = String(value || "").trim();
+  if (!text || text.toLowerCase() === "no campaign") return "No Campaign";
+  return text.split(".")[0].split(" ")[0].replace(/[^A-Za-z0-9-]/g, "") || text.slice(0, 18);
 }
 
 
@@ -2163,11 +2237,18 @@ function aggregateAgentsByCoach(rows, coach, mode, selectedWeek, query) {
 }
 
 function renderTeamColumn(title, agents, target) {
+  const sourceRows = layerOneRows.filter(row => (row.leader || "-") === title);
+  const productRows = topGroupRows(sourceRows, row => productBucket(row), 5);
+  const campaignRows = topGroupRows(sourceRows, row => campaignCode(row.campaign || "No Campaign"), 5);
   return `
     <section class="compare-column">
       <div class="compare-column-head">
         <div><h3>${escapeHtml(title)}</h3><span>${agents.length.toLocaleString("id-ID")} agent</span></div>
         <strong>${rupiah(agents.reduce((sum, row) => sum + row.revenue, 0))}</strong>
+      </div>
+      <div class="compare-breakdown">
+        <div><strong>Product</strong>${renderMiniBars(productRows)}</div>
+        <div><strong>Campaign</strong>${renderMiniBars(campaignRows)}</div>
       </div>
       <div class="compare-agent-list">
         ${agents.map((row, index) => {
@@ -2190,6 +2271,29 @@ function renderTeamColumn(title, agents, target) {
       </div>
     </section>
   `;
+}
+
+function topGroupRows(rows, keyFn, limit) {
+  const groups = new Map();
+  rows.forEach(row => {
+    const key = keyFn(row) || "-";
+    if (!groups.has(key)) groups.set(key, { key, revenue: 0, txn: 0 });
+    const item = groups.get(key);
+    item.revenue += row.revenue;
+    item.txn += 1;
+  });
+  return [...groups.values()].sort((a, b) => b.revenue - a.revenue).slice(0, limit);
+}
+
+function renderMiniBars(rows) {
+  const max = Math.max(...rows.map(row => row.revenue), 1);
+  return `<div class="mini-bars">${rows.map((row, index) => `
+    <div class="mini-bar-row">
+      <span>${escapeHtml(row.key)}</span>
+      <div><i class="bar-color-${(index % 6) + 1}" style="width:${Math.max(5, row.revenue / max * 100)}%"></i></div>
+      <b>${rupiah(row.revenue)}</b>
+    </div>
+  `).join("")}</div>`;
 }
 
 function renderAgentLeaderboard() {
@@ -2318,8 +2422,8 @@ function selectAgent(key) {
   el("productList").innerHTML = row.productDetails.map(product => `
     <div class="product-row">
       <strong>${escapeHtml(product.product)}</strong>
-      <span>${row.allWeeks ? "Akumulasi rate dan tier tiap week" : `${percent(product.rate)} rate · tier ${product.tier ? percent(product.tier) : "-"}`}</span>
-      <div class="product-money"><strong>${rupiah(product.incentive)}</strong><span>${rupiah(product.revenue)}</span></div>
+      <span>${row.allWeeks ? "Akumulasi rate dan tier tiap week" : `${percent(product.rate)} rate - tier ${product.tier ? percent(product.tier) : "-"}`} - ${product.txn || 0} TXN - ${rupiah(product.incentivePerTxn || 0)}/TXN</span>
+      <div class="product-money"><strong>${rupiah(product.incentive)}</strong><span>${rupiah(product.revenue)} revenue</span></div>
     </div>
   `).join("");
   render();
@@ -2417,6 +2521,7 @@ el("compareCoach").addEventListener("change", renderCompareTeam);
 el("compareSearch").addEventListener("input", renderCompareTeam);
 el("exportButton").addEventListener("click", exportResults);
 loadFromGoogleSheet();
+
 
 
 </script>
