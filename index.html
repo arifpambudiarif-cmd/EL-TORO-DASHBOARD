@@ -1091,6 +1091,10 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       </div>
       <div class="filters">
         <div class="field">
+          <label for="actionMonthFilter">Bulan</label>
+          <select id="actionMonthFilter"></select>
+        </div>
+        <div class="field">
           <label for="actionWeekFilter">Week</label>
           <select id="actionWeekFilter"></select>
         </div>
@@ -1162,6 +1166,10 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       </div>
       <div class="filters">
         <div class="field">
+          <label for="topCampaignMonth">Bulan</label>
+          <select id="topCampaignMonth"></select>
+        </div>
+        <div class="field">
           <label for="topCampaignWeek">Week</label>
           <select id="topCampaignWeek"></select>
         </div>
@@ -1206,6 +1214,10 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
     <section id="dodolanPanel" class="tab-panel">
       <div class="filters dodolan-filters">
         <div class="field">
+          <label for="dodolanMonthFilter">Bulan</label>
+          <select id="dodolanMonthFilter"></select>
+        </div>
+        <div class="field">
           <label for="dodolanWeekFilter">Week</label>
           <select id="dodolanWeekFilter"></select>
         </div>
@@ -1241,9 +1253,9 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
     <section id="leaderboardPanel" class="tab-panel">
       <div class="leaderboard-hero">
         <div>
-          <p class="eyebrow">JULY RACE</p>
+          <p class="eyebrow">MONTHLY RACE</p>
           <h2>Revenue Leaderboard</h2>
-          <p>Total revenue coach selama Juli, bisa difilter per layer termasuk S2S.</p>
+          <p>Total revenue coach per bulan, bisa difilter per layer termasuk S2S.</p>
         </div>
         <div class="hero-number">
           <span>Total Revenue</span>
@@ -1252,6 +1264,10 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       </div>
 
       <div class="filters">
+        <div class="field">
+          <label for="leaderboardMonthFilter">Bulan</label>
+          <select id="leaderboardMonthFilter"></select>
+        </div>
         <div class="field">
           <label for="leaderboardWeekFilter">Week</label>
           <select id="leaderboardWeekFilter"></select>
@@ -1269,9 +1285,9 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 
       <div class="kpi-grid leaderboard-kpis">
         <article class="kpi"><span>Coach aktif</span><strong id="leaderboardLeaderKpi">0</strong><small id="leaderboardLayerNote">All layer termasuk S2S</small></article>
-        <article class="kpi"><span>Total transaksi</span><strong id="leaderboardTxnKpi">0</strong><small id="leaderboardTxnNote">Seluruh week Juli</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="leaderboardTxnKpi">0</strong><small id="leaderboardTxnNote">Semua bulan</small></article>
         <article class="kpi"><span>Top leader</span><strong id="leaderboardTopLeaderKpi">-</strong><small id="leaderboardTopRevenueKpi">Rp0</small></article>
-        <article class="kpi"><span>Total to target</span><strong id="leaderboardTotalToTargetKpi">0%</strong><small id="leaderboardTargetNote">Target Juli = semua week</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="leaderboardTotalToTargetKpi">0%</strong><small id="leaderboardTargetNote">Target bulan terpilih</small></article>
       </div>
 
       <section class="table-panel leaderboard-panel">
@@ -1301,9 +1317,13 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 
       <div class="filters">
         <div class="field">
+          <label for="agentLeaderboardMonth">Bulan</label>
+          <select id="agentLeaderboardMonth"></select>
+        </div>
+        <div class="field">
           <label for="agentLeaderboardMode">Mode</label>
           <select id="agentLeaderboardMode">
-            <option value="monthly">Monthly Juli</option>
+            <option value="monthly">Monthly</option>
             <option value="weekly">Weekly</option>
           </select>
         </div>
@@ -1332,7 +1352,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         <div class="panel-heading">
           <div>
             <h2>Ranking Agent Layer 1</h2>
-            <p id="agentLeaderboardCaption">Monthly Juli</p>
+            <p id="agentLeaderboardCaption">Monthly</p>
           </div>
           <span id="agentLeaderboardCount" class="count-chip">0 agent</span>
         </div>
@@ -1354,9 +1374,13 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       </div>
       <div class="filters">
         <div class="field">
+          <label for="compareMonth">Bulan</label>
+          <select id="compareMonth"></select>
+        </div>
+        <div class="field">
           <label for="compareMode">Mode</label>
           <select id="compareMode">
-            <option value="monthly">Monthly Juli</option>
+            <option value="monthly">Monthly</option>
             <option value="weekly">Weekly</option>
           </select>
         </div>
@@ -1383,7 +1407,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         <div class="panel-heading">
           <div>
             <h2>Comparison Ranking</h2>
-            <p id="compareCaption">Monthly Juli</p>
+            <p id="compareCaption">Monthly</p>
           </div>
           <span id="compareCount" class="count-chip">0 agent</span>
         </div>
@@ -1754,7 +1778,7 @@ function loadRows(rows, sheetName, targetSheetRows = []) {
   summary = calculate(layerOneRows);
   dodolanRows = buildDodolanRows(layerOneRows);
   leaderboardRows = buildDodolanRows(normalized);
-  if (!summary.length) throw new Error("Tidak ada transaksi Layer 1 pada periode W1-W5 Juli.");
+  if (!summary.length) throw new Error("Tidak ada transaksi Layer 1 pada periode yang tersedia.");
   prepareDashboard(sheetName, rows.length);
 }
 
@@ -1764,16 +1788,17 @@ function prepareDashboard(sheetName, rawCount) {
   el("exportButton").disabled = false;
   el("dataStatus").textContent = `Update ${formatUpdateTime(new Date())}`;
   el("dataStatus").classList.add("ready");
-  const weeks = [...new Set(summary.map(row => row.week))];
-  const months = [...new Set(summary.map(row => row.month))];
-  el("monthFilter").innerHTML = `<option value="all">Semua bulan</option>${months.map(month => `<option value="${month}">${month}</option>`).join("")}`;
-  el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
-  el("dodolanWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
-  el("leaderboardWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
-  el("topCampaignWeek").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
-  el("agentLeaderboardWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
-  el("compareWeek").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
-  el("actionWeekFilter").innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
+  const months = availableMonths();
+  ["monthFilter", "actionMonthFilter", "topCampaignMonth", "dodolanMonthFilter", "leaderboardMonthFilter", "agentLeaderboardMonth", "compareMonth"].forEach(id => {
+    el(id).innerHTML = monthOptions(months);
+  });
+  syncWeekOptions("weekFilter", "all", true);
+  syncWeekOptions("dodolanWeekFilter", "all", true);
+  syncWeekOptions("leaderboardWeekFilter", "all", true);
+  syncWeekOptions("topCampaignWeek", "all", true);
+  syncWeekOptions("agentLeaderboardWeek", "all", false);
+  syncWeekOptions("compareWeek", "all", false);
+  syncWeekOptions("actionWeekFilter", "all", false);
   const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   el("dodolanLeaderFilter").innerHTML = `<option value="all">Semua leader</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
   el("agentLeaderboardCoach").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
@@ -1788,6 +1813,40 @@ function prepareDashboard(sheetName, rawCount) {
   renderLeaderboard();
   renderAgentLeaderboard();
   renderCompareTeam();
+}
+
+function availableMonths() {
+  const months = new Set();
+  [...summary, ...dodolanRows, ...leaderboardRows].forEach(row => {
+    if (row.month) months.add(row.month);
+  });
+  return WEEK_PERIODS.map(week => week.month).filter((month, index, list) => list.indexOf(month) === index && months.has(month));
+}
+
+function monthOptions(months) {
+  return `<option value="all">Semua bulan</option>${months.map(month => `<option value="${month}">${month}</option>`).join("")}`;
+}
+
+function availableWeeks(month = "all") {
+  const weeks = new Set();
+  [...summary, ...dodolanRows, ...leaderboardRows].forEach(row => {
+    const week = row.week || weekFor(row.weekName, row.weekNum)?.name;
+    const rowMonth = row.month || WEEK_PERIODS.find(item => item.name === week)?.month;
+    if (week && (month === "all" || rowMonth === month)) weeks.add(week);
+  });
+  return WEEK_PERIODS.map(week => week.name).filter(week => weeks.has(week));
+}
+
+function syncWeekOptions(weekId, month, includeAll = true) {
+  const select = el(weekId);
+  const current = select.value;
+  const weeks = availableWeeks(month);
+  select.innerHTML = `${includeAll ? `<option value="all">Semua week</option>` : ""}${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
+  if ((includeAll && current === "all") || weeks.includes(current)) select.value = current;
+}
+
+function selectedMonthLabel(month) {
+  return month === "all" ? "Semua bulan" : month;
 }
 
 function aggregateAllWeeks(rows) {
@@ -1892,10 +1951,12 @@ function render() {
 }
 
 function filteredDodolanRows() {
+  const month = el("dodolanMonthFilter").value;
   const week = el("dodolanWeekFilter").value;
   const leader = el("dodolanLeaderFilter").value;
   const query = el("dodolanSearchFilter").value.trim().toLowerCase();
   return dodolanRows.filter(row =>
+    (month === "all" || row.month === month) &&
     (week === "all" || row.week === week) &&
     (leader === "all" || (row.leader || "-") === leader) &&
     (!query || `${row.packageName} ${row.campaign} ${row.agent} ${row.leader}`.toLowerCase().includes(query))
@@ -1976,10 +2037,14 @@ function renderMiniAggregate(elementId, rows, keyFn, limit) {
 }
 
 function renderActionCenter() {
+  const selectedMonth = el("actionMonthFilter").value;
   const selectedWeek = el("actionWeekFilter").value;
   const query = el("actionSearchFilter").value.trim().toLowerCase();
   const daysLeft = weekDaysLeft(selectedWeek);
-  const arifRows = layerOneRows.filter(row => (row.leader || "").trim().toLowerCase() === "arif pambudi");
+  const arifRows = layerOneRows.filter(row => {
+    const month = weekFor(row.weekName, row.weekNum)?.month;
+    return (selectedMonth === "all" || month === selectedMonth) && (row.leader || "").trim().toLowerCase() === "arif pambudi";
+  });
   const agents = aggregateActionAgents(arifRows, selectedWeek).filter(row =>
     !query || `${row.agent} ${row.leader}`.toLowerCase().includes(query)
   );
@@ -2059,20 +2124,28 @@ function campaignCode(value) {
 
 
 function updateTopCampaignAgentOptions() {
+  const selectedMonth = el("topCampaignMonth").value;
+  const selectedWeek = el("topCampaignWeek").value;
   const selectedCoach = el("topCampaignCoach").value;
-  const agents = [...new Set(dodolanRows.filter(row => selectedCoach === "all" || (row.leader || "-") === selectedCoach).map(row => row.agent))].sort((a, b) => a.localeCompare(b));
+  const agents = [...new Set(dodolanRows.filter(row =>
+    (selectedMonth === "all" || row.month === selectedMonth) &&
+    (selectedWeek === "all" || row.week === selectedWeek) &&
+    (selectedCoach === "all" || (row.leader || "-") === selectedCoach)
+  ).map(row => row.agent))].sort((a, b) => a.localeCompare(b));
   const current = el("topCampaignAgent").value;
   el("topCampaignAgent").innerHTML = `<option value="all">Semua agent</option>${agents.map(agent => `<option value="${escapeHtml(agent)}">${escapeHtml(agent)}</option>`).join("")}`;
   if (agents.includes(current)) el("topCampaignAgent").value = current;
 }
 
 function renderTopCampaign() {
+  const selectedMonth = el("topCampaignMonth").value;
   const selectedWeek = el("topCampaignWeek").value;
   const selectedCoach = el("topCampaignCoach").value;
   const selectedAgent = el("topCampaignAgent").value;
   const sortBy = el("topCampaignSort").value;
   const query = el("topCampaignSearch").value.trim().toLowerCase();
   const rows = dodolanRows.filter(row =>
+    (selectedMonth === "all" || row.month === selectedMonth) &&
     (selectedWeek === "all" || row.week === selectedWeek) &&
     (selectedCoach === "all" || (row.leader || "-") === selectedCoach) &&
     (selectedAgent === "all" || row.agent === selectedAgent) &&
@@ -2098,13 +2171,13 @@ function renderTopCampaign() {
   const top = campaigns[0];
   el("topCampaignTotalRevenue").textContent = rupiah(totalRevenue);
   el("topCampaignCountKpi").textContent = campaigns.length.toLocaleString("id-ID");
-  el("topCampaignWeekNote").textContent = selectedWeek === "all" ? "Semua week" : selectedWeek;
+  el("topCampaignWeekNote").textContent = selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek;
   el("topCampaignTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
   el("topCampaignNameKpi").textContent = top ? top.campaign : "-";
   el("topCampaignRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("topCampaignAovKpi").textContent = top ? top.txn.toLocaleString("id-ID") : "0";
   el("topCampaignCount").textContent = `${campaigns.length} campaign`;
-  el("topCampaignCaption").textContent = `${selectedWeek === "all" ? "Semua week" : selectedWeek} - ${selectedCoach === "all" ? "Semua coach" : selectedCoach} - ${selectedAgent === "all" ? "Semua agent" : selectedAgent} - sort by ${sortBy.toUpperCase()}`;
+  el("topCampaignCaption").textContent = `${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek} - ${selectedCoach === "all" ? "Semua coach" : selectedCoach} - ${selectedAgent === "all" ? "Semua agent" : selectedAgent} - sort by ${sortBy.toUpperCase()}`;
   el("topCampaignList").innerHTML = campaigns.slice(0, 20).map((row, index) => {
     const share = totalRevenue ? row.revenue / totalRevenue : 0;
     const width = Math.min(100, Math.max(4, share * 100));
@@ -2195,11 +2268,13 @@ function renderDodolan() {
 }
 
 function renderLeaderboard() {
+  const selectedMonth = el("leaderboardMonthFilter").value;
   const selectedWeek = el("leaderboardWeekFilter").value;
   const selectedLayer = el("leaderboardLayerFilter").value;
   const byLeader = new Map();
   leaderboardRows.forEach(row => {
     if (!LEADERBOARD_WEEKLY_TARGETS[row.team]) return;
+    if (selectedMonth !== "all" && row.month !== selectedMonth) return;
     if (selectedWeek !== "all" && row.week !== selectedWeek) return;
     if (selectedLayer !== "all" && row.team !== selectedLayer) return;
     const leader = row.leader || "-";
@@ -2234,12 +2309,12 @@ function renderLeaderboard() {
   el("leaderboardTotalRevenue").textContent = rupiah(totalRevenue);
   el("leaderboardLeaderKpi").textContent = leaders.length.toLocaleString("id-ID");
   el("leaderboardTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
-  el("leaderboardTxnNote").textContent = selectedWeek === "all" ? "Seluruh week Juli" : selectedWeek;
+  el("leaderboardTxnNote").textContent = selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek;
   el("leaderboardTopLeaderKpi").textContent = top ? top.leader : "-";
   el("leaderboardTopRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("leaderboardTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
-  el("leaderboardTargetNote").textContent = selectedWeek === "all" ? "Target Juli = semua week" : `Target ${selectedWeek}`;
-  el("leaderboardLayerNote").textContent = `${selectedWeek === "all" ? "Semua week" : selectedWeek} - ${selectedLayer === "all" ? "Semua layer" : selectedLayer}`;
+  el("leaderboardTargetNote").textContent = selectedWeek === "all" ? `Target ${selectedMonthLabel(selectedMonth)}` : `Target ${selectedWeek}`;
+  el("leaderboardLayerNote").textContent = `${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek} - ${selectedLayer === "all" ? "Semua layer" : selectedLayer}`;
   el("leaderboardCount").textContent = `${leaders.length} coach`;
 
   el("leaderboardList").innerHTML = leaders.map((row, index) => {
@@ -2256,7 +2331,7 @@ function renderLeaderboard() {
           </div>
           <div class="rank-bar"><span style="width:${targetWidth}%"></span></div>
           <div class="rank-meta">
-            <span>${selectedWeek === "all" ? "Target Juli" : `Target ${selectedWeek}`}: ${rupiah(row.target)} - Top product: ${escapeHtml(topProduct)}</span>
+            <span>${selectedWeek === "all" ? `Target ${selectedMonthLabel(selectedMonth)}` : `Target ${selectedWeek}`}: ${rupiah(row.target)} - Top product: ${escapeHtml(topProduct)}</span>
             <span>${percent(row.toTarget)} to target · Share ${percent(share)}</span>
           </div>
         </div>
@@ -2288,7 +2363,15 @@ function aggregateAgentsByCoach(rows, coach, mode, selectedWeek, query) {
 }
 
 function renderTeamColumn(title, agents, target) {
-  const sourceRows = layerOneRows.filter(row => (row.leader || "-") === title);
+  const selectedMonth = el("compareMonth").value;
+  const mode = el("compareMode").value;
+  const selectedWeek = el("compareWeek").value;
+  const sourceRows = layerOneRows.filter(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    return (row.leader || "-") === title &&
+      (selectedMonth === "all" || week?.month === selectedMonth) &&
+      (mode === "monthly" || week?.name === selectedWeek);
+  });
   const productRows = topGroupRows(sourceRows, row => productBucket(row), 5);
   const campaignRows = topGroupRows(sourceRows, row => campaignCode(row.campaign || "No Campaign"), 5);
   return `
@@ -2348,12 +2431,14 @@ function renderMiniBars(rows) {
 }
 
 function renderAgentLeaderboard() {
+  const selectedMonth = el("agentLeaderboardMonth").value;
   const mode = el("agentLeaderboardMode").value;
   const selectedWeek = el("agentLeaderboardWeek").value;
   const selectedCoach = el("agentLeaderboardCoach").value;
   const query = el("agentLeaderboardSearch").value.trim().toLowerCase();
   el("agentLeaderboardWeek").disabled = mode === "monthly";
   const rows = layerOneRows.filter(row =>
+    (selectedMonth === "all" || weekFor(row.weekName, row.weekNum)?.month === selectedMonth) &&
     (mode === "monthly" || weekFor(row.weekName, row.weekNum)?.name === selectedWeek) &&
     (selectedCoach === "all" || (row.leader || "-") === selectedCoach) &&
     (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
@@ -2371,7 +2456,10 @@ function renderAgentLeaderboard() {
     item.products[product] = (item.products[product] || 0) + row.revenue;
   });
   const agents = [...byAgent.values()].sort((a, b) => b.revenue - a.revenue);
-  const targetForRow = row => mode === "monthly" ? WEEK_PERIODS.reduce((sum, week) => sum + targetForAgentWeek(row.agent, week), 0) : targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
+  const monthWeeks = availableWeeks(selectedMonth);
+  const targetForRow = row => mode === "monthly"
+    ? monthWeeks.reduce((sum, weekName) => sum + targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === weekName)), 0)
+    : targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
   const target = agents.length ? agents.reduce((sum, row) => sum + targetForRow(row), 0) / agents.length : 0;
   const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
   const totalTarget = agents.reduce((sum, row) => sum + targetForRow(row), 0);
@@ -2380,12 +2468,12 @@ function renderAgentLeaderboard() {
   el("agentLeaderboardTotalRevenue").textContent = rupiah(totalRevenue);
   el("agentLeaderboardAgentKpi").textContent = agents.length.toLocaleString("id-ID");
   el("agentLeaderboardTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
-  el("agentLeaderboardTxnNote").textContent = mode === "monthly" ? "Monthly Juli" : selectedWeek;
+  el("agentLeaderboardTxnNote").textContent = mode === "monthly" ? `Monthly ${selectedMonthLabel(selectedMonth)}` : selectedWeek;
   el("agentLeaderboardTopAgentKpi").textContent = top ? top.agent : "-";
   el("agentLeaderboardTopRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("agentLeaderboardTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
   el("agentLeaderboardCount").textContent = `${agents.length} agent`;
-  el("agentLeaderboardCaption").textContent = mode === "monthly" ? `Monthly Juli - target ${rupiah(target)} per agent` : `${selectedWeek} - target ${rupiah(target)} per agent`;
+  el("agentLeaderboardCaption").textContent = mode === "monthly" ? `Monthly ${selectedMonthLabel(selectedMonth)} - target ${rupiah(target)} per agent` : `${selectedWeek} - target ${rupiah(target)} per agent`;
   el("agentLeaderboardList").classList.remove("compare-grid");
   el("agentLeaderboardList").innerHTML = agents.map((row, index) => {
     const rowTarget = targetForRow(row);
@@ -2407,14 +2495,22 @@ function renderAgentLeaderboard() {
 }
 
 function renderCompareTeam() {
+  const selectedMonth = el("compareMonth").value;
   const mode = el("compareMode").value;
   const selectedWeek = el("compareWeek").value;
   const compareCoach = el("compareCoach").value;
   const query = el("compareSearch").value.trim().toLowerCase();
   el("compareWeek").disabled = mode === "monthly";
-  const targetForRow = row => mode === "monthly" ? WEEK_PERIODS.reduce((sum, week) => sum + targetForAgentWeek(row.agent, week), 0) : targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
-  const arifAgents = aggregateAgentsByCoach(layerOneRows, "Arif Pambudi", mode, selectedWeek, query);
-  const compareAgents = aggregateAgentsByCoach(layerOneRows, compareCoach, mode, selectedWeek, query);
+  const monthWeeks = availableWeeks(selectedMonth);
+  const monthRows = layerOneRows.filter(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    return selectedMonth === "all" || week?.month === selectedMonth;
+  });
+  const targetForRow = row => mode === "monthly"
+    ? monthWeeks.reduce((sum, weekName) => sum + targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === weekName)), 0)
+    : targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
+  const arifAgents = aggregateAgentsByCoach(monthRows, "Arif Pambudi", mode, selectedWeek, query);
+  const compareAgents = aggregateAgentsByCoach(monthRows, compareCoach, mode, selectedWeek, query);
   const allAgents = [...arifAgents, ...compareAgents];
   const totalRevenue = allAgents.reduce((sum, row) => sum + row.revenue, 0);
   const totalTarget = allAgents.reduce((sum, row) => sum + targetForRow(row), 0);
@@ -2423,12 +2519,12 @@ function renderCompareTeam() {
   el("compareTotalRevenue").textContent = rupiah(totalRevenue);
   el("compareAgentKpi").textContent = allAgents.length.toLocaleString("id-ID");
   el("compareTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
-  el("compareTxnNote").textContent = mode === "monthly" ? "Monthly Juli" : selectedWeek;
+  el("compareTxnNote").textContent = mode === "monthly" ? `Monthly ${selectedMonthLabel(selectedMonth)}` : selectedWeek;
   el("compareTopAgentKpi").textContent = top ? top.agent : "-";
   el("compareTopRevenueKpi").textContent = top ? `${top.leader} - ${rupiah(top.revenue)}` : "Rp0";
   el("compareTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
   el("compareCount").textContent = `${arifAgents.length} vs ${compareAgents.length} agent`;
-  el("compareCaption").textContent = mode === "monthly" ? `Monthly Juli - Arif Pambudi vs ${compareCoach}` : `${selectedWeek} - Arif Pambudi vs ${compareCoach}`;
+  el("compareCaption").textContent = mode === "monthly" ? `Monthly ${selectedMonthLabel(selectedMonth)} - Arif Pambudi vs ${compareCoach}` : `${selectedWeek} - Arif Pambudi vs ${compareCoach}`;
   el("compareList").innerHTML = renderTeamColumn("Arif Pambudi", arifAgents, targetForRow) + renderTeamColumn(compareCoach, compareAgents, targetForRow);
 }
 
@@ -2457,10 +2553,12 @@ function weeklyActionBlock(revenue, target) {
 
 function selectAgent(key) {
   selectedKey = key;
-  const selectedWeek = el("weekFilter").value;
-  const sourceRows = selectedWeek === "all" ? aggregateAllWeeks(summary) : summary;
-  const row = sourceRows.find(item => item.key === key);
-  if (!row) return;
+  const row = filteredSummary().find(item => item.key === key);
+  if (!row) {
+    clearDetail();
+    render();
+    return;
+  }
   el("detailEmpty").hidden = true;
   el("detailContent").hidden = false;
   el("detailName").textContent = row.agent;
@@ -2550,28 +2648,52 @@ document.querySelectorAll(".tab-button").forEach(button => button.addEventListen
 el("weekFilter").addEventListener("change", render);
 el("monthFilter").addEventListener("change", () => {
   const month = el("monthFilter").value;
-  const weeks = [...new Set(summary.filter(row => month === "all" || row.month === month).map(row => row.week))];
-  el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
+  syncWeekOptions("weekFilter", month, true);
   render();
 });
 el("searchFilter").addEventListener("input", render);
 el("statusFilter").addEventListener("change", render);
+el("actionMonthFilter").addEventListener("change", () => {
+  syncWeekOptions("actionWeekFilter", el("actionMonthFilter").value, false);
+  renderActionCenter();
+});
+el("topCampaignMonth").addEventListener("change", () => {
+  syncWeekOptions("topCampaignWeek", el("topCampaignMonth").value, true);
+  updateTopCampaignAgentOptions();
+  renderTopCampaign();
+});
 el("topCampaignWeek").addEventListener("change", renderTopCampaign);
 el("topCampaignCoach").addEventListener("change", () => { updateTopCampaignAgentOptions(); renderTopCampaign(); });
 el("topCampaignAgent").addEventListener("change", renderTopCampaign);
 el("topCampaignSort").addEventListener("change", renderTopCampaign);
 el("topCampaignSearch").addEventListener("input", renderTopCampaign);
+el("dodolanMonthFilter").addEventListener("change", () => {
+  syncWeekOptions("dodolanWeekFilter", el("dodolanMonthFilter").value, true);
+  renderDodolan();
+});
 el("dodolanWeekFilter").addEventListener("change", renderDodolan);
 el("dodolanLeaderFilter").addEventListener("change", renderDodolan);
 el("dodolanSearchFilter").addEventListener("input", renderDodolan);
+el("leaderboardMonthFilter").addEventListener("change", () => {
+  syncWeekOptions("leaderboardWeekFilter", el("leaderboardMonthFilter").value, true);
+  renderLeaderboard();
+});
 el("leaderboardWeekFilter").addEventListener("change", renderLeaderboard);
 el("leaderboardLayerFilter").addEventListener("change", renderLeaderboard);
 el("actionWeekFilter").addEventListener("change", renderActionCenter);
 el("actionSearchFilter").addEventListener("input", renderActionCenter);
+el("agentLeaderboardMonth").addEventListener("change", () => {
+  syncWeekOptions("agentLeaderboardWeek", el("agentLeaderboardMonth").value, false);
+  renderAgentLeaderboard();
+});
 el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardWeek").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardCoach").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardSearch").addEventListener("input", renderAgentLeaderboard);
+el("compareMonth").addEventListener("change", () => {
+  syncWeekOptions("compareWeek", el("compareMonth").value, false);
+  renderCompareTeam();
+});
 el("compareMode").addEventListener("change", renderCompareTeam);
 el("compareWeek").addEventListener("change", renderCompareTeam);
 el("compareCoach").addEventListener("change", renderCompareTeam);
