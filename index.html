@@ -997,6 +997,10 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
     <section id="dashboard" class="dashboard" hidden>
       <div class="filters">
         <div class="field">
+          <label for="monthFilter">Bulan</label>
+          <select id="monthFilter"></select>
+        </div>
+        <div class="field">
           <label for="weekFilter">Week</label>
           <select id="weekFilter"></select>
         </div>
@@ -1392,9 +1396,9 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
 const WEEKLY_TARGET = 23400000;
-const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000 };
+const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000 };
 const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
-const SOURCE_TAB_NAME = "RAW";
+const SOURCE_TAB_NAME = "RAW_COMBINED";
 const SOURCE_GID = "0";
 const JULY_WEEK_COUNT = 5;
 const LEADERBOARD_WEEKLY_TARGETS = {
@@ -1418,11 +1422,15 @@ const LEADERBOARD_TARGET_LABELS = {
   "Layer 2": "Layer 2",
 };
 const WEEK_PERIODS = [
-  { name: "W 1 JUL", weekNum: 27, minimum: 0.50, scheme: "W1" },
-  { name: "W 2 JUL", weekNum: 28, minimum: 0.40, scheme: "W2" },
-  { name: "W 3 JUL", weekNum: 29, minimum: 0.40, scheme: "W2" },
-  { name: "W 4 JUL", weekNum: 30, minimum: 0.50, scheme: "W4" },
-  { name: "W 5 JUL", weekNum: 31, minimum: 0.50, scheme: "W4" },
+  { name: "W 1 JUL", weekNum: 27, minimum: 0.50, scheme: "W1", month: "Juli" },
+  { name: "W 2 JUL", weekNum: 28, minimum: 0.40, scheme: "W2", month: "Juli" },
+  { name: "W 3 JUL", weekNum: 29, minimum: 0.40, scheme: "W2", month: "Juli" },
+  { name: "W 4 JUL", weekNum: 30, minimum: 0.50, scheme: "W4", month: "Juli" },
+  { name: "W 5 JUL", weekNum: 31, minimum: 0.50, scheme: "W4", month: "Juli" },
+  { name: "W 1 AUG", weekNum: 32, minimum: 0.50, scheme: "AUG1", month: "Agustus" },
+  { name: "W 2 AUG", weekNum: 33, minimum: 0.50, scheme: "AUG1", month: "Agustus" },
+  { name: "W 3 AUG", weekNum: 34, minimum: 0.50, scheme: "AUG1", month: "Agustus" },
+  { name: "W 4 AUG", weekNum: 35, minimum: 0.50, scheme: "AUG1", month: "Agustus" },
 ];
 
 const RATES = {
@@ -1461,6 +1469,18 @@ const RATES = {
     "RGP Offline": { 0: 0, .5: .003, .75: .005, 1: .01, 1.25: .01, 1.5: .01, 2: .01 },
     "Math Champs Online": { 0: 0, .5: .01, .75: .01, 1: .01, 1.25: .01, 1.5: .01, 2: .01 },
     "Skill Academy": { 0: 0, .5: .02, .75: .02, 1: .02, 1.25: .02, 1.5: .02, 2: .02 },
+  },
+  AUG1: {
+    "BAC & Mathchamps Offline": { 0: 0, .5: .0143, .75: .0175, 1: .0523, 1.25: .0605 },
+    "BAON Elite": { 0: 0, .5: .0158, .75: .0175, 1: .0503, 1.25: .0565 },
+    "BAON Prem": { 0: 0, .5: .029, .75: .0335, 1: .1065, 1.25: .127 },
+    "BAON Reg": { 0: 0, .5: .0243, .75: .0285, 1: .0915, 1.25: .1138 },
+    "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
+    "RB": { 0: 0, .5: .0253, .75: .0295, 1: .0955, 1.25: .12 },
+    "RGP Online": { 0: 0, .5: .009, .75: .015, 1: .03, 1.25: .035 },
+    "RGP Offline": { 0: 0, .5: .003, .75: .005, 1: .01, 1.25: .01 },
+    "Math Champs Online": { 0: 0, .5: .01, .75: .01, 1: .01, 1.25: .01 },
+    "Skill Academy": { 0: 0, .5: .02, .75: .02, 1: .02, 1.25: .02 },
   },
 };
 
@@ -1658,7 +1678,7 @@ function calculate(rows) {
     const week = weekFor(row.weekName, row.weekNum);
     const key = `${week.name}|${row.agent.toLowerCase()}`;
     if (!agents.has(key)) {
-      agents.set(key, { key, week: week.name, weekMeta: week, agent: row.agent, leader: row.leader, revenue: 0, transactions: 0, products: {} });
+      agents.set(key, { key, week: week.name, month: week.month, weekMeta: week, agent: row.agent, leader: row.leader, revenue: 0, transactions: 0, products: {} });
     }
     const item = agents.get(key);
     const product = productBucket(row);
@@ -1745,6 +1765,8 @@ function prepareDashboard(sheetName, rawCount) {
   el("dataStatus").textContent = `Update ${formatUpdateTime(new Date())}`;
   el("dataStatus").classList.add("ready");
   const weeks = [...new Set(summary.map(row => row.week))];
+  const months = [...new Set(summary.map(row => row.month))];
+  el("monthFilter").innerHTML = `<option value="all">Semua bulan</option>${months.map(month => `<option value="${month}">${month}</option>`).join("")}`;
   el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("dodolanWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
   el("leaderboardWeekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
@@ -1778,6 +1800,7 @@ function aggregateAllWeeks(rows) {
       agents.set(key, {
         key: `all|${key}`,
         week: "Semua Week",
+        month: "Multiple",
         agent: row.agent,
         leader: row.leader,
         revenue: 0,
@@ -1819,10 +1842,12 @@ function aggregateAllWeeks(rows) {
 }
 
 function filteredSummary() {
+  const month = el("monthFilter").value;
   const week = el("weekFilter").value;
   const query = el("searchFilter").value.trim().toLowerCase();
   const status = el("statusFilter").value;
-  const baseRows = week === "all" ? aggregateAllWeeks(summary) : summary.filter(row => row.week === week);
+  const monthRows = month === "all" ? summary : summary.filter(row => row.month === month);
+  const baseRows = week === "all" ? aggregateAllWeeks(monthRows) : monthRows.filter(row => row.week === week);
   return baseRows.filter(row =>
     (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query)) &&
     (status === "all" || (status === "eligible") === row.eligible)
@@ -2523,6 +2548,12 @@ function switchTab(tabId) {
 
 document.querySelectorAll(".tab-button").forEach(button => button.addEventListener("click", () => switchTab(button.dataset.tab)));
 el("weekFilter").addEventListener("change", render);
+el("monthFilter").addEventListener("change", () => {
+  const month = el("monthFilter").value;
+  const weeks = [...new Set(summary.filter(row => month === "all" || row.month === month).map(row => row.week))];
+  el("weekFilter").innerHTML = `<option value="all">Semua week</option>${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
+  render();
+});
 el("searchFilter").addEventListener("input", render);
 el("statusFilter").addEventListener("change", render);
 el("topCampaignWeek").addEventListener("change", renderTopCampaign);
