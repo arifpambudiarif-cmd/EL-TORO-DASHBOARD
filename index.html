@@ -840,11 +840,11 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   font-weight: 700;
 }
 .simple-action-card {
-  grid-template-columns: minmax(0, 1fr) 190px;
+  grid-template-columns: minmax(0, 1fr) 210px;
 }
 .action-readout {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 7px;
   margin: 10px 0 8px;
 }
@@ -882,6 +882,34 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   margin: 0;
   line-height: 1.45;
   color: #0f4f59;
+}
+.action-signal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 8px;
+}
+.action-signal-grid div {
+  min-width: 0;
+  padding: 8px;
+  border-radius: 7px;
+  background: #fff8e7;
+  border: 1px solid #f2d98f;
+}
+.action-signal-grid span {
+  display: block;
+  color: #8a5a00;
+  font-size: 10px;
+  font-weight: 800;
+}
+.action-signal-grid strong {
+  display: block;
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #2f2100;
+  font-size: 12px;
 }
 .mini-row {
   display: grid;
@@ -931,6 +959,8 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   .leader-summary { grid-template-columns: 24px minmax(140px, 1fr) 70px 120px; }
   .action-layout { grid-template-columns: 1fr; }
   .action-agent-card { grid-template-columns: 1fr; }
+  .action-readout { grid-template-columns: repeat(3, 1fr); }
+  .action-signal-grid { grid-template-columns: repeat(2, 1fr); }
   .action-money { text-align: left; }
   .leaderboard-list.compare-grid { grid-template-columns: 1fr; }
   .compare-agent-card { grid-template-columns: 34px minmax(0, 1fr); }
@@ -948,6 +978,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   .rules-strip div { border-right: 0; border-bottom: 1px solid var(--line); }
   .rules-strip div:last-child { border-bottom: 0; }
   .kpi { min-height: 94px; }
+  .action-readout, .action-signal-grid { grid-template-columns: 1fr; }
   .top-actions .status-dot { display: none; }
 }
 
@@ -1981,13 +2012,91 @@ function getISOWeekNumber(date) {
 
 function weekDaysLeft(weekName) {
   const currentWeek = WEEK_PERIODS.find(week => week.weekNum === getISOWeekNumber(new Date()));
-  if (!currentWeek || currentWeek.name !== weekName) return 7;
+  if (!currentWeek || currentWeek.name !== weekName) return 5;
   const day = new Date().getDay() || 7;
-  return Math.max(1, 7 - day + 1);
+  const workdayWeights = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 0.5, 7: 0.5 };
+  let remaining = 0;
+  for (let currentDay = day; currentDay <= 7; currentDay += 1) {
+    remaining += workdayWeights[currentDay] || 0;
+  }
+  return Math.max(0.5, remaining);
+}
+
+function weekDaysPassed(weekName) {
+  const currentWeek = WEEK_PERIODS.find(week => week.weekNum === getISOWeekNumber(new Date()));
+  if (!currentWeek || currentWeek.name !== weekName) return 5;
+  const day = new Date().getDay() || 7;
+  const workdayWeights = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 0.5, 7: 0.5 };
+  let passed = 0;
+  for (let currentDay = 1; currentDay <= day; currentDay += 1) {
+    passed += workdayWeights[currentDay] || 0;
+  }
+  return Math.max(1, passed);
+}
+
+function historicalActionProfile(rows, agent, selectedWeek) {
+  const currentWeek = WEEK_PERIODS.find(week => week.name === selectedWeek);
+  const agentKey = String(agent || "").toLowerCase();
+  const historyRows = rows.filter(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    return row.agent.toLowerCase() === agentKey && week && week.weekNum < (currentWeek?.weekNum || 999);
+  });
+  const sourceRows = historyRows.length ? historyRows : rows.filter(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    return week && week.weekNum < (currentWeek?.weekNum || 999);
+  });
+  const totalRevenue = sourceRows.reduce((sum, row) => sum + row.revenue, 0);
+  const arpu = sourceRows.length ? totalRevenue / sourceRows.length : 0;
+  const campaigns = new Map();
+  const products = new Map();
+  sourceRows.forEach(row => {
+    const campaign = row.campaign || "No Campaign";
+    const product = productBucket(row);
+    if (!campaigns.has(campaign)) campaigns.set(campaign, { name: campaign, revenue: 0, txn: 0 });
+    if (!products.has(product)) products.set(product, { name: product, revenue: 0, txn: 0 });
+    campaigns.get(campaign).revenue += row.revenue;
+    campaigns.get(campaign).txn += 1;
+    products.get(product).revenue += row.revenue;
+    products.get(product).txn += 1;
+  });
+  const topCampaign = [...campaigns.values()].sort((a, b) => b.revenue - a.revenue || b.txn - a.txn)[0];
+  const topProduct = [...products.values()].sort((a, b) => b.revenue - a.revenue || b.txn - a.txn)[0];
+  return {
+    arpu,
+    topCampaign: topCampaign?.name || "Campaign revenue tertinggi",
+    topCampaignRevenue: topCampaign?.revenue || 0,
+    topProduct: topProduct?.name || "produk utama",
+  };
+}
+
+function estimateUpsideIncentive(row) {
+  const week = WEEK_PERIODS.find(item => item.name === row.week);
+  const product = row.topProduct === "-" ? "Others" : row.topProduct;
+  const arpu = row.historyArpu || row.aov || 0;
+  const tier = chooseTier(Math.max(row.th, 1), week, product);
+  const rate = RATES[week?.scheme]?.[product]?.[tier] || RATES[week?.scheme]?.Others?.[tier] || 0;
+  return arpu * rate;
+}
+
+function actionPlaybook(row, daysLeft) {
+  const dailyNeed = row.gap / Math.max(0.5, daysLeft);
+  const campaign = row.historyCampaign || row.topCampaign || "campaign yang punya revenue tertinggi";
+  const product = row.historyProduct || row.topProduct || "produk utama";
+  if (row.th >= 1) {
+    return `Sudah 100%+. Kalau closing lagi sebelum Minggu, estimasi tambahan incentive sekitar ${rupiah(row.upsideIncentive)} per transaksi dengan acuan ARPU histori ${rupiah(row.historyArpu || row.aov)}. Fokus upsell dari ${campaign} dan jaga closing ${product}.`;
+  }
+  if (row.status.key === "near") {
+    return `Dekat cair. Kejar ${row.neededTxn || 1} transaksi dengan ARPU minimal ${rupiah(row.requiredArpu)}. Mulai dari unpaid invoice, lalu leads panas dari ${campaign}; produk yang paling masuk akal: ${product}.`;
+  }
+  if (row.status.key === "track") {
+    return `Sudah masuk minimum, sekarang dorong ke 100%. Butuh run rate ${rupiah(dailyNeed)}/hari. Pakai pola histori: campaign ${campaign}, produk ${product}, ARPU acuan ${rupiah(row.historyArpu || row.aov)}.`;
+  }
+  return `Prioritas hari ini: tambah pipeline sampai minimal ${rupiah(dailyNeed)} revenue/hari. Butuh sekitar ${row.neededTxn || 1} transaksi dengan ARPU ${rupiah(row.requiredArpu)}. Kerjakan ulang campaign ${campaign}, lalu follow-up hot leads dan unpaid invoice.`;
 }
 
 function aggregateActionAgents(rows, selectedWeek) {
   const byAgent = new Map();
+  const selectedWeekMeta = WEEK_PERIODS.find(week => week.name === selectedWeek);
   rows.forEach(row => {
     const week = weekFor(row.weekName, row.weekNum);
     if (!week || week.name !== selectedWeek) return;
@@ -2004,13 +2113,22 @@ function aggregateActionAgents(rows, selectedWeek) {
     item.campaigns[campaign] = (item.campaigns[campaign] || 0) + row.revenue;
   });
   return [...byAgent.values()].map(row => {
-    row.target = targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
+    row.week = selectedWeek;
+    row.target = targetForAgentWeek(row.agent, selectedWeekMeta);
     row.gap = Math.max(0, row.target - row.revenue);
     row.th = row.target ? row.revenue / row.target : 0;
-    row.neededTxn = row.aov ? Math.ceil(row.gap / row.aov) : null;
-    row.status = actionStatus(row.th, WEEK_PERIODS.find(week => week.name === selectedWeek)?.minimum || .5);
+    row.aov = row.txn ? row.revenue / row.txn : 0;
+    const profile = historicalActionProfile(rows, row.agent, selectedWeek);
+    row.historyArpu = profile.arpu || row.aov || row.target;
+    row.historyCampaign = profile.topCampaign;
+    row.historyCampaignRevenue = profile.topCampaignRevenue;
+    row.historyProduct = profile.topProduct;
+    row.neededTxn = row.gap > 0 ? Math.max(1, Math.ceil(row.gap / Math.max(1, row.historyArpu))) : 0;
+    row.requiredArpu = row.gap > 0 ? row.gap / Math.max(1, row.neededTxn) : row.historyArpu;
+    row.status = actionStatus(row.th, selectedWeekMeta?.minimum || .5);
     row.topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
     row.topCampaign = Object.entries(row.campaigns).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+    row.upsideIncentive = estimateUpsideIncentive(row);
     return row;
   }).sort((a, b) => {
     const order = { need: 0, near: 1, track: 2, done: 3 };
@@ -2053,6 +2171,9 @@ function renderActionCenter() {
   const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
   const target = agents.reduce((sum, row) => sum + row.target, 0) || weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek)) * Math.max(1, agents.length);
   const nextAction = openAgents[0];
+  const daysPassed = weekDaysPassed(selectedWeek);
+  const projectedRevenue = totalRevenue / Math.max(1, daysPassed) * 6;
+  const teamRunRate = totalRevenue / Math.max(1, daysPassed);
 
   el("actionTotalGap").textContent = rupiah(totalGap);
   el("actionNeedPushKpi").textContent = agents.filter(row => row.status.key === "need").length.toLocaleString("id-ID");
@@ -2061,17 +2182,15 @@ function renderActionCenter() {
   el("actionTopCoachKpi").textContent = nextAction ? nextAction.agent : "Semua aman";
   el("actionTopCoachGap").textContent = nextAction ? `Next action - ${rupiah(nextAction.gap)} gap` : "Tidak ada gap";
   el("actionAgentCount").textContent = `${agents.length} agent`;
-  el("actionAgentCaption").textContent = `Tim Arif Pambudi - ${selectedWeek} - ${daysLeft} hari tersisa`;
+  el("actionAgentCaption").textContent = `Tim Arif Pambudi - ${selectedWeek} - ${daysLeft} hari kerja tersisa`;
 
   el("actionAgentList").innerHTML = agents.map(row => {
     const width = Math.min(100, Math.max(4, row.th * 100));
-    const neededTxn = row.neededTxn ? `${row.neededTxn} transaksi lagi` : "mulai dari 1 transaksi baru";
+    const runRate = row.revenue / Math.max(1, daysPassed);
+    const projected = runRate * 6;
+    const neededTxn = row.neededTxn ? `${row.neededTxn} transaksi lagi` : "sudah 100%";
     const dailyNeed = row.gap / daysLeft;
-    const action = row.status.key === "done"
-      ? "Jaga ritme. Share script/campaign yang berhasil ke teman satu tim."
-      : row.status.key === "near"
-        ? `Fokus hari ini: closing ${neededTxn}. Prioritaskan unpaid invoice dan user yang sudah tanya harga.`
-        : `Fokus hari ini: tambah pipeline dan kejar minimal ${rupiah(dailyNeed)} revenue. Mulai dari hot leads, reaktivasi, lalu unpaid invoice.`;
+    const action = actionPlaybook(row, daysLeft);
     return `
       <article class="action-agent-card simple-action-card">
         <div>
@@ -2083,14 +2202,23 @@ function renderActionCenter() {
             <div><span>Revenue</span><strong>${rupiah(row.revenue)}</strong></div>
             <div><span>Gap</span><strong>${rupiah(row.gap)}</strong></div>
             <div><span>TH</span><strong>${percent(row.th)}</strong></div>
+            <div><span>Run rate</span><strong>${rupiah(runRate)}/hari</strong></div>
+            <div><span>Projected week</span><strong>${rupiah(projected)}</strong></div>
+            <div><span>ARPU acuan</span><strong>${rupiah(row.historyArpu || row.aov)}</strong></div>
           </div>
           <div class="rank-bar"><span style="width:${width}%"></span></div>
-          <div class="action-next-step"><strong>Action hari ini</strong><p>${action}</p></div>
+          <div class="action-signal-grid">
+            <div><span>Butuh TXN</span><strong>${neededTxn}</strong></div>
+            <div><span>ARPU target</span><strong>${rupiah(row.requiredArpu)}</strong></div>
+            <div><span>Campaign acuan</span><strong>${escapeHtml(row.historyCampaign)}</strong></div>
+            <div><span>Produk acuan</span><strong>${escapeHtml(row.historyProduct)}</strong></div>
+          </div>
+          <div class="action-next-step"><strong>Action hari ini</strong><p>${escapeHtml(action)}</p></div>
         </div>
         <div class="action-money">
-          <strong>${neededTxn}</strong>
-          <span>Estimasi kebutuhan</span>
-          <small>AOV ${rupiah(row.aov)} - ${row.txn.toLocaleString("id-ID")} TXN</small>
+          <strong>${row.th >= 1 ? rupiah(row.upsideIncentive) : rupiah(dailyNeed)}</strong>
+          <span>${row.th >= 1 ? "Est. incentive / TXN baru" : "Run rate gap / hari"}</span>
+          <small>${row.txn.toLocaleString("id-ID")} TXN minggu ini - AOV ${rupiah(row.aov)}</small>
         </div>
       </article>
     `;
@@ -2101,6 +2229,7 @@ function renderActionCenter() {
     <div class="mini-row"><div><strong>Total revenue tim</strong><span>${agents.length.toLocaleString("id-ID")} agent aktif</span></div><div class="mini-value">${rupiah(totalRevenue)}</div></div>
     <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(target / Math.max(1, agents.length))} avg per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
     <div class="mini-row"><div><strong>Pencapaian tim</strong><span>Revenue / target</span></div><div class="mini-value">${percent(target ? totalRevenue / target : 0)}</div></div>
+    <div class="mini-row"><div><strong>Run rate tim</strong><span>Projected ${rupiah(projectedRevenue)}</span></div><div class="mini-value">${rupiah(teamRunRate)}/hari</div></div>
   `;
   renderMiniAggregate("actionCampaignList", weekRows, row => row.campaign || "No Campaign", 5);
   renderMiniAggregate("actionProductList", weekRows, row => productBucket(row), 5);
