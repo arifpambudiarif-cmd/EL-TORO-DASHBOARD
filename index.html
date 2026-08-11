@@ -835,19 +835,26 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 }
 .spv-card {
   overflow: hidden;
-  border: 1px solid #d8e3ed;
+  border: 1px solid #c8d8e6;
   border-radius: 8px;
   background: #fff;
+  box-shadow: 0 8px 22px rgba(22, 45, 61, .06);
 }
+.spv-card.spv-1 { border-color: #e0b52f; }
+.spv-card.spv-2 { border-color: #64a7bb; }
+.spv-card.spv-3 { border-color: #8dc486; }
 .spv-card-head {
   display: flex;
   justify-content: space-between;
   gap: 12px;
   align-items: center;
   padding: 9px 12px;
-  background: #f7fafc;
+  background: linear-gradient(135deg, #ecf7fa, #f8fbfd);
   border-bottom: 1px solid #e3ebf2;
 }
+.spv-card.spv-1 .spv-card-head { background: linear-gradient(135deg, #fff4c2, #fffaf0); }
+.spv-card.spv-2 .spv-card-head { background: linear-gradient(135deg, #dff3f8, #f4fbfd); }
+.spv-card.spv-3 .spv-card-head { background: linear-gradient(135deg, #e5f6e1, #f8fcf7); }
 .spv-card-head strong {
   display: block;
   font-size: 14px;
@@ -872,8 +879,13 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   padding: 8px;
   border: 1px solid #dfe7ef;
   border-radius: 7px;
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff, #f8fbfd);
 }
+.spv-product-cell:nth-child(1) { border-color: #d6c07a; background: #fff9e8; }
+.spv-product-cell:nth-child(2) { border-color: #9bc6d5; background: #eef9fc; }
+.spv-product-cell:nth-child(3) { border-color: #a9d3a3; background: #f1faef; }
+.spv-product-cell:nth-child(4) { border-color: #d7b0ca; background: #fcf1f8; }
+.spv-product-cell:nth-child(5) { border-color: #c2cbd6; background: #f6f8fb; }
 .spv-product-cell > span {
   display: block;
   color: var(--muted);
@@ -2784,7 +2796,7 @@ function isMainSpv(spv) {
 function spvSort(a, b) {
   const aIndex = SPV_ORDER.indexOf(a.spv);
   const bIndex = SPV_ORDER.indexOf(b.spv);
-  return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex) || b.revenue - a.revenue;
+  return b.revenue - a.revenue || (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex);
 }
 
 function renderSpvDivision() {
@@ -3290,6 +3302,7 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
 
 
 
