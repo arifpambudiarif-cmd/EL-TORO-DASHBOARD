@@ -828,6 +828,102 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   border-radius: 4px;
   background: linear-gradient(90deg, var(--teal), var(--pink));
 }
+.spv-board {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+}
+.spv-card {
+  overflow: hidden;
+  border: 1px solid #d8e3ed;
+  border-radius: 8px;
+  background: #fff;
+}
+.spv-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  background: #f7fafc;
+  border-bottom: 1px solid #e3ebf2;
+}
+.spv-card-head strong {
+  display: block;
+  font-size: 14px;
+}
+.spv-card-head span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.spv-card-head > div:last-child { text-align: right; }
+.spv-product-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(130px, 1fr));
+  gap: 8px;
+  padding: 10px 12px;
+  background: #fbfcfd;
+  border-bottom: 1px solid #e7edf3;
+}
+.spv-product-cell {
+  min-height: 74px;
+  padding: 9px;
+  border: 1px solid #dfe7ef;
+  border-radius: 7px;
+  background: #fff;
+}
+.spv-product-cell > span {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+.spv-product-cell > strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+}
+.spv-product-cell > small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.spv-child-products {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid #edf1f5;
+}
+.spv-child-products div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+}
+.spv-child-products span { color: var(--muted); }
+.spv-agent-table-wrap {
+  max-height: 420px;
+  overflow: auto;
+}
+.spv-agent-table {
+  table-layout: fixed;
+  min-width: 1180px;
+}
+.spv-agent-table th,
+.spv-agent-table td {
+  padding: 7px 8px;
+  font-size: 10px;
+}
+.spv-agent-table th:nth-child(1),
+.spv-agent-table td:nth-child(1) { width: 42px; }
+.spv-agent-table th:nth-child(2),
+.spv-agent-table td:nth-child(2) { width: 130px; }
+.spv-agent-table th:nth-child(3),
+.spv-agent-table td:nth-child(3) { width: 150px; }
 .action-note {
   margin-top: 7px;
   padding: 7px 8px;
@@ -1045,6 +1141,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   .leaderboard-list.compare-grid { grid-template-columns: 1fr; }
   .compare-agent-card { grid-template-columns: 34px minmax(0, 1fr); }
   .compare-agent-value { grid-column: 2; text-align: left; }
+  .spv-product-grid { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
 }
 
 @media (max-width: 620px) {
@@ -1060,6 +1157,9 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   .kpi { min-height: 94px; }
   .action-readout, .action-signal-grid { grid-template-columns: 1fr; }
   .top-actions .status-dot { display: none; }
+  .spv-card-head { align-items: flex-start; flex-direction: column; }
+  .spv-card-head > div:last-child { text-align: left; }
+  .spv-product-grid { grid-template-columns: 1fr; }
 }
 
 </style>
@@ -1085,6 +1185,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       <button class="tab-button" type="button" data-tab="topCampaignPanel">TOP CAMPAIGN</button>
       <button class="tab-button" type="button" data-tab="dodolanPanel">DODOLAN</button>
       <button class="tab-button" type="button" data-tab="leaderboardPanel">LEADERBOARD COACH</button>
+      <button class="tab-button" type="button" data-tab="spvPanel">SPV PRODUCT</button>
       <button class="tab-button" type="button" data-tab="agentLeaderboardPanel">LEADERBOARD AGENT</button>
       <button class="tab-button" type="button" data-tab="compareTeamPanel">COMPARE TEAM</button>
     </nav>
@@ -1471,6 +1572,46 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       </section>
     </section>
 
+    <section id="spvPanel" class="tab-panel">
+      <div class="leaderboard-hero agent-hero">
+        <div>
+          <p class="eyebrow">SPV PRODUCT VIEW</p>
+          <h2>Pembagian Revenue 3 SPV</h2>
+          <p>Revenue per SPV dari sheet Target Agent, dengan breakdown product dan BAON Reg/Prem/Elite.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="spvTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="spvMonthFilter">Bulan</label>
+          <select id="spvMonthFilter"></select>
+        </div>
+        <div class="field">
+          <label for="spvWeekFilter">Week</label>
+          <select id="spvWeekFilter"></select>
+        </div>
+      </div>
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Total revenue</span><strong id="spvRevenueKpi">Rp0</strong><small id="spvRevenueNote">Semua bulan</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="spvTxnKpi">0</strong><small id="spvTxnNote">0 SPV</small></article>
+        <article class="kpi"><span>Agent target</span><strong id="spvAgentKpi">0</strong><small id="spvAgentNote">Dari sheet Target Agent</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="spvToTargetKpi">0%</strong><small id="spvTargetNote">Target filter aktif</small></article>
+      </div>
+      <section class="table-panel spv-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>SPV Product Split</h2>
+            <p>BAON bisa dilihat lagi sebagai Regular, Premium, dan Elite.</p>
+          </div>
+          <span id="spvCount" class="count-chip">0 SPV</span>
+        </div>
+        <div id="spvBoard" class="spv-board"></div>
+      </section>
+    </section>
+
     <section id="compareTeamPanel" class="tab-panel">
       <div class="leaderboard-hero agent-hero">
         <div>
@@ -1625,6 +1766,8 @@ let leaderboardRows = [];
 let layerOneRows = [];
 let targetRows = [];
 let selectedKey = "";
+const SPV_ORDER = ["TIM YULFAN", "TIM BUNDET", "TIM PAK MARK"];
+const PRODUCT_FAMILY_ORDER = ["BAON", "Ruangguru Private", "Ruangbelajar", "Brain Academy", "Others"];
 
 const el = id => document.getElementById(id);
 const rupiah = value => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value || 0);
@@ -1713,6 +1856,15 @@ function productBucket(row) {
   return "Others";
 }
 
+function productFamily(rowOrProduct) {
+  const bucket = typeof rowOrProduct === "string" ? rowOrProduct : productBucket(rowOrProduct);
+  if (bucket === "BAON Elite" || bucket === "BAON Prem" || bucket === "BAON Reg") return "BAON";
+  if (bucket === "RGP Online" || bucket === "RGP Offline") return "Ruangguru Private";
+  if (bucket === "RB") return "Ruangbelajar";
+  if (bucket === "BAC & Mathchamps Offline" || bucket === "Math Champs Online") return "Brain Academy";
+  return "Others";
+}
+
 function weeklyTargetForWeek(week) {
   return WEEKLY_TARGET_BY_SCHEME[week?.scheme] || WEEKLY_TARGET;
 }
@@ -1737,6 +1889,7 @@ function normalizeTargetRows(rows) {
     return {
       agent: String(read(row, "Agent") || "").trim(),
       leader: String(read(row, "Coach") || "").trim(),
+      spv: String(read(row, "SPV") || "").trim(),
       team: normalizeTeam(read(row, "KATEGORI")),
       week: week?.name || "",
       weekNum,
@@ -1903,10 +2056,12 @@ function prepareDashboard(sheetName, rawCount) {
   ["monthFilter", "actionMonthFilter", "topCampaignMonth", "dodolanMonthFilter", "leaderboardMonthFilter", "agentLeaderboardMonth", "compareMonth"].forEach(id => {
     el(id).innerHTML = monthOptions(months);
   });
+  el("spvMonthFilter").innerHTML = monthOptions(months);
   syncWeekOptions("weekFilter", "all", true);
   syncWeekOptions("dodolanWeekFilter", "all", true);
   syncWeekOptions("leaderboardWeekFilter", "all", true);
   syncWeekOptions("topCampaignWeek", "all", true);
+  syncWeekOptions("spvWeekFilter", "all", true);
   syncWeekOptions("agentLeaderboardWeek", "all", false);
   syncWeekOptions("compareWeek", "all", false);
   syncWeekOptions("actionWeekFilter", "all", false);
@@ -1922,6 +2077,7 @@ function prepareDashboard(sheetName, rawCount) {
   renderTopCampaign();
   renderDodolan();
   renderLeaderboard();
+  renderSpvDivision();
   renderAgentLeaderboard();
   renderCompareTeam();
 }
@@ -2582,6 +2738,164 @@ function renderLeaderboard() {
   });
 }
 
+function getTargetMetaMap(selectedMonth, selectedWeek) {
+  const map = new Map();
+  targetRows.forEach(row => {
+    if (!row.agent) return;
+    if (selectedWeek !== "all" && row.week !== selectedWeek) return;
+    const rowMonth = WEEK_PERIODS.find(week => week.name === row.week)?.month;
+    if (selectedMonth !== "all" && rowMonth !== selectedMonth) return;
+    const key = row.agent.toLowerCase();
+    if (!map.has(key)) map.set(key, { agent: row.agent, leader: row.leader, spv: row.spv, target: 0, weeks: new Set() });
+    const item = map.get(key);
+    item.target += row.target;
+    item.weeks.add(row.week);
+    if (!item.leader && row.leader) item.leader = row.leader;
+    if (!item.spv && row.spv) item.spv = row.spv;
+  });
+  return map;
+}
+
+function createProductTotals() {
+  return {
+    BAON: { revenue: 0, txn: 0, children: { "BAON Reg": { revenue: 0, txn: 0 }, "BAON Prem": { revenue: 0, txn: 0 }, "BAON Elite": { revenue: 0, txn: 0 } } },
+    "Ruangguru Private": { revenue: 0, txn: 0, children: {} },
+    Ruangbelajar: { revenue: 0, txn: 0, children: {} },
+    "Brain Academy": { revenue: 0, txn: 0, children: {} },
+    Others: { revenue: 0, txn: 0, children: {} },
+  };
+}
+
+function addProductTotal(products, bucket, revenue) {
+  const family = productFamily(bucket);
+  products[family].revenue += revenue;
+  products[family].txn += 1;
+  if (family === "BAON") {
+    if (!products[family].children[bucket]) products[family].children[bucket] = { revenue: 0, txn: 0 };
+    products[family].children[bucket].revenue += revenue;
+    products[family].children[bucket].txn += 1;
+  }
+}
+
+function spvSort(a, b) {
+  const aIndex = SPV_ORDER.indexOf(a.spv);
+  const bIndex = SPV_ORDER.indexOf(b.spv);
+  return (aIndex === -1 ? 99 : aIndex) - (bIndex === -1 ? 99 : bIndex) || b.revenue - a.revenue;
+}
+
+function renderSpvDivision() {
+  const selectedMonth = el("spvMonthFilter").value;
+  const selectedWeek = el("spvWeekFilter").value;
+  const metaMap = getTargetMetaMap(selectedMonth, selectedWeek);
+  const bySpv = new Map();
+
+  metaMap.forEach(meta => {
+    const spv = meta.spv || "Tanpa SPV";
+    if (!bySpv.has(spv)) bySpv.set(spv, { spv, revenue: 0, target: 0, txn: 0, agents: new Map(), products: createProductTotals() });
+    const item = bySpv.get(spv);
+    item.target += meta.target;
+    if (!item.agents.has(meta.agent.toLowerCase())) item.agents.set(meta.agent.toLowerCase(), { agent: meta.agent, leader: meta.leader, revenue: 0, target: meta.target, txn: 0, products: createProductTotals() });
+  });
+
+  leaderboardRows.forEach(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    if (selectedMonth !== "all" && week?.month !== selectedMonth) return;
+    if (selectedWeek !== "all" && row.week !== selectedWeek) return;
+    const key = row.agent.toLowerCase();
+    const meta = metaMap.get(key);
+    if (!meta) return;
+    const spv = meta.spv || "Tanpa SPV";
+    if (!bySpv.has(spv)) bySpv.set(spv, { spv, revenue: 0, target: 0, txn: 0, agents: new Map(), products: createProductTotals() });
+    const group = bySpv.get(spv);
+    if (!group.agents.has(key)) {
+      group.agents.set(key, { agent: row.agent, leader: meta.leader || row.leader, revenue: 0, target: meta.target, txn: 0, products: createProductTotals() });
+      group.target += meta.target;
+    }
+    const agent = group.agents.get(key);
+    const bucket = productBucket(row);
+    group.revenue += row.revenue;
+    group.txn += 1;
+    agent.revenue += row.revenue;
+    agent.txn += 1;
+    addProductTotal(group.products, bucket, row.revenue);
+    addProductTotal(agent.products, bucket, row.revenue);
+  });
+
+  const groups = [...bySpv.values()].filter(group => SPV_ORDER.includes(group.spv) || group.revenue > 0).sort(spvSort);
+  const totalRevenue = groups.reduce((sum, group) => sum + group.revenue, 0);
+  const totalTarget = groups.reduce((sum, group) => sum + group.target, 0);
+  const totalTxn = groups.reduce((sum, group) => sum + group.txn, 0);
+  const totalAgents = groups.reduce((sum, group) => sum + group.agents.size, 0);
+
+  el("spvTotalRevenue").textContent = rupiah(totalRevenue);
+  el("spvRevenueKpi").textContent = rupiah(totalRevenue);
+  el("spvTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
+  el("spvAgentKpi").textContent = totalAgents.toLocaleString("id-ID");
+  el("spvToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
+  el("spvRevenueNote").textContent = selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek;
+  el("spvTxnNote").textContent = `${groups.length.toLocaleString("id-ID")} SPV`;
+  el("spvAgentNote").textContent = "Dari sheet Target Agent";
+  el("spvTargetNote").textContent = `Target ${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek}`;
+  el("spvCount").textContent = `${groups.length} SPV`;
+  el("spvBoard").innerHTML = groups.map((group, index) => renderSpvCard(group, index)).join("") || `<div class="detail-empty">Tidak ada data pada filter ini.</div>`;
+}
+
+function renderSpvCard(group, index) {
+  const agents = [...group.agents.values()].sort((a, b) => b.revenue - a.revenue || a.agent.localeCompare(b.agent));
+  const achievement = group.target ? group.revenue / group.target : 0;
+  return `
+    <section class="spv-card spv-${index + 1}">
+      <div class="spv-card-head">
+        <div><strong>${escapeHtml(group.spv)}</strong><span>${agents.length.toLocaleString("id-ID")} agent - ${group.txn.toLocaleString("id-ID")} TXN</span></div>
+        <div><strong>${rupiah(group.revenue)}</strong><span>${percent(achievement)} to target</span></div>
+      </div>
+      <div class="spv-product-grid">${PRODUCT_FAMILY_ORDER.map(product => renderSpvProductCell(product, group.products[product], group.revenue)).join("")}</div>
+      <div class="spv-agent-table-wrap">
+        <table class="spv-agent-table">
+          <thead><tr><th>No</th><th>Coach</th><th>Agent</th><th>Target</th><th>Revenue</th><th>% Target</th><th>BAON</th><th>BA Reg</th><th>BA Prem</th><th>BA Elite</th><th>Private</th><th>RB</th><th>BAC</th><th>Others</th></tr></thead>
+          <tbody>${agents.map((agent, agentIndex) => renderSpvAgentRow(agent, agentIndex)).join("")}</tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+function renderSpvProductCell(label, item, totalRevenue) {
+  const share = totalRevenue ? item.revenue / totalRevenue : 0;
+  const children = Object.entries(item.children || {}).filter(([, child]) => child.revenue > 0);
+  return `
+    <div class="spv-product-cell ${label === "BAON" ? "has-children" : ""}">
+      <span>${escapeHtml(label)}</span>
+      <strong>${rupiah(item.revenue)}</strong>
+      <small>${percent(share)} - ${item.txn.toLocaleString("id-ID")} TXN</small>
+      ${children.length ? `<div class="spv-child-products">${children.map(([name, child]) => `<div><span>${escapeHtml(name.replace("BAON ", ""))}</span><b>${rupiah(child.revenue)}</b></div>`).join("")}</div>` : ""}
+    </div>
+  `;
+}
+
+function renderSpvAgentRow(agent, index) {
+  const achievement = agent.target ? agent.revenue / agent.target : 0;
+  const baon = agent.products.BAON;
+  return `
+    <tr>
+      <td>${index + 1}</td>
+      <td>${escapeHtml(agent.leader || "-")}</td>
+      <td>${escapeHtml(agent.agent)}</td>
+      <td class="money">${rupiah(agent.target)}</td>
+      <td class="money">${rupiah(agent.revenue)}</td>
+      <td class="number">${percent(achievement)}</td>
+      <td class="money">${rupiah(baon.revenue)}</td>
+      <td class="money">${rupiah(baon.children["BAON Reg"]?.revenue || 0)}</td>
+      <td class="money">${rupiah(baon.children["BAON Prem"]?.revenue || 0)}</td>
+      <td class="money">${rupiah(baon.children["BAON Elite"]?.revenue || 0)}</td>
+      <td class="money">${rupiah(agent.products["Ruangguru Private"].revenue)}</td>
+      <td class="money">${rupiah(agent.products.Ruangbelajar.revenue)}</td>
+      <td class="money">${rupiah(agent.products["Brain Academy"].revenue)}</td>
+      <td class="money">${rupiah(agent.products.Others.revenue)}</td>
+    </tr>
+  `;
+}
+
 function aggregateAgentsByCoach(rows, coach, mode, selectedWeek, query) {
   const byAgent = new Map();
   rows.forEach(row => {
@@ -2921,6 +3235,11 @@ el("leaderboardMonthFilter").addEventListener("change", () => {
 });
 el("leaderboardWeekFilter").addEventListener("change", renderLeaderboard);
 el("leaderboardLayerFilter").addEventListener("change", renderLeaderboard);
+el("spvMonthFilter").addEventListener("change", () => {
+  syncWeekOptions("spvWeekFilter", el("spvMonthFilter").value, true);
+  renderSpvDivision();
+});
+el("spvWeekFilter").addEventListener("change", renderSpvDivision);
 el("actionWeekFilter").addEventListener("change", renderActionCenter);
 el("actionSearchFilter").addEventListener("input", renderActionCenter);
 el("agentLeaderboardMonth").addEventListener("change", () => {
@@ -2947,6 +3266,7 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
 
 
 
