@@ -1952,6 +1952,7 @@ function buildDodolanRows(rows) {
     return {
       ...row,
       week: week.name,
+      month: week.month,
       packageName: row.packageName || row.product_type || "-",
       campaign: row.campaign || "No Campaign",
       assignedDate: row.assignedDate || "-",
@@ -3302,6 +3303,7 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
 
 
 
