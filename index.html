@@ -830,8 +830,8 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 }
 .spv-board {
   display: grid;
-  gap: 12px;
-  padding: 12px;
+  gap: 10px;
+  padding: 10px;
 }
 .spv-card {
   overflow: hidden;
@@ -844,7 +844,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   justify-content: space-between;
   gap: 12px;
   align-items: center;
-  padding: 10px 12px;
+  padding: 9px 12px;
   background: #f7fafc;
   border-bottom: 1px solid #e3ebf2;
 }
@@ -862,14 +862,14 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 .spv-product-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(130px, 1fr));
-  gap: 8px;
-  padding: 10px 12px;
+  gap: 7px;
+  padding: 9px 12px;
   background: #fbfcfd;
   border-bottom: 1px solid #e7edf3;
 }
 .spv-product-cell {
-  min-height: 74px;
-  padding: 9px;
+  min-height: 60px;
+  padding: 8px;
   border: 1px solid #dfe7ef;
   border-radius: 7px;
   background: #fff;
@@ -882,8 +882,8 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 }
 .spv-product-cell > strong {
   display: block;
-  margin-top: 5px;
-  font-size: 14px;
+  margin-top: 4px;
+  font-size: 13px;
 }
 .spv-product-cell > small {
   display: block;
@@ -894,8 +894,8 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 .spv-child-products {
   display: grid;
   gap: 4px;
-  margin-top: 8px;
-  padding-top: 7px;
+  margin-top: 6px;
+  padding-top: 6px;
   border-top: 1px solid #edf1f5;
 }
 .spv-child-products div {
@@ -906,24 +906,24 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 }
 .spv-child-products span { color: var(--muted); }
 .spv-agent-table-wrap {
-  max-height: 420px;
+  max-height: 260px;
   overflow: auto;
 }
 .spv-agent-table {
   table-layout: fixed;
-  min-width: 1180px;
+  min-width: 1080px;
 }
 .spv-agent-table th,
 .spv-agent-table td {
-  padding: 7px 8px;
+  padding: 6px 7px;
   font-size: 10px;
 }
 .spv-agent-table th:nth-child(1),
 .spv-agent-table td:nth-child(1) { width: 42px; }
 .spv-agent-table th:nth-child(2),
-.spv-agent-table td:nth-child(2) { width: 130px; }
+.spv-agent-table td:nth-child(2) { width: 160px; }
 .spv-agent-table th:nth-child(3),
-.spv-agent-table td:nth-child(3) { width: 150px; }
+.spv-agent-table td:nth-child(3) { width: 58px; }
 .action-note {
   margin-top: 7px;
   padding: 7px 8px;
@@ -1577,7 +1577,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         <div>
           <p class="eyebrow">SPV PRODUCT VIEW</p>
           <h2>Pembagian Revenue 3 SPV</h2>
-          <p>Revenue per SPV dari sheet Target Agent, dengan breakdown product dan BAON Reg/Prem/Elite.</p>
+          <p>Deti Laharwati, Yulfan Prihartanto, dan Mark Johannes. Ringkas per leader dengan breakdown product.</p>
         </div>
         <div class="hero-number">
           <span>Total Revenue</span>
@@ -1604,7 +1604,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         <div class="panel-heading">
           <div>
             <h2>SPV Product Split</h2>
-            <p>BAON bisa dilihat lagi sebagai Regular, Premium, dan Elite.</p>
+            <p>Hanya 3 SPV utama. BAON dibuka menjadi Regular, Premium, dan Elite.</p>
           </div>
           <span id="spvCount" class="count-chip">0 SPV</span>
         </div>
@@ -1766,7 +1766,7 @@ let leaderboardRows = [];
 let layerOneRows = [];
 let targetRows = [];
 let selectedKey = "";
-const SPV_ORDER = ["TIM YULFAN", "TIM BUNDET", "TIM PAK MARK"];
+const SPV_ORDER = ["Deti Laharwati", "Yulfan Prihartanto", "Mark Johannes Hilman"];
 const PRODUCT_FAMILY_ORDER = ["BAON", "Ruangguru Private", "Ruangbelajar", "Brain Academy", "Others"];
 
 const el = id => document.getElementById(id);
@@ -2777,6 +2777,10 @@ function addProductTotal(products, bucket, revenue) {
   }
 }
 
+function isMainSpv(spv) {
+  return SPV_ORDER.some(name => name.toLowerCase() === String(spv || "").trim().toLowerCase());
+}
+
 function spvSort(a, b) {
   const aIndex = SPV_ORDER.indexOf(a.spv);
   const bIndex = SPV_ORDER.indexOf(b.spv);
@@ -2791,6 +2795,7 @@ function renderSpvDivision() {
 
   metaMap.forEach(meta => {
     const spv = meta.spv || "Tanpa SPV";
+    if (!isMainSpv(spv)) return;
     if (!bySpv.has(spv)) bySpv.set(spv, { spv, revenue: 0, target: 0, txn: 0, agents: new Map(), products: createProductTotals() });
     const item = bySpv.get(spv);
     item.target += meta.target;
@@ -2805,6 +2810,7 @@ function renderSpvDivision() {
     const meta = metaMap.get(key);
     if (!meta) return;
     const spv = meta.spv || "Tanpa SPV";
+    if (!isMainSpv(spv)) return;
     if (!bySpv.has(spv)) bySpv.set(spv, { spv, revenue: 0, target: 0, txn: 0, agents: new Map(), products: createProductTotals() });
     const group = bySpv.get(spv);
     if (!group.agents.has(key)) {
@@ -2821,7 +2827,7 @@ function renderSpvDivision() {
     addProductTotal(agent.products, bucket, row.revenue);
   });
 
-  const groups = [...bySpv.values()].filter(group => SPV_ORDER.includes(group.spv) || group.revenue > 0).sort(spvSort);
+  const groups = [...bySpv.values()].filter(group => isMainSpv(group.spv)).sort(spvSort);
   const totalRevenue = groups.reduce((sum, group) => sum + group.revenue, 0);
   const totalTarget = groups.reduce((sum, group) => sum + group.target, 0);
   const totalTxn = groups.reduce((sum, group) => sum + group.txn, 0);
@@ -2841,19 +2847,37 @@ function renderSpvDivision() {
 }
 
 function renderSpvCard(group, index) {
-  const agents = [...group.agents.values()].sort((a, b) => b.revenue - a.revenue || a.agent.localeCompare(b.agent));
+  const leaders = [...group.agents.values()].reduce((map, agent) => {
+    const leader = agent.leader || "-";
+    if (!map.has(leader)) map.set(leader, { leader, revenue: 0, target: 0, txn: 0, agents: 0, products: createProductTotals() });
+    const item = map.get(leader);
+    item.revenue += agent.revenue;
+    item.target += agent.target;
+    item.txn += agent.txn;
+    item.agents += 1;
+    PRODUCT_FAMILY_ORDER.forEach(product => {
+      item.products[product].revenue += agent.products[product].revenue;
+      item.products[product].txn += agent.products[product].txn;
+    });
+    Object.entries(agent.products.BAON.children).forEach(([name, child]) => {
+      item.products.BAON.children[name].revenue += child.revenue;
+      item.products.BAON.children[name].txn += child.txn;
+    });
+    return map;
+  }, new Map());
+  const leaderRows = [...leaders.values()].sort((a, b) => b.revenue - a.revenue || a.leader.localeCompare(b.leader));
   const achievement = group.target ? group.revenue / group.target : 0;
   return `
     <section class="spv-card spv-${index + 1}">
       <div class="spv-card-head">
-        <div><strong>${escapeHtml(group.spv)}</strong><span>${agents.length.toLocaleString("id-ID")} agent - ${group.txn.toLocaleString("id-ID")} TXN</span></div>
+        <div><strong>${escapeHtml(group.spv)}</strong><span>${leaderRows.length.toLocaleString("id-ID")} leader - ${group.agents.size.toLocaleString("id-ID")} agent - ${group.txn.toLocaleString("id-ID")} TXN</span></div>
         <div><strong>${rupiah(group.revenue)}</strong><span>${percent(achievement)} to target</span></div>
       </div>
       <div class="spv-product-grid">${PRODUCT_FAMILY_ORDER.map(product => renderSpvProductCell(product, group.products[product], group.revenue)).join("")}</div>
       <div class="spv-agent-table-wrap">
         <table class="spv-agent-table">
-          <thead><tr><th>No</th><th>Coach</th><th>Agent</th><th>Target</th><th>Revenue</th><th>% Target</th><th>BAON</th><th>BA Reg</th><th>BA Prem</th><th>BA Elite</th><th>Private</th><th>RB</th><th>BAC</th><th>Others</th></tr></thead>
-          <tbody>${agents.map((agent, agentIndex) => renderSpvAgentRow(agent, agentIndex)).join("")}</tbody>
+          <thead><tr><th>No</th><th>Leader</th><th>Agent</th><th>Target</th><th>Revenue</th><th>% Target</th><th>BAON</th><th>Reg</th><th>Prem</th><th>Elite</th><th>Private</th><th>RB</th><th>BAC</th><th>Others</th></tr></thead>
+          <tbody>${leaderRows.map((leader, leaderIndex) => renderSpvLeaderRow(leader, leaderIndex)).join("")}</tbody>
         </table>
       </div>
     </section>
@@ -2873,25 +2897,25 @@ function renderSpvProductCell(label, item, totalRevenue) {
   `;
 }
 
-function renderSpvAgentRow(agent, index) {
-  const achievement = agent.target ? agent.revenue / agent.target : 0;
-  const baon = agent.products.BAON;
+function renderSpvLeaderRow(leader, index) {
+  const achievement = leader.target ? leader.revenue / leader.target : 0;
+  const baon = leader.products.BAON;
   return `
     <tr>
       <td>${index + 1}</td>
-      <td>${escapeHtml(agent.leader || "-")}</td>
-      <td>${escapeHtml(agent.agent)}</td>
-      <td class="money">${rupiah(agent.target)}</td>
-      <td class="money">${rupiah(agent.revenue)}</td>
+      <td>${escapeHtml(leader.leader || "-")}</td>
+      <td class="number">${leader.agents.toLocaleString("id-ID")}</td>
+      <td class="money">${rupiah(leader.target)}</td>
+      <td class="money">${rupiah(leader.revenue)}</td>
       <td class="number">${percent(achievement)}</td>
       <td class="money">${rupiah(baon.revenue)}</td>
       <td class="money">${rupiah(baon.children["BAON Reg"]?.revenue || 0)}</td>
       <td class="money">${rupiah(baon.children["BAON Prem"]?.revenue || 0)}</td>
       <td class="money">${rupiah(baon.children["BAON Elite"]?.revenue || 0)}</td>
-      <td class="money">${rupiah(agent.products["Ruangguru Private"].revenue)}</td>
-      <td class="money">${rupiah(agent.products.Ruangbelajar.revenue)}</td>
-      <td class="money">${rupiah(agent.products["Brain Academy"].revenue)}</td>
-      <td class="money">${rupiah(agent.products.Others.revenue)}</td>
+      <td class="money">${rupiah(leader.products["Ruangguru Private"].revenue)}</td>
+      <td class="money">${rupiah(leader.products.Ruangbelajar.revenue)}</td>
+      <td class="money">${rupiah(leader.products["Brain Academy"].revenue)}</td>
+      <td class="money">${rupiah(leader.products.Others.revenue)}</td>
     </tr>
   `;
 }
@@ -3266,6 +3290,7 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
 
 
 
