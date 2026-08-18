@@ -1855,14 +1855,23 @@ function normalizeTeam(value) {
 function productBucket(row) {
   const type = String(row.product_type || "").trim();
   const group = String(row.product_group || "").trim().toUpperCase();
+  const packageName = String(row.packageName || "").trim();
   const lower = type.toLowerCase();
+  const packageLower = packageName.toLowerCase();
   if (lower.includes("elite")) return "BAON Elite";
   if (lower.includes("premium")) return "BAON Prem";
   if (lower.includes("regular")) return "BAON Reg";
   if (lower === "brain academy" || lower === "math champs") return "BAC & Mathchamps Offline";
   if (lower === "math champs online") return "Math Champs Online";
   if (lower === "ruangbelajar" || group === "RB") return "RB";
-  if (lower.includes("ruangguru privat") && lower.includes("online")) return "RGP Online";
+  if (
+    lower.includes("ruangguru privat") &&
+    (lower.includes("online") || packageLower.includes("rgp [online]") || packageLower.includes("rgp online"))
+  ) return "RGP Online";
+  if (
+    lower.includes("ruangguru privat") &&
+    (lower.includes("offline") || packageLower.includes("rgp [offline]") || packageLower.includes("rgp offline"))
+  ) return "RGP Offline";
   if (lower === "ruangguru privat" || group === "RGP") return "RGP Offline";
   if (lower === "skill academy") return "Skill Academy";
   return "Others";
@@ -3303,6 +3312,7 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
 
 
 
