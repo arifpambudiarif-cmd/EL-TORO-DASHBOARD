@@ -1684,7 +1684,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
 const WEEKLY_TARGET = 23400000;
-const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000 };
+const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000 };
 const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
 const SOURCE_TAB_NAME = "RAW_COMBINED";
 const SOURCE_GID = "0";
@@ -1717,8 +1717,8 @@ const WEEK_PERIODS = [
   { name: "W 5 JUL", weekNum: 31, minimum: 0.50, scheme: "W4", month: "Juli" },
   { name: "W 1 AUG", weekNum: 32, minimum: 0.50, scheme: "AUG1", month: "Agustus" },
   { name: "W 2 AUG", weekNum: 33, minimum: 0.50, scheme: "AUG1", month: "Agustus" },
-  { name: "W 3 AUG", weekNum: 34, minimum: 0.50, scheme: "AUG1", month: "Agustus" },
-  { name: "W 4 AUG", weekNum: 35, minimum: 0.50, scheme: "AUG1", month: "Agustus" },
+  { name: "W 3 AUG", weekNum: 34, minimum: 0.50, scheme: "AUG3", month: "Agustus" },
+  { name: "W 4 AUG", weekNum: 35, minimum: 0.50, scheme: "AUG3", month: "Agustus" },
 ];
 
 const RATES = {
@@ -1767,6 +1767,18 @@ const RATES = {
     "RB": { 0: 0, .5: .0253, .75: .0295, 1: .0955, 1.25: .12 },
     "RGP Online": { 0: 0, .5: .009, .75: .015, 1: .03, 1.25: .035 },
     "RGP Offline": { 0: 0, .5: .003, .75: .005, 1: .01, 1.25: .01 },
+    "Math Champs Online": { 0: 0, .5: .01, .75: .01, 1: .01, 1.25: .01 },
+    "Skill Academy": { 0: 0, .5: .02, .75: .02, 1: .02, 1.25: .02 },
+  },
+  AUG3: {
+    "BAC & Mathchamps Offline": { 0: 0, .5: .0115, .75: .014, 1: .0418, 1.25: .0485 },
+    "BAON Elite": { 0: 0, .5: .0125, .75: .014, 1: .04, 1.25: .0453 },
+    "BAON Prem": { 0: 0, .5: .0233, .75: .0268, 1: .0853, 1.25: .1015 },
+    "BAON Reg": { 0: 0, .5: .0195, .75: .0228, 1: .0733, 1.25: .091 },
+    "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
+    "RB": { 0: 0, .5: .0203, .75: .0235, 1: .0765, 1.25: .096 },
+    "RGP Online": { 0: 0, .5: .0073, .75: .012, 1: .024, 1.25: .028 },
+    "RGP Offline": { 0: 0, .5: .0025, .75: .004, 1: .008, 1.25: .008 },
     "Math Champs Online": { 0: 0, .5: .01, .75: .01, 1: .01, 1.25: .01 },
     "Skill Academy": { 0: 0, .5: .02, .75: .02, 1: .02, 1.25: .02 },
   },
@@ -1922,7 +1934,8 @@ function normalizeTargetRows(rows) {
 function targetForAgentWeek(agent, week) {
   const key = String(agent || "").trim().toLowerCase();
   const found = targetRows.find(row => row.agent.toLowerCase() === key && row.week === week?.name);
-  return found ? found.target : weeklyTargetForWeek(week);
+  if (!found) return weeklyTargetForWeek(week);
+  return week?.scheme === "AUG3" && found.team === "Layer 1" ? weeklyTargetForWeek(week) : found.target;
 }
 
 function targetForLeaderTeamWeeks(leader, team, weeks) {
@@ -2124,6 +2137,12 @@ function availableWeeks(month = "all") {
     if (week && (month === "all" || rowMonth === month)) weeks.add(week);
   });
   return WEEK_PERIODS.map(week => week.name).filter(week => weeks.has(week));
+}
+
+function targetWeeksForMonth(month = "all") {
+  return WEEK_PERIODS
+    .filter(week => month === "all" || week.month === month)
+    .map(week => week.name);
 }
 
 function syncWeekOptions(weekId, month, includeAll = true) {
@@ -2682,7 +2701,7 @@ function renderLeaderboard() {
     row.primaryTeam = selectedLayer === "all"
       ? Object.entries(row.teams).sort((a, b) => b[1] - a[1])[0]?.[0] || "-"
       : selectedLayer;
-    row.activeWeeks = [...row.weeks];
+    row.activeWeeks = selectedWeek === "all" ? targetWeeksForMonth(selectedMonth) : [...row.weeks];
     row.weeklyTarget = row.activeWeeks.length ? totalLeaderboardTarget(row.primaryTeam, row.activeWeeks) / row.activeWeeks.length : leaderboardTargetForTeam(row.primaryTeam);
     row.agentCount = selectedLayer === "all" ? (LEADERBOARD_AGENT_COUNTS[row.primaryTeam] || row.agents.size) : row.agents.size;
     row.target = targetForLeaderTeamWeeks(row.leader, row.primaryTeam, row.activeWeeks);
@@ -3057,7 +3076,7 @@ function renderAgentLeaderboard() {
     item.products[product] = (item.products[product] || 0) + row.revenue;
   });
   const agents = [...byAgent.values()].sort((a, b) => b.revenue - a.revenue);
-  const monthWeeks = availableWeeks(selectedMonth);
+  const monthWeeks = targetWeeksForMonth(selectedMonth);
   const targetForRow = row => mode === "monthly"
     ? monthWeeks.reduce((sum, weekName) => sum + targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === weekName)), 0)
     : targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
@@ -3102,7 +3121,7 @@ function renderCompareTeam() {
   const compareCoach = el("compareCoach").value;
   const query = el("compareSearch").value.trim().toLowerCase();
   el("compareWeek").disabled = mode === "monthly";
-  const monthWeeks = availableWeeks(selectedMonth);
+  const monthWeeks = targetWeeksForMonth(selectedMonth);
   const monthRows = layerOneRows.filter(row => {
     const week = weekFor(row.weekName, row.weekNum);
     return selectedMonth === "all" || week?.month === selectedMonth;
@@ -3312,6 +3331,8 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
+
 
 
 
