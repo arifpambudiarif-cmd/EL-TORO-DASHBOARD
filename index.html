@@ -1205,9 +1205,9 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
     <section id="incentivePanel" class="tab-panel active">
     <section class="rules-strip">
       <div><span>Scope</span><strong>Layer 1</strong></div>
-      <div><span>Target L1 W1-W3</span><strong>Rp23.400.000</strong></div>
-      <div><span>W1 minimum TH</span><strong>50%</strong></div>
-      <div><span>W4-W5 target L1</span><strong>Rp18.200.000</strong></div>
+      <div><span>Target L1 W1-W5 Sep</span><strong>Rp9.000.000</strong></div>
+      <div><span>W1-W5 minimum TH</span><strong>50%</strong></div>
+      <div><span>Skema Baru</span><strong>September 2026</strong></div>
     </section>
 
     <section id="emptyState" class="empty-state">
@@ -1684,7 +1684,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
 const WEEKLY_TARGET = 23400000;
-const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000 };
+const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000, SEP: 9000000 };
 const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
 const SOURCE_TAB_NAME = "RAW_COMBINED";
 const SOURCE_GID = "0";
@@ -1719,6 +1719,11 @@ const WEEK_PERIODS = [
   { name: "W 2 AUG", weekNum: 33, minimum: 0.50, scheme: "AUG1", month: "Agustus" },
   { name: "W 3 AUG", weekNum: 34, minimum: 0.50, scheme: "AUG3", month: "Agustus" },
   { name: "W 4 AUG", weekNum: 35, minimum: 0.50, scheme: "AUG3", month: "Agustus" },
+  { name: "W 1 SEP", weekNum: 36, minimum: 0.50, scheme: "SEP", month: "September" },
+  { name: "W 2 SEP", weekNum: 37, minimum: 0.50, scheme: "SEP", month: "September" },
+  { name: "W 3 SEP", weekNum: 38, minimum: 0.50, scheme: "SEP", month: "September" },
+  { name: "W 4 SEP", weekNum: 39, minimum: 0.50, scheme: "SEP", month: "September" },
+  { name: "W 5 SEP", weekNum: 40, minimum: 0.50, scheme: "SEP", month: "September" },
 ];
 
 const RATES = {
@@ -1779,6 +1784,18 @@ const RATES = {
     "RB": { 0: 0, .5: .0203, .75: .0235, 1: .0765, 1.25: .096 },
     "RGP Online": { 0: 0, .5: .0073, .75: .012, 1: .024, 1.25: .028 },
     "RGP Offline": { 0: 0, .5: .0025, .75: .004, 1: .008, 1.25: .008 },
+    "Math Champs Online": { 0: 0, .5: .01, .75: .01, 1: .01, 1.25: .01 },
+    "Skill Academy": { 0: 0, .5: .02, .75: .02, 1: .02, 1.25: .02 },
+  },
+  SEP: {
+    "BAC & Mathchamps Offline": { 0: 0, .5: .0158, .75: .0195, 1: .0365, 1.25: .042 },
+    "BAON Elite": { 0: 0, .5: .0175, .75: .0195, 1: .035, 1.25: .0395 },
+    "BAON Prem": { 0: 0, .5: .032, .75: .037, 1: .0743, 1.25: .0885 },
+    "BAON Reg": { 0: 0, .5: .027, .75: .0318, 1: .0638, 1.25: .0793 },
+    "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
+    "RB": { 0: 0, .5: .028, .75: .033, 1: .0665, 1.25: .0835 },
+    "RGP Online": { 0: 0, .5: .009, .75: .015, 1: .03, 1.25: .035 },
+    "RGP Offline": { 0: 0, .5: .003, .75: .005, 1: .01, 1.25: .01 },
     "Math Champs Online": { 0: 0, .5: .01, .75: .01, 1: .01, 1.25: .01 },
     "Skill Academy": { 0: 0, .5: .02, .75: .02, 1: .02, 1.25: .02 },
   },
@@ -3322,37 +3339,9 @@ el("compareMonth").addEventListener("change", () => {
 el("compareMode").addEventListener("change", renderCompareTeam);
 el("compareWeek").addEventListener("change", renderCompareTeam);
 el("compareCoach").addEventListener("change", renderCompareTeam);
-el("compareSearch").addEventListener("input", renderCompareTeam);
+el("compareSearch").exportResults;
 el("exportButton").addEventListener("click", exportResults);
 loadFromGoogleSheet();
-
-
-
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
