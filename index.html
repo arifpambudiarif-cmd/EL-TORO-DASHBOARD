@@ -1398,7 +1398,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
           <select id="topCampaignWeek"></select>
         </div>
         <div class="field">
-          <label for="topCampaignCoach">Coach</label>
+          <label for="topCampaignCoach">Coach / Leader</label>
           <select id="topCampaignCoach"></select>
         </div>
         <div class="field">
@@ -1419,7 +1419,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       </div>
       <div class="kpi-grid leaderboard-kpis">
         <article class="kpi"><span>Campaign aktif</span><strong id="topCampaignCountKpi">0</strong><small id="topCampaignWeekNote">Weekly</small></article>
-        <article class="kpi"><span>Total transaksi</span><strong id="topCampaignTxnKpi">0</strong><small>Layer 1</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="topCampaignTxnKpi">0</strong><small>Semua layer / coach</small></article>
         <article class="kpi"><span>Top campaign</span><strong id="topCampaignNameKpi">-</strong><small id="topCampaignRevenueKpi">Rp0</small></article>
         <article class="kpi"><span>Txn top campaign</span><strong id="topCampaignAovKpi">0</strong><small>Jumlah transaksi campaign #1</small></article>
       </div>
@@ -1805,6 +1805,7 @@ let summary = [];
 let dodolanRows = [];
 let leaderboardRows = [];
 let layerOneRows = [];
+let allTransactionRows = [];
 let targetRows = [];
 let selectedKey = "";
 const SPV_ORDER = ["Deti Laharwati", "Yulfan Prihartanto", "Mark Johannes Hilman"];
@@ -2090,6 +2091,7 @@ function loadRows(rows, sheetName, targetSheetRows = []) {
   targetRows = normalizeTargetRows(targetSheetRows);
   console.info(`Loaded ${targetRows.length.toLocaleString("id-ID")} target rows from TARGET AGENT.`);
   const normalized = normalizeRows(rows);
+  allTransactionRows = normalized;
   layerOneRows = normalized.filter(row => row.team.toLowerCase() === "layer 1");
   summary = calculate(layerOneRows);
   dodolanRows = buildDodolanRows(layerOneRows);
@@ -2118,9 +2120,10 @@ function prepareDashboard(sheetName, rawCount) {
   syncWeekOptions("compareWeek", "all", false);
   syncWeekOptions("actionWeekFilter", "all", false);
   const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
+  const allLeaders = [...new Set(allTransactionRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   el("dodolanLeaderFilter").innerHTML = `<option value="all">Semua leader</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
   el("agentLeaderboardCoach").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
-  el("topCampaignCoach").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
+  el("topCampaignCoach").innerHTML = `<option value="all">Semua coach / leader</option>${allLeaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
   updateTopCampaignAgentOptions();
   el("compareCoach").innerHTML = leaders.filter(leader => leader.toLowerCase() !== "arif pambudi").map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("");
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
@@ -2136,8 +2139,9 @@ function prepareDashboard(sheetName, rawCount) {
 
 function availableMonths() {
   const months = new Set();
-  [...summary, ...dodolanRows, ...leaderboardRows].forEach(row => {
-    if (row.month) months.add(row.month);
+  [...allTransactionRows, ...summary, ...dodolanRows, ...leaderboardRows].forEach(row => {
+    const rowMonth = row.month || WEEK_PERIODS.find(item => item.name === (row.week || weekFor(row.weekName, row.weekNum)?.name))?.month;
+    if (rowMonth) months.add(rowMonth);
   });
   return WEEK_PERIODS.map(week => week.month).filter((month, index, list) => list.indexOf(month) === index && months.has(month));
 }
@@ -2148,7 +2152,7 @@ function monthOptions(months) {
 
 function availableWeeks(month = "all") {
   const weeks = new Set();
-  [...summary, ...dodolanRows, ...leaderboardRows].forEach(row => {
+  [...allTransactionRows, ...summary, ...dodolanRows, ...leaderboardRows].forEach(row => {
     const week = row.week || weekFor(row.weekName, row.weekNum)?.name;
     const rowMonth = row.month || WEEK_PERIODS.find(item => item.name === week)?.month;
     if (week && (month === "all" || rowMonth === month)) weeks.add(week);
@@ -2550,11 +2554,14 @@ function updateTopCampaignAgentOptions() {
   const selectedMonth = el("topCampaignMonth").value;
   const selectedWeek = el("topCampaignWeek").value;
   const selectedCoach = el("topCampaignCoach").value;
-  const agents = [...new Set(dodolanRows.filter(row =>
-    (selectedMonth === "all" || row.month === selectedMonth) &&
-    (selectedWeek === "all" || row.week === selectedWeek) &&
-    (selectedCoach === "all" || (row.leader || "-") === selectedCoach)
-  ).map(row => row.agent))].sort((a, b) => a.localeCompare(b));
+  const agents = [...new Set(allTransactionRows.filter(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    const rowMonth = week?.month;
+    const rowWeek = week?.name;
+    return (selectedMonth === "all" || rowMonth === selectedMonth) &&
+      (selectedWeek === "all" || rowWeek === selectedWeek) &&
+      (selectedCoach === "all" || (row.leader || "-") === selectedCoach);
+  }).map(row => row.agent))].sort((a, b) => a.localeCompare(b));
   const current = el("topCampaignAgent").value;
   el("topCampaignAgent").innerHTML = `<option value="all">Semua agent</option>${agents.map(agent => `<option value="${escapeHtml(agent)}">${escapeHtml(agent)}</option>`).join("")}`;
   if (agents.includes(current)) el("topCampaignAgent").value = current;
@@ -2567,31 +2574,44 @@ function renderTopCampaign() {
   const selectedAgent = el("topCampaignAgent").value;
   const sortBy = el("topCampaignSort").value;
   const query = el("topCampaignSearch").value.trim().toLowerCase();
-  const rows = dodolanRows.filter(row =>
-    (selectedMonth === "all" || row.month === selectedMonth) &&
-    (selectedWeek === "all" || row.week === selectedWeek) &&
-    (selectedCoach === "all" || (row.leader || "-") === selectedCoach) &&
-    (selectedAgent === "all" || row.agent === selectedAgent) &&
-    (!query || `${row.campaign} ${row.product} ${row.packageName}`.toLowerCase().includes(query))
-  );
+  
+  const rows = allTransactionRows.filter(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    const rowMonth = week?.month;
+    const rowWeek = week?.name;
+    const bucket = productBucket(row);
+    const packageName = row.packageName || row.product_type || "-";
+    const campaign = row.campaign || "No Campaign";
+    return (selectedMonth === "all" || rowMonth === selectedMonth) &&
+      (selectedWeek === "all" || rowWeek === selectedWeek) &&
+      (selectedCoach === "all" || (row.leader || "-") === selectedCoach) &&
+      (selectedAgent === "all" || row.agent === selectedAgent) &&
+      (!query || `${campaign} ${bucket} ${packageName}`.toLowerCase().includes(query));
+  });
+
   const groups = new Map();
   rows.forEach(row => {
     const key = row.campaign || "No Campaign";
     if (!groups.has(key)) groups.set(key, { campaign: key, revenue: 0, txn: 0, products: {}, agents: new Set(), weeks: new Set() });
     const item = groups.get(key);
     item.revenue += row.revenue;
-    item.txn += row.txn || 1;
-    item.products[row.product] = (item.products[row.product] || 0) + row.revenue;
+    item.txn += 1;
+    const bucket = productBucket(row);
+    item.products[bucket] = (item.products[bucket] || 0) + row.revenue;
     item.agents.add(row.agent);
-    item.weeks.add(row.week);
+    const week = weekFor(row.weekName, row.weekNum);
+    if (week) item.weeks.add(week.name);
   });
+
   const campaigns = [...groups.values()].map(row => {
     row.topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
     return row;
   }).sort((a, b) => sortBy === "txn" ? b.txn - a.txn || b.revenue - a.revenue : b.revenue - a.revenue || b.txn - a.txn);
+
   const totalRevenue = campaigns.reduce((sum, row) => sum + row.revenue, 0);
   const totalTxn = campaigns.reduce((sum, row) => sum + row.txn, 0);
   const top = campaigns[0];
+
   el("topCampaignTotalRevenue").textContent = rupiah(totalRevenue);
   el("topCampaignCountKpi").textContent = campaigns.length.toLocaleString("id-ID");
   el("topCampaignWeekNote").textContent = selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek;
@@ -2600,7 +2620,8 @@ function renderTopCampaign() {
   el("topCampaignRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("topCampaignAovKpi").textContent = top ? top.txn.toLocaleString("id-ID") : "0";
   el("topCampaignCount").textContent = `${campaigns.length} campaign`;
-  el("topCampaignCaption").textContent = `${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek} - ${selectedCoach === "all" ? "Semua coach" : selectedCoach} - ${selectedAgent === "all" ? "Semua agent" : selectedAgent} - sort by ${sortBy.toUpperCase()}`;
+  el("topCampaignCaption").textContent = `${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek} - ${selectedCoach === "all" ? "Semua coach / leader" : selectedCoach} - ${selectedAgent === "all" ? "Semua agent" : selectedAgent} - sort by ${sortBy.toUpperCase()}`;
+  
   el("topCampaignList").innerHTML = campaigns.slice(0, 20).map((row, index) => {
     const share = totalRevenue ? row.revenue / totalRevenue : 0;
     const width = Math.min(100, Math.max(4, share * 100));
@@ -3299,7 +3320,7 @@ el("topCampaignMonth").addEventListener("change", () => {
   updateTopCampaignAgentOptions();
   renderTopCampaign();
 });
-el("topCampaignWeek").addEventListener("change", renderTopCampaign);
+el("topCampaignWeek").addEventListener("change", () => { updateTopCampaignAgentOptions(); renderTopCampaign(); });
 el("topCampaignCoach").addEventListener("change", () => { updateTopCampaignAgentOptions(); renderTopCampaign(); });
 el("topCampaignAgent").addEventListener("change", renderTopCampaign);
 el("topCampaignSort").addEventListener("change", renderTopCampaign);
@@ -3317,6 +3338,7 @@ el("leaderboardMonthFilter").addEventListener("change", () => {
 });
 el("leaderboardWeekFilter").addEventListener("change", renderLeaderboard);
 el("leaderboardLayerFilter").addEventListener("change", renderLeaderboard);
+el("spvMonthFilter").instance = null;
 el("spvMonthFilter").addEventListener("change", () => {
   syncWeekOptions("spvWeekFilter", el("spvMonthFilter").value, true);
   renderSpvDivision();
