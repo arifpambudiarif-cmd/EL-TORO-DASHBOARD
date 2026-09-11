@@ -1721,7 +1721,7 @@ const WEEK_PERIODS = [
   { name: "W 3 AUG", weekNum: 34, minimum: 0.50, scheme: "AUG3", month: "Agustus" },
   { name: "W 4 AUG", weekNum: 35, minimum: 0.50, scheme: "AUG3", month: "Agustus" },
   { name: "W 1 SEP", weekNum: 36, minimum: 0.50, scheme: "SEP", month: "September" },
-  { name: "W 2 SEP", weekNum: 37, minimum: 0.50, scheme: "SEP", month: "September" },
+  { name: "W 2 SEP", weekNum: 37, minimum: 0.50, scheme: "SEP2", month: "September" },
   { name: "W 3 SEP", weekNum: 38, minimum: 0.50, scheme: "SEP", month: "September" },
   { name: "W 4 SEP", weekNum: 39, minimum: 0.50, scheme: "SEP", month: "September" },
   { name: "W 5 SEP", weekNum: 40, minimum: 0.50, scheme: "SEP", month: "September" },
@@ -1800,6 +1800,18 @@ const RATES = {
     "Math Champs Online": { 0: 0, .5: .01, .75: .01, 1: .01, 1.25: .01 },
     "Skill Academy": { 0: 0, .5: .02, .75: .02, 1: .02, 1.25: .02 },
   },
+  SEP2: {
+    "BAC & Mathchamps Offline": { 0: 0, .5: .0153, .75: .0188, 1: .0350, 1.25: .0405 },
+    "BAON Elite": { 0: 0, .5: .0170, .75: .0187, 1: .0335, 1.25: .0378 },
+    "BAON Prem": { 0: 0, .5: .0310, .75: .0358, 1: .0715, 1.25: .0850 },
+    "BAON Reg": { 0: 0, .5: .0263, .75: .0305, 1: .0613, 1.25: .0760 },
+    "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
+    "RB": { 0: 0, .5: .0270, .75: .0320, 1: .0638, 1.25: .0800 },
+    "RGP Online": { 0: 0, .5: .0090, .75: .0150, 1: .0300, 1.25: .0350 },
+    "RGP Offline": { 0: 0, .5: .0030, .75: .0050, 1: .0100, 1.25: .0100 },
+    "Math Champs Online": { 0: 0, .5: .0100, .75: .0100, 1: .0100, 1.25: .0100 },
+    "Skill Academy": { 0: 0, .5: .0200, .75: .0200, 1: .0200, 1.25: .0200 },
+  }
 };
 
 let summary = [];
@@ -3354,7 +3366,7 @@ el("agentLeaderboardMonth").addEventListener("change", () => {
   renderAgentLeaderboard();
 });
 el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
-el("agentLeaderboardWeek").addEventListener("change", renderAgentLeaderboard);
+el("agentLeaderboardWeek").addEventListener("agentLeaderboardWeek", renderAgentLeaderboard);
 el("agentLeaderboardCoach").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardSearch").addEventListener("input", renderAgentLeaderboard);
 el("compareMonth").addEventListener("change", () => {
