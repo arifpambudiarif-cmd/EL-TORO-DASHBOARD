@@ -1162,7 +1162,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   h1 { font-size: 20px; }
   main { width: min(100% - 20px, 1480px); margin-top: 10px; }
   .input-row, .filters { flex-direction: column; align-items: stretch; }
-  .primary-button { width: 100%; }
+  .primary-button { width: 100%. }
   .field { min-width: 0; width: 100%; }
   .rules-strip, .kpi-grid { grid-template-columns: 1fr; }
   .rules-strip div { border-right: 0; border-bottom: 1px solid var(--line); }
@@ -1908,14 +1908,13 @@ function productBucket(row) {
   if (lower === "math champs online") return "Math Champs Online";
   if (lower === "ruangbelajar" || group === "RB") return "RB";
   if (
-    lower.includes("ruangguru privat") &&
-    (lower.includes("online") || packageLower.includes("rgp [online]") || packageLower.includes("rgp online"))
-  ) return "RGP Online";
-  if (
-    lower.includes("ruangguru privat") &&
-    (lower.includes("offline") || packageLower.includes("rgp [offline]") || packageLower.includes("rgp offline"))
-  ) return "RGP Offline";
-  if (lower === "ruangguru privat" || group === "RGP") return "RGP Offline";
+    lower.includes("ruangguru privat") || packageLower.includes("rgp") || group === "RGP"
+  ) {
+    if (packageLower.includes("online") || packageLower.includes("[online]") || lower.includes("online")) {
+      return "RGP Online";
+    }
+    return "RGP Offline";
+  }
   if (lower === "skill academy") return "Skill Academy";
   return "Others";
 }
@@ -3366,7 +3365,7 @@ el("agentLeaderboardMonth").addEventListener("change", () => {
   renderAgentLeaderboard();
 });
 el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
-el("agentLeaderboardWeek").addEventListener("agentLeaderboardWeek", renderAgentLeaderboard);
+el("agentLeaderboardWeek").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardCoach").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardSearch").addEventListener("input", renderAgentLeaderboard);
 el("compareMonth").addEventListener("change", () => {
