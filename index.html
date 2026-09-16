@@ -1229,6 +1229,94 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 }
 .tomorrow-checklist li b { color: var(--ink); }
 
+.trend-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.trend-chart-card, .trend-summary-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+.trend-chart-card h3, .trend-summary-card h3 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+.trend-summary-card p {
+  margin: 0 0 10px;
+  line-height: 1.55;
+  font-size: 11.5px;
+  color: #274357;
+}
+.trend-summary-card p:last-child { margin-bottom: 0; }
+.trend-distribution { color: var(--muted) !important; font-size: 10.5px !important; }
+.trend-tag {
+  display: inline-block;
+  margin-right: 4px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.trend-tag-strength { background: var(--green-soft); color: var(--green); }
+.trend-tag-weakness { background: var(--red-soft); color: var(--red); }
+
+.trend-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.trend-naik-konsisten { background: var(--green-soft); color: var(--green); }
+.trend-naik-tajam { background: var(--green-soft); color: #0c8f5a; }
+.trend-turun-tajam { background: var(--red-soft); color: var(--red); }
+.trend-turun-konsisten { background: var(--red-soft); color: #8c1c12; }
+.trend-fluktuatif { background: var(--amber-soft); color: var(--amber); }
+.trend-flat { background: #eef2f6; color: #475467; }
+
+.trend-plan-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px;
+}
+.trend-plan-card {
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px 12px;
+}
+.trend-plan-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.trend-plan-head strong { display: block; font-size: 13px; }
+.trend-plan-head span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; font-weight: 700; }
+.trend-plan-note {
+  margin: 8px 0 0;
+  padding: 8px 9px;
+  border-radius: 6px;
+  background: #f6fafc;
+  color: #274357;
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+.trend-plan-note b { color: var(--ink); }
+
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
   .divider { height: 1px; border-left: 0; border-top: 1px solid var(--line); }
@@ -1248,6 +1336,8 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   .compare-agent-value { grid-column: 2; text-align: left; }
   .spv-product-grid { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
   .tomorrow-plan-grid { grid-template-columns: repeat(2, 1fr); }
+  .trend-grid { grid-template-columns: 1fr; }
+  .trend-plan-list { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 620px) {
@@ -1295,6 +1385,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
       <button class="tab-button" type="button" data-tab="spvPanel">SPV PRODUCT</button>
       <button class="tab-button" type="button" data-tab="agentLeaderboardPanel">LEADERBOARD AGENT</button>
       <button class="tab-button" type="button" data-tab="compareTeamPanel">COMPARE TEAM</button>
+      <button class="tab-button" type="button" data-tab="trendPanel">TREND AGENT</button>
     </nav>
 
     <section id="incentivePanel" class="tab-panel active">
@@ -1773,6 +1864,85 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         <div id="compareList" class="leaderboard-list compare-grid"></div>
       </section>
     </section>
+
+    <section id="trendPanel" class="tab-panel">
+      <div class="leaderboard-hero agent-hero">
+        <div>
+          <p class="eyebrow">WEEKLY TREND</p>
+          <h2 id="trendHeroTitle">Trend Performa Agent</h2>
+          <p id="trendHeroSubtitle">Pilih coach dan periode untuk melihat tren beberapa minggu terakhir.</p>
+        </div>
+        <div class="hero-number">
+          <span>Revenue Minggu Terakhir</span>
+          <strong id="trendTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="trendMonthFilter">Bulan</label>
+          <select id="trendMonthFilter"></select>
+        </div>
+        <div class="field">
+          <label for="trendWeekFilter">Sampai Week</label>
+          <select id="trendWeekFilter"></select>
+        </div>
+        <div class="field">
+          <label for="trendWindowFilter">Jumlah Minggu</label>
+          <select id="trendWindowFilter">
+            <option value="3">3 minggu</option>
+            <option value="4" selected>4 minggu</option>
+            <option value="5">5 minggu</option>
+            <option value="6">6 minggu</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="trendCoachFilter">Coach</label>
+          <select id="trendCoachFilter"></select>
+        </div>
+        <div class="field grow">
+          <label for="trendSearchFilter">Cari agent</label>
+          <input id="trendSearchFilter" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+
+      <div class="trend-grid">
+        <section class="trend-chart-card">
+          <h3 id="trendChartCaption">Revenue Tim per Minggu (Rp Jt)</h3>
+          <div id="trendChartWrap"></div>
+        </section>
+        <section class="trend-summary-card">
+          <h3>Ringkasan</h3>
+          <div id="trendSummaryText"></div>
+        </section>
+      </div>
+
+      <section class="table-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Tabel Trend Revenue per Agent</h2>
+            <p>Revenue mingguan (Rp Jt) dan klasifikasi tren otomatis.</p>
+          </div>
+          <span id="trendRowCount" class="count-chip">0 agent</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead id="trendTableHead"></thead>
+            <tbody id="trendTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="table-panel">
+        <div class="panel-heading">
+          <div>
+            <h2 id="trendPlanTitle">Rencana Aksi Minggu Depan</h2>
+            <p id="trendPlanNote">Target dan fokus kerja per agent untuk minggu berikutnya.</p>
+          </div>
+          <span id="trendPlanCount" class="count-chip">0 agent</span>
+        </div>
+        <div id="trendPlanList" class="trend-plan-list"></div>
+      </section>
+    </section>
   </main>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -2215,7 +2385,7 @@ function prepareDashboard(sheetName, rawCount) {
   el("dataStatus").textContent = `Update ${formatUpdateTime(new Date())}`;
   el("dataStatus").classList.add("ready");
   const months = availableMonths();
-  ["monthFilter", "actionMonthFilter", "topCampaignMonth", "dodolanMonthFilter", "leaderboardMonthFilter", "agentLeaderboardMonth", "compareMonth"].forEach(id => {
+  ["monthFilter", "actionMonthFilter", "topCampaignMonth", "dodolanMonthFilter", "leaderboardMonthFilter", "agentLeaderboardMonth", "compareMonth", "trendMonthFilter"].forEach(id => {
     el(id).innerHTML = monthOptions(months);
   });
   el("spvMonthFilter").innerHTML = monthOptions(months);
@@ -2243,6 +2413,7 @@ function prepareDashboard(sheetName, rawCount) {
   renderSpvDivision();
   renderAgentLeaderboard();
   renderCompareTeam();
+  renderTrendPanel();
 }
 
 function availableMonths() {
@@ -3335,6 +3506,240 @@ function renderCompareTeam() {
   el("compareList").innerHTML = renderTeamColumn("Arif Pambudi", arifAgents, targetForRow) + renderTeamColumn(compareCoach, compareAgents, targetForRow);
 }
 
+function trendWeekWindow(endWeekName, windowSize) {
+  const endIndex = WEEK_PERIODS.findIndex(week => week.name === endWeekName);
+  if (endIndex === -1) return [];
+  const startIndex = Math.max(0, endIndex - windowSize + 1);
+  return WEEK_PERIODS.slice(startIndex, endIndex + 1);
+}
+
+function classifyTrend(values) {
+  if (values.length < 2) {
+    return { key: "flat", label: "Data Kurang", note: "Data minimal 2 minggu untuk melihat tren." };
+  }
+  const diffs = [];
+  for (let index = 1; index < values.length; index += 1) diffs.push(values[index] - values[index - 1]);
+  const last = values[values.length - 1];
+  const prev = values[values.length - 2];
+  const first = values[0];
+  const lastPct = prev > 0 ? (last - prev) / prev : (last > 0 ? 1 : 0);
+  const tolerance = Math.max(300000, Math.abs(first) * 0.05);
+  const allNonDecreasing = diffs.every(diff => diff >= -tolerance);
+  const allNonIncreasing = diffs.every(diff => diff <= tolerance);
+  if (lastPct <= -0.35) return { key: "turun-tajam", label: "Turun Tajam", note: "Intervensi cepat - cek kendala mendadak minggu ini" };
+  if (lastPct >= 0.35) return { key: "naik-tajam", label: "Naik Tajam", note: "Momentum bagus - cek pemicunya & coba replikasi" };
+  if (allNonDecreasing && last > first * 1.05) return { key: "naik-konsisten", label: "Naik Konsisten", note: "Pertahankan ritme, dorong ke produk ARPU lebih tinggi" };
+  if (allNonIncreasing && last < first * 0.95) return { key: "turun-konsisten", label: "Turun Konsisten", note: "Coaching intensif, cari akar penyebab penurunan" };
+  return { key: "fluktuatif", label: "Fluktuatif", note: "Stabilkan ritme, follow-up mingguan konsisten" };
+}
+
+function formatJt(value) {
+  return new Intl.NumberFormat("id-ID", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format((value || 0) / 1000000);
+}
+
+function formatJtRounded(value) {
+  return Math.round((value || 0) / 1000000).toLocaleString("id-ID");
+}
+
+function buildTeamTrendSvg(weeks, values) {
+  const width = 640, height = 190, padX = 34, padTop = 34, padBottom = 28;
+  const max = Math.max(...values, 1);
+  const min = Math.min(0, ...values);
+  const range = Math.max(1, max - min);
+  const stepX = weeks.length > 1 ? (width - padX * 2) / (weeks.length - 1) : 0;
+  const points = values.map((value, index) => ({
+    x: padX + stepX * index,
+    y: padTop + (1 - (value - min) / range) * (height - padTop - padBottom),
+    value,
+  }));
+  const path = points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
+  const dots = points.map(point => `<circle cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4.5" fill="#18bfe8" stroke="#ffffff" stroke-width="1.5"/>`).join("");
+  const valueLabels = points.map(point => `<text x="${point.x.toFixed(1)}" y="${Math.max(14, point.y - 12).toFixed(1)}" text-anchor="middle" font-size="13" font-weight="700" fill="#06223a">${formatJtRounded(point.value)}</text>`).join("");
+  const weekLabels = points.map((point, index) => `<text x="${point.x.toFixed(1)}" y="${height - 8}" text-anchor="middle" font-size="10" fill="#4e7190">${escapeHtml(weeks[index])}</text>`).join("");
+  return `<svg viewBox="0 0 ${width} ${height}" width="100%" height="${height}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Revenue tim per minggu">
+    <path d="${path}" fill="none" stroke="#18bfe8" stroke-width="2.5"/>
+    ${dots}
+    ${valueLabels}
+    ${weekLabels}
+  </svg>`;
+}
+
+function buildTeamTrendNarrative(weeks, values, agentTrends) {
+  const first = values[0] || 0;
+  const last = values[values.length - 1] || 0;
+  const peak = Math.max(...values);
+  const peakIndex = values.indexOf(peak);
+  const recentWindow = values.slice(-3);
+  const avgRecent = recentWindow.reduce((sum, value) => sum + value, 0) / Math.max(1, recentWindow.length);
+  const volatility = avgRecent ? (Math.max(...recentWindow) - Math.min(...recentWindow)) / avgRecent : 0;
+
+  let trendSentence;
+  if (peak > first * 1.15 && peakIndex <= values.length - 2 && volatility < 0.1) {
+    trendSentence = `Revenue melonjak ${escapeHtml(weeks[0])}→${escapeHtml(weeks[peakIndex])} (${formatJtRounded(first)} Jt → ${formatJtRounded(peak)} Jt), lalu plateau di kisaran ${formatJtRounded(Math.min(...recentWindow))}-${formatJtRounded(Math.max(...recentWindow))} Jt selama ${recentWindow.length} minggu terakhir - pertumbuhan sudah mentok.`;
+  } else if (last > first * 1.1) {
+    trendSentence = `Revenue tim naik dari ${formatJtRounded(first)} Jt di ${escapeHtml(weeks[0])} menjadi ${formatJtRounded(last)} Jt di ${escapeHtml(weeks[weeks.length - 1])} - tren positif.`;
+  } else if (last < first * 0.9) {
+    trendSentence = `Revenue tim turun dari ${formatJtRounded(first)} Jt di ${escapeHtml(weeks[0])} menjadi ${formatJtRounded(last)} Jt di ${escapeHtml(weeks[weeks.length - 1])} - perlu perhatian.`;
+  } else {
+    trendSentence = `Revenue tim relatif stabil di kisaran ${formatJtRounded(Math.min(...values))}-${formatJtRounded(Math.max(...values))} Jt sepanjang ${weeks.length} minggu terakhir.`;
+  }
+
+  const counts = { "naik-konsisten": 0, "naik-tajam": 0, fluktuatif: 0, "turun-tajam": 0, "turun-konsisten": 0 };
+  agentTrends.forEach(item => { if (counts[item.trend.key] !== undefined) counts[item.trend.key] += 1; });
+  const distribution = `Dari ${agentTrends.length} agent: ${counts.fluktuatif} Fluktuatif, ${counts["naik-konsisten"]} Naik Konsisten, ${counts["naik-tajam"]} Naik Tajam, ${counts["turun-konsisten"]} Turun Konsisten, ${counts["turun-tajam"]} Turun Tajam.`;
+
+  const strong = [...agentTrends]
+    .filter(item => item.trend.key === "naik-konsisten" || item.trend.key === "naik-tajam")
+    .sort((a, b) => b.last - a.last)[0];
+  const weak = [...agentTrends]
+    .filter(item => item.trend.key === "turun-konsisten" || item.trend.key === "turun-tajam")
+    .sort((a, b) => {
+      const order = { "turun-konsisten": 0, "turun-tajam": 1 };
+      return (order[a.trend.key] - order[b.trend.key]) || a.last - b.last;
+    })[0];
+
+  const strengthSentence = strong
+    ? `${escapeHtml(strong.agent)} (top agent) ${strong.trend.label} & jadi tulang punggung tim.`
+    : "Belum ada agent dengan tren naik yang menonjol minggu ini.";
+  const weaknessSentence = weak
+    ? `${escapeHtml(weak.agent)} ${weak.trend.label} - butuh keputusan cepat (coaching intensif atau reassignment).`
+    : "Tidak ada agent dengan tren turun signifikan minggu ini.";
+
+  return { trendSentence, distribution, strengthSentence, weaknessSentence };
+}
+
+function weeklyPlanForAgent(agent, rows, nextWeekMeta, lastValue) {
+  const target = targetForAgentWeek(agent, nextWeekMeta);
+  const profile = historicalActionProfile(rows, agent, nextWeekMeta.name);
+  const arpu = profile.arpu || (lastValue ? lastValue / 3 : 0) || target;
+  const neededTxn = arpu > 0 ? Math.max(1, Math.ceil(target / arpu)) : 0;
+  return { target, arpu, neededTxn, topCampaign: profile.topCampaign, topProduct: profile.topProduct };
+}
+
+function populateTrendWeekOptions(month) {
+  const weeks = availableWeeks(month);
+  const select = el("trendWeekFilter");
+  const current = select.value;
+  select.innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
+  if (weeks.includes(current)) select.value = current;
+  else if (weeks.length) select.value = weeks[weeks.length - 1];
+}
+
+function populateTrendCoachOptions() {
+  const leaders = [...new Set(layerOneRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
+  const select = el("trendCoachFilter");
+  const current = select.value;
+  select.innerHTML = leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("");
+  if (leaders.includes(current)) select.value = current;
+  else if (leaders.some(leader => leader.toLowerCase() === "arif pambudi")) select.value = leaders.find(leader => leader.toLowerCase() === "arif pambudi");
+  else if (leaders.length) select.value = leaders[0];
+}
+
+function renderTrendPanel() {
+  const month = el("trendMonthFilter").value;
+  populateTrendWeekOptions(month);
+  populateTrendCoachOptions();
+  const endWeekName = el("trendWeekFilter").value;
+  const windowSize = Number(el("trendWindowFilter").value) || 4;
+  const coach = el("trendCoachFilter").value;
+  const query = el("trendSearchFilter").value.trim().toLowerCase();
+
+  const windowWeeks = trendWeekWindow(endWeekName, windowSize);
+  if (!windowWeeks.length || !coach) {
+    el("trendChartWrap").innerHTML = `<div class="detail-empty">Belum ada data untuk filter ini.</div>`;
+    el("trendSummaryText").innerHTML = `<div class="detail-empty">Belum ada data.</div>`;
+    el("trendTableHead").innerHTML = "";
+    el("trendTableBody").innerHTML = "";
+    el("trendPlanList").innerHTML = "";
+    el("trendRowCount").textContent = "0 agent";
+    el("trendPlanCount").textContent = "0 agent";
+    return;
+  }
+  const weekNames = windowWeeks.map(week => week.name);
+  const endIndex = WEEK_PERIODS.findIndex(week => week.name === endWeekName);
+  const nextWeekMeta = WEEK_PERIODS[endIndex + 1];
+
+  const coachRows = layerOneRows.filter(row => (row.leader || "-") === coach);
+  const byAgent = new Map();
+  coachRows.forEach(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    if (!week || !weekNames.includes(week.name)) return;
+    const key = row.agent.toLowerCase();
+    if (!byAgent.has(key)) byAgent.set(key, { agent: row.agent, values: new Array(weekNames.length).fill(0) });
+    const idx = weekNames.indexOf(week.name);
+    byAgent.get(key).values[idx] += row.revenue;
+  });
+
+  const agentTrends = [...byAgent.values()]
+    .filter(item => !query || item.agent.toLowerCase().includes(query))
+    .map(item => {
+      const trend = classifyTrend(item.values);
+      return { agent: item.agent, values: item.values, trend, last: item.values[item.values.length - 1] };
+    })
+    .sort((a, b) => b.last - a.last);
+
+  const teamValues = weekNames.map((weekName, idx) => agentTrends.reduce((sum, item) => sum + (item.values[idx] || 0), 0));
+
+  el("trendTotalRevenue").textContent = rupiah(teamValues[teamValues.length - 1] || 0);
+  el("trendHeroSubtitle").textContent = `${coach} - ${weekNames[0]} s/d ${weekNames[weekNames.length - 1]}`;
+  el("trendChartWrap").innerHTML = buildTeamTrendSvg(weekNames, teamValues);
+  el("trendChartCaption").textContent = `Revenue Tim per Minggu (Rp Jt) - ${coach}`;
+
+  const narrative = buildTeamTrendNarrative(weekNames, teamValues, agentTrends);
+  el("trendSummaryText").innerHTML = `
+    <p><strong>Trend tim:</strong> ${narrative.trendSentence}</p>
+    <p class="trend-distribution">${narrative.distribution}</p>
+    <p><span class="trend-tag trend-tag-strength">Kekuatan</span> ${narrative.strengthSentence}</p>
+    <p><span class="trend-tag trend-tag-weakness">Kelemahan</span> ${narrative.weaknessSentence}</p>
+  `;
+
+  el("trendTableHead").innerHTML = `
+    <tr>
+      <th>Agent</th>
+      ${weekNames.map(week => `<th class="number">${escapeHtml(week)}</th>`).join("")}
+      <th>Trend & Rekomendasi Aksi</th>
+    </tr>
+  `;
+  el("trendTableBody").innerHTML = agentTrends.map(item => `
+    <tr>
+      <td><strong>${escapeHtml(item.agent)}</strong></td>
+      ${item.values.map(value => `<td class="number">${formatJt(value)}</td>`).join("")}
+      <td><span class="trend-badge trend-${item.trend.key}">${item.trend.label}</span> - ${escapeHtml(item.trend.note)}</td>
+    </tr>
+  `).join("") || `<tr><td colspan="${weekNames.length + 2}"><div class="detail-empty">Tidak ada agent pada filter ini.</div></td></tr>`;
+  el("trendRowCount").textContent = `${agentTrends.length} agent`;
+
+  if (!nextWeekMeta) {
+    el("trendPlanTitle").textContent = "Rencana Aksi Minggu Depan";
+    el("trendPlanNote").textContent = "Periode minggu berikutnya belum didefinisikan di WEEK_PERIODS.";
+    el("trendPlanList").innerHTML = "";
+    el("trendPlanCount").textContent = "0 agent";
+    return;
+  }
+
+  el("trendPlanTitle").textContent = `Rencana Aksi ${nextWeekMeta.name}`;
+  el("trendPlanNote").textContent = `Target dan fokus kerja per agent untuk ${nextWeekMeta.name}, dibuat dari tren ${weekNames.length} minggu terakhir.`;
+  el("trendPlanCount").textContent = `${agentTrends.length} agent`;
+  el("trendPlanList").innerHTML = agentTrends.map(item => {
+    const plan = weeklyPlanForAgent(item.agent, coachRows, nextWeekMeta, item.last);
+    return `
+      <article class="trend-plan-card">
+        <div class="trend-plan-head">
+          <div><strong>${escapeHtml(item.agent)}</strong><span>${escapeHtml(weekNames[weekNames.length - 1])}: ${rupiah(item.last)}</span></div>
+          <span class="trend-badge trend-${item.trend.key}">${item.trend.label}</span>
+        </div>
+        <div class="tomorrow-plan-grid">
+          <div><span>Target ${escapeHtml(nextWeekMeta.name)}</span><strong>${rupiah(plan.target)}</strong></div>
+          <div><span>Transaksi dibutuhkan</span><strong>${plan.neededTxn} TXN</strong></div>
+          <div><span>ARPU acuan</span><strong>${rupiah(plan.arpu)}</strong></div>
+          <div><span>Fokus produk</span><strong>${escapeHtml(plan.topProduct)}</strong></div>
+        </div>
+        <p class="trend-plan-note">${escapeHtml(item.trend.note)}. Fokus campaign andalan: <b>${escapeHtml(plan.topCampaign)}</b>, produk: <b>${escapeHtml(plan.topProduct)}</b>.</p>
+      </article>
+    `;
+  }).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`;
+}
+
 function weeklyActionBlock(revenue, target) {
   const gap = Math.max(0, target - revenue);
   const today = new Date();
@@ -3510,6 +3915,14 @@ el("compareMonth").addEventListener("change", () => {
 el("compareMode").addEventListener("change", renderCompareTeam);
 el("compareWeek").addEventListener("change", renderCompareTeam);
 el("compareCoach").addEventListener("change", renderCompareTeam);
+el("trendMonthFilter").addEventListener("change", () => {
+  populateTrendWeekOptions(el("trendMonthFilter").value);
+  renderTrendPanel();
+});
+el("trendWeekFilter").addEventListener("change", renderTrendPanel);
+el("trendWindowFilter").addEventListener("change", renderTrendPanel);
+el("trendCoachFilter").addEventListener("change", renderTrendPanel);
+el("trendSearchFilter").addEventListener("input", renderTrendPanel);
 el("compareSearch").exportResults;
 el("exportButton").addEventListener("click", exportResults);
 loadFromGoogleSheet();
