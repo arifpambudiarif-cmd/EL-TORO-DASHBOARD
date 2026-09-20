@@ -919,24 +919,38 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 }
 .spv-child-products span { color: var(--muted); }
 .spv-agent-table-wrap {
-  max-height: 260px;
+  max-height: 300px;
   overflow: auto;
 }
 .spv-agent-table {
   table-layout: fixed;
-  min-width: 1080px;
+  min-width: 1220px;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 .spv-agent-table th,
 .spv-agent-table td {
   padding: 6px 7px;
   font-size: 10px;
+  border-right: 1px solid #eef1f5;
 }
+.spv-agent-table th:last-child,
+.spv-agent-table td:last-child { border-right: 0; }
+.spv-agent-table thead tr:first-child th { top: 0; }
+.spv-agent-table thead tr:last-child th { top: 25px; }
+.spv-agent-table thead th.group-head {
+  text-align: center;
+  background: #eef6f3;
+  color: #0b6f96;
+}
+.spv-agent-table tbody tr:nth-child(even) { background: #f9fbfd; }
+.spv-agent-table tbody tr:hover { background: #eef8f8; }
 .spv-agent-table th:nth-child(1),
-.spv-agent-table td:nth-child(1) { width: 42px; }
+.spv-agent-table td:nth-child(1) { width: 34px; }
 .spv-agent-table th:nth-child(2),
-.spv-agent-table td:nth-child(2) { width: 160px; }
+.spv-agent-table td:nth-child(2) { width: 150px; }
 .spv-agent-table th:nth-child(3),
-.spv-agent-table td:nth-child(3) { width: 58px; }
+.spv-agent-table td:nth-child(3) { width: 52px; }
 .action-note {
   margin-top: 7px;
   padding: 7px 8px;
@@ -1949,7 +1963,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
 const WEEKLY_TARGET = 23400000;
-const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000, SEP: 9000000 };
+const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000, SEP: 9000000, SEP3: 9000000 };
 const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
 const SOURCE_TAB_NAME = "RAW_COMBINED";
 const SOURCE_GID = "0";
@@ -1986,7 +2000,7 @@ const WEEK_PERIODS = [
   { name: "W 4 AUG", weekNum: 35, minimum: 0.50, scheme: "AUG3", month: "Agustus" },
   { name: "W 1 SEP", weekNum: 36, minimum: 0.50, scheme: "SEP", month: "September" },
   { name: "W 2 SEP", weekNum: 37, minimum: 0.50, scheme: "SEP2", month: "September" },
-  { name: "W 3 SEP", weekNum: 38, minimum: 0.50, scheme: "SEP", month: "September" },
+  { name: "W 3 SEP", weekNum: 38, minimum: 0.50, scheme: "SEP3", month: "September" },
   { name: "W 4 SEP", weekNum: 39, minimum: 0.50, scheme: "SEP", month: "September" },
   { name: "W 5 SEP", weekNum: 40, minimum: 0.50, scheme: "SEP", month: "September" },
 ];
@@ -2071,6 +2085,18 @@ const RATES = {
     "BAON Reg": { 0: 0, .5: .0263, .75: .0305, 1: .0613, 1.25: .0760 },
     "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
     "RB": { 0: 0, .5: .0270, .75: .0320, 1: .0638, 1.25: .0800 },
+    "RGP Online": { 0: 0, .5: .0090, .75: .0150, 1: .0300, 1.25: .0350 },
+    "RGP Offline": { 0: 0, .5: .0030, .75: .0050, 1: .0100, 1.25: .0100 },
+    "Math Champs Online": { 0: 0, .5: .0100, .75: .0100, 1: .0100, 1.25: .0100 },
+    "Skill Academy": { 0: 0, .5: .0200, .75: .0200, 1: .0200, 1.25: .0200 },
+  },
+  SEP3: {
+    "BAC & Mathchamps Offline": { 0: 0, .5: .0145, .75: .0175, 1: .0330, 1.25: .0380 },
+    "BAON Elite": { 0: 0, .5: .0160, .75: .0175, 1: .0315, 1.25: .0350 },
+    "BAON Prem": { 0: 0, .5: .0290, .75: .0335, 1: .0670, 1.25: .0800 },
+    "BAON Reg": { 0: 0, .5: .0245, .75: .0285, 1: .0575, 1.25: .0715 },
+    "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
+    "RB": { 0: 0, .5: .0255, .75: .0300, 1: .0600, 1.25: .0755 },
     "RGP Online": { 0: 0, .5: .0090, .75: .0150, 1: .0300, 1.25: .0350 },
     "RGP Offline": { 0: 0, .5: .0030, .75: .0050, 1: .0100, 1.25: .0100 },
     "Math Champs Online": { 0: 0, .5: .0100, .75: .0100, 1: .0100, 1.25: .0100 },
@@ -3275,7 +3301,28 @@ function renderSpvCard(group, index) {
       <div class="spv-product-grid">${PRODUCT_FAMILY_ORDER.map(product => renderSpvProductCell(product, group.products[product], group.revenue)).join("")}</div>
       <div class="spv-agent-table-wrap">
         <table class="spv-agent-table">
-          <thead><tr><th>No</th><th>Leader</th><th>Agent</th><th>Target</th><th>Revenue</th><th>% Target</th><th>BAON</th><th>Reg</th><th>Prem</th><th>Elite</th><th>Private</th><th>RB</th><th>BAC</th><th>Others</th></tr></thead>
+          <thead>
+            <tr>
+              <th rowspan="2">No</th>
+              <th rowspan="2">Leader</th>
+              <th rowspan="2">Agent</th>
+              <th rowspan="2">Target</th>
+              <th rowspan="2">Revenue</th>
+              <th rowspan="2">TXN</th>
+              <th rowspan="2">% Target</th>
+              <th colspan="4" class="group-head">BAON</th>
+              <th rowspan="2">Private</th>
+              <th rowspan="2">RB</th>
+              <th rowspan="2">BAC</th>
+              <th rowspan="2">Others</th>
+            </tr>
+            <tr>
+              <th class="group-head">Total</th>
+              <th class="group-head">Reg</th>
+              <th class="group-head">Prem</th>
+              <th class="group-head">Elite</th>
+            </tr>
+          </thead>
           <tbody>${leaderRows.map((leader, leaderIndex) => renderSpvLeaderRow(leader, leaderIndex)).join("")}</tbody>
         </table>
       </div>
@@ -3306,6 +3353,7 @@ function renderSpvLeaderRow(leader, index) {
       <td class="number">${leader.agents.toLocaleString("id-ID")}</td>
       <td class="money">${rupiah(leader.target)}</td>
       <td class="money">${rupiah(leader.revenue)}</td>
+      <td class="number">${leader.txn.toLocaleString("id-ID")}</td>
       <td class="number">${percent(achievement)}</td>
       <td class="money">${rupiah(baon.revenue)}</td>
       <td class="money">${rupiah(baon.children["BAON Reg"]?.revenue || 0)}</td>
