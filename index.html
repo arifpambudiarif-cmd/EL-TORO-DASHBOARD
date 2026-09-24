@@ -1963,7 +1963,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
 const WEEKLY_TARGET = 23400000;
-const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000, SEP: 9000000, SEP3: 9000000 };
+const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000, SEP: 9000000, SEP3: 9000000, SEP4: 9000000 };
 const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
 const SOURCE_TAB_NAME = "RAW_COMBINED";
 const SOURCE_GID = "0";
@@ -2001,7 +2001,7 @@ const WEEK_PERIODS = [
   { name: "W 1 SEP", weekNum: 36, minimum: 0.50, scheme: "SEP", month: "September" },
   { name: "W 2 SEP", weekNum: 37, minimum: 0.50, scheme: "SEP2", month: "September" },
   { name: "W 3 SEP", weekNum: 38, minimum: 0.50, scheme: "SEP3", month: "September" },
-  { name: "W 4 SEP", weekNum: 39, minimum: 0.50, scheme: "SEP", month: "September" },
+  { name: "W 4 SEP", weekNum: 39, minimum: 0.50, scheme: "SEP4", month: "September" },
   { name: "W 5 SEP", weekNum: 40, minimum: 0.50, scheme: "SEP", month: "September" },
 ];
 
@@ -2097,6 +2097,18 @@ const RATES = {
     "BAON Reg": { 0: 0, .5: .0245, .75: .0285, 1: .0575, 1.25: .0715 },
     "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
     "RB": { 0: 0, .5: .0255, .75: .0300, 1: .0600, 1.25: .0755 },
+    "RGP Online": { 0: 0, .5: .0090, .75: .0150, 1: .0300, 1.25: .0350 },
+    "RGP Offline": { 0: 0, .5: .0030, .75: .0050, 1: .0100, 1.25: .0100 },
+    "Math Champs Online": { 0: 0, .5: .0100, .75: .0100, 1: .0100, 1.25: .0100 },
+    "Skill Academy": { 0: 0, .5: .0200, .75: .0200, 1: .0200, 1.25: .0200 },
+  },
+  SEP4: {
+    "BAC & Mathchamps Offline": { 0: 0, .5: .0145, .75: .0175, 1: .0300, 1.25: .0350 },
+    "BAON Elite": { 0: 0, .5: .0160, .75: .0175, 1: .0280, 1.25: .0320 },
+    "BAON Prem": { 0: 0, .5: .0280, .75: .0335, 1: .0620, 1.25: .0750 },
+    "BAON Reg": { 0: 0, .5: .0240, .75: .0285, 1: .0540, 1.25: .0670 },
+    "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
+    "RB": { 0: 0, .5: .0250, .75: .0300, 1: .0560, 1.25: .0700 },
     "RGP Online": { 0: 0, .5: .0090, .75: .0150, 1: .0300, 1.25: .0350 },
     "RGP Offline": { 0: 0, .5: .0030, .75: .0050, 1: .0100, 1.25: .0100 },
     "Math Champs Online": { 0: 0, .5: .0100, .75: .0100, 1: .0100, 1.25: .0100 },
