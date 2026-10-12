@@ -224,6 +224,7 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
 .dashboard { margin-top: 14px; }
 .filters {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: end;
   margin-bottom: 8px;
@@ -553,7 +554,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   padding: 10px;
 }
 .leaderboard-list.compare-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   align-items: start;
 }
 .compare-column {
@@ -638,7 +639,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 
 .compare-breakdown {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 10px;
   padding: 10px;
   border-bottom: 1px solid var(--line);
@@ -1331,6 +1332,82 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 }
 .trend-plan-note b { color: var(--ink); }
 
+.multi { position: relative; min-width: 0; }
+.field .multi { width: 100%; }
+.multi .multi-btn {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 11px;
+  border: 1px solid #cfd6df;
+  border-radius: 7px;
+  background: #fff;
+  color: var(--ink);
+  text-align: left;
+}
+.multi.open .multi-btn, .multi .multi-btn:focus-visible {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(8,127,140,.10);
+  outline: none;
+}
+.multi.has-value .multi-btn { border-color: var(--teal); background: var(--teal-soft); }
+.multi .multi-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.multi .multi-btn svg { width: 14px; height: 14px; flex: none; color: var(--muted); }
+.multi .multi-panel {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 4px);
+  z-index: 40;
+  width: max(100%, 270px);
+  max-width: min(360px, 92vw);
+  padding: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(6, 34, 58, .16);
+}
+.multi .multi-search { width: 100%; height: 34px; margin-bottom: 6px; }
+.multi .multi-actions { display: flex; gap: 6px; margin-bottom: 6px; }
+.multi .multi-actions button {
+  flex: 1;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #f8fafb;
+  color: var(--teal-dark);
+  font-size: 11px;
+  font-weight: 700;
+}
+.multi .multi-actions button:hover { background: var(--teal-soft); }
+.multi .multi-list { max-height: 240px; overflow: auto; display: grid; gap: 2px; }
+.multi .multi-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.multi .multi-item:hover { background: #f0f8f8; }
+.multi .multi-item input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  padding: 0;
+  flex: none;
+  border: 0;
+  box-shadow: none;
+  accent-color: var(--teal-dark);
+}
+.multi .multi-empty { padding: 10px 8px; color: var(--muted); font-size: 11px; text-align: center; }
+
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
   .divider { height: 1px; border-left: 0; border-top: 1px solid var(--line); }
@@ -1428,6 +1505,14 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
           <label for="weekFilter">Week</label>
           <select id="weekFilter"></select>
         </div>
+        <div class="field">
+          <label>Coach</label>
+          <div id="incCoachFilter"></div>
+        </div>
+        <div class="field">
+          <label>Agent</label>
+          <div id="incAgentFilter"></div>
+        </div>
         <div class="field grow">
           <label for="searchFilter">Cari agent atau leader</label>
           <input id="searchFilter" type="search" placeholder="Ketik nama...">
@@ -1522,6 +1607,10 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
           <label for="actionWeekFilter">Week</label>
           <select id="actionWeekFilter"></select>
         </div>
+        <div class="field">
+          <label>Agent</label>
+          <div id="actionAgentFilter"></div>
+        </div>
         <div class="field grow">
           <label for="actionSearchFilter">Cari agent</label>
           <input id="actionSearchFilter" type="search" placeholder="Ketik nama...">
@@ -1599,11 +1688,11 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         </div>
         <div class="field">
           <label for="topCampaignCoach">Coach / Leader</label>
-          <select id="topCampaignCoach"></select>
+          <div id="topCampaignCoach"></div>
         </div>
         <div class="field">
           <label for="topCampaignAgent">Agent</label>
-          <select id="topCampaignAgent"></select>
+          <div id="topCampaignAgent"></div>
         </div>
         <div class="field">
           <label for="topCampaignSort">Sort by</label>
@@ -1647,7 +1736,11 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         </div>
         <div class="field">
           <label for="dodolanLeaderFilter">Leader</label>
-          <select id="dodolanLeaderFilter"></select>
+          <div id="dodolanLeaderFilter"></div>
+        </div>
+        <div class="field">
+          <label>Agent</label>
+          <div id="dodolanAgentFilter"></div>
         </div>
         <div class="field grow">
           <label for="dodolanSearchFilter">Cari package, campaign, agent</label>
@@ -1757,7 +1850,11 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         </div>
         <div class="field">
           <label for="agentLeaderboardCoach">Coach</label>
-          <select id="agentLeaderboardCoach"></select>
+          <div id="agentLeaderboardCoach"></div>
+        </div>
+        <div class="field">
+          <label>Agent</label>
+          <div id="agentLeaderboardAgent"></div>
         </div>
         <div class="field grow">
           <label for="agentLeaderboardSearch">Cari agent atau leader</label>
@@ -1854,7 +1951,7 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         </div>
         <div class="field">
           <label for="compareCoach">Compare dengan</label>
-          <select id="compareCoach"></select>
+          <div id="compareCoach"></div>
         </div>
         <div class="field grow">
           <label for="compareSearch">Cari agent</label>
@@ -1911,7 +2008,11 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         </div>
         <div class="field">
           <label for="trendCoachFilter">Coach</label>
-          <select id="trendCoachFilter"></select>
+          <div id="trendCoachFilter"></div>
+        </div>
+        <div class="field">
+          <label>Agent</label>
+          <div id="trendAgentFilter"></div>
         </div>
         <div class="field grow">
           <label for="trendSearchFilter">Cari agent</label>
@@ -2171,6 +2272,143 @@ const formatUpdateTime = date => new Intl.DateTimeFormat("id-ID", {
   timeStyle: "short",
   timeZone: "Asia/Jakarta",
 }).format(date);
+
+const MULTI = {};
+const MULTI_CARET = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+
+function initMulti(id, allLabel) {
+  const root = el(id);
+  root.classList.add("multi");
+  root.innerHTML = `
+    <button type="button" class="multi-btn" aria-haspopup="listbox" aria-expanded="false"><span class="multi-label"></span>${MULTI_CARET}</button>
+    <div class="multi-panel" hidden>
+      <input type="search" class="multi-search" placeholder="Cari...">
+      <div class="multi-actions"><button type="button" data-act="all">Pilih semua</button><button type="button" data-act="clear">Reset</button></div>
+      <div class="multi-list"></div>
+    </div>`;
+  const state = { options: [], selected: new Set(), allLabel, query: "" };
+  MULTI[id] = state;
+  root.querySelector(".multi-btn").addEventListener("click", () => toggleMulti(id));
+  root.querySelector(".multi-search").addEventListener("input", event => {
+    state.query = event.target.value.trim().toLowerCase();
+    renderMultiList(id);
+  });
+  root.querySelector('[data-act="all"]').addEventListener("click", () => {
+    visibleMultiOptions(state).forEach(option => state.selected.add(option.value));
+    renderMultiList(id);
+    commitMulti(id);
+  });
+  root.querySelector('[data-act="clear"]').addEventListener("click", () => {
+    state.selected.clear();
+    renderMultiList(id);
+    commitMulti(id);
+  });
+  root.querySelector(".multi-list").addEventListener("change", event => {
+    event.stopPropagation();
+    const box = event.target.closest('input[type="checkbox"]');
+    if (!box) return;
+    if (box.checked) state.selected.add(box.value); else state.selected.delete(box.value);
+    commitMulti(id);
+  });
+  root.addEventListener("keydown", event => { if (event.key === "Escape") closeMulti(id); });
+  updateMultiLabel(id);
+}
+
+function visibleMultiOptions(state) {
+  return state.options.filter(option => !state.query || option.label.toLowerCase().includes(state.query));
+}
+
+function renderMultiList(id) {
+  const state = MULTI[id];
+  const list = el(id).querySelector(".multi-list");
+  const options = visibleMultiOptions(state);
+  list.innerHTML = options.map(option => `
+    <label class="multi-item"><input type="checkbox" value="${escapeHtml(option.value)}" ${state.selected.has(option.value) ? "checked" : ""}><span>${escapeHtml(option.label)}</span></label>
+  `).join("") || `<div class="multi-empty">Tidak ada pilihan.</div>`;
+}
+
+function updateMultiLabel(id) {
+  const state = MULTI[id];
+  const labels = state.options.filter(option => state.selected.has(option.value)).map(option => option.label);
+  const root = el(id);
+  root.querySelector(".multi-label").textContent = !labels.length ? state.allLabel : labels.length <= 2 ? labels.join(", ") : `${labels.length} dipilih`;
+  root.classList.toggle("has-value", labels.length > 0);
+}
+
+function commitMulti(id) {
+  updateMultiLabel(id);
+  el(id).dispatchEvent(new Event("change"));
+}
+
+function openMulti(id) {
+  Object.keys(MULTI).forEach(other => { if (other !== id) closeMulti(other); });
+  const root = el(id);
+  const panel = root.querySelector(".multi-panel");
+  const search = root.querySelector(".multi-search");
+  MULTI[id].query = "";
+  search.value = "";
+  renderMultiList(id);
+  panel.style.left = "0";
+  panel.style.right = "auto";
+  panel.hidden = false;
+  if (panel.getBoundingClientRect().right > window.innerWidth - 8) {
+    panel.style.left = "auto";
+    panel.style.right = "0";
+  }
+  root.classList.add("open");
+  root.querySelector(".multi-btn").setAttribute("aria-expanded", "true");
+  search.focus();
+}
+
+function closeMulti(id) {
+  const root = el(id);
+  const panel = root.querySelector(".multi-panel");
+  if (!panel || panel.hidden) return;
+  panel.hidden = true;
+  root.classList.remove("open");
+  root.querySelector(".multi-btn").setAttribute("aria-expanded", "false");
+}
+
+function toggleMulti(id) {
+  const panel = el(id).querySelector(".multi-panel");
+  if (panel.hidden) openMulti(id); else closeMulti(id);
+}
+
+function setMultiOptions(id, options) {
+  const state = MULTI[id];
+  state.options = options.map(option => typeof option === "string" ? { value: option, label: option } : option);
+  const valid = new Set(state.options.map(option => option.value));
+  state.selected = new Set([...state.selected].filter(value => valid.has(value)));
+  if (!el(id).querySelector(".multi-panel").hidden) renderMultiList(id);
+  updateMultiLabel(id);
+}
+
+function setMultiSelected(id, values) {
+  const state = MULTI[id];
+  const valid = new Set(state.options.map(option => option.value));
+  state.selected = new Set(values.filter(value => valid.has(value)));
+  updateMultiLabel(id);
+}
+
+function getMulti(id) { return [...MULTI[id].selected]; }
+function getMultiSet(id) { return new Set(MULTI[id].selected); }
+function matchMulti(set, value) { return set.size === 0 || set.has(value); }
+function multiText(id, allText) {
+  const values = getMulti(id);
+  return values.length ? values.join(", ") : allText;
+}
+
+function agentNamesFor(rows, coachSet) {
+  return [...new Set(rows.filter(row => matchMulti(coachSet, row.leader || "-")).map(row => row.agent))].sort((a, b) => a.localeCompare(b));
+}
+
+function syncAgentMulti(agentId, rows, coachId) {
+  setMultiOptions(agentId, agentNamesFor(rows, getMultiSet(coachId)));
+}
+
+document.addEventListener("click", event => {
+  Object.keys(MULTI).forEach(id => { if (!el(id).contains(event.target)) closeMulti(id); });
+});
 
 function parseAmount(value) {
   if (typeof value === "number") return Number.isFinite(value) ? Math.round(value) : 0;
@@ -2474,11 +2712,24 @@ function prepareDashboard(sheetName, rawCount) {
   syncWeekOptions("actionWeekFilter", "all", false);
   const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   const allLeaders = [...new Set(allTransactionRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
-  el("dodolanLeaderFilter").innerHTML = `<option value="all">Semua leader</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
-  el("agentLeaderboardCoach").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
-  el("topCampaignCoach").innerHTML = `<option value="all">Semua coach / leader</option>${allLeaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
+  const byName = (a, b) => a.localeCompare(b);
+  setMultiOptions("dodolanLeaderFilter", leaders);
+  setMultiOptions("agentLeaderboardCoach", leaders);
+  setMultiOptions("topCampaignCoach", allLeaders);
+  const layerOneLeaders = [...new Set(layerOneRows.map(row => row.leader || "-"))].sort(byName);
+  setMultiOptions("incCoachFilter", layerOneLeaders);
+  setMultiOptions("trendCoachFilter", layerOneLeaders);
+  const arifName = layerOneLeaders.find(leader => leader.toLowerCase() === "arif pambudi");
+  if (arifName && !getMulti("trendCoachFilter").length) setMultiSelected("trendCoachFilter", [arifName]);
+  const compareOptions = leaders.filter(leader => leader.toLowerCase() !== "arif pambudi");
+  setMultiOptions("compareCoach", compareOptions);
+  if (!getMulti("compareCoach").length && compareOptions.length) setMultiSelected("compareCoach", [compareOptions[0]]);
+  syncAgentMulti("incAgentFilter", layerOneRows, "incCoachFilter");
+  syncAgentMulti("dodolanAgentFilter", dodolanRows, "dodolanLeaderFilter");
+  syncAgentMulti("agentLeaderboardAgent", layerOneRows, "agentLeaderboardCoach");
+  syncAgentMulti("trendAgentFilter", layerOneRows, "trendCoachFilter");
+  setMultiOptions("actionAgentFilter", [...new Set(layerOneRows.filter(row => (row.leader || "").trim().toLowerCase() === "arif pambudi").map(row => row.agent))].sort(byName));
   updateTopCampaignAgentOptions();
-  el("compareCoach").innerHTML = leaders.filter(leader => leader.toLowerCase() !== "arif pambudi").map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("");
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
   render();
   renderActionCenter();
@@ -2588,9 +2839,13 @@ function filteredSummary() {
   const week = el("weekFilter").value;
   const query = el("searchFilter").value.trim().toLowerCase();
   const status = el("statusFilter").value;
+  const coachSet = getMultiSet("incCoachFilter");
+  const agentSet = getMultiSet("incAgentFilter");
   const monthRows = month === "all" ? summary : summary.filter(row => row.month === month);
   const baseRows = week === "all" ? aggregateAllWeeks(monthRows) : monthRows.filter(row => row.week === week);
   return baseRows.filter(row =>
+    matchMulti(coachSet, row.leader || "-") &&
+    matchMulti(agentSet, row.agent) &&
     (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query)) &&
     (status === "all" || (status === "eligible") === row.eligible)
   );
@@ -2636,12 +2891,14 @@ function render() {
 function filteredDodolanRows() {
   const month = el("dodolanMonthFilter").value;
   const week = el("dodolanWeekFilter").value;
-  const leader = el("dodolanLeaderFilter").value;
+  const leaderSet = getMultiSet("dodolanLeaderFilter");
+  const agentSet = getMultiSet("dodolanAgentFilter");
   const query = el("dodolanSearchFilter").value.trim().toLowerCase();
   return dodolanRows.filter(row =>
     (month === "all" || row.month === month) &&
     (week === "all" || row.week === week) &&
-    (leader === "all" || (row.leader || "-") === leader) &&
+    matchMulti(leaderSet, row.leader || "-") &&
+    matchMulti(agentSet, row.agent) &&
     (!query || `${row.packageName} ${row.campaign} ${row.agent} ${row.leader} ${row.assignedAgent}`.toLowerCase().includes(query))
   );
 }
@@ -2847,8 +3104,10 @@ function renderActionCenter() {
     const month = weekFor(row.weekName, row.weekNum)?.month;
     return (selectedMonth === "all" || month === selectedMonth) && (row.leader || "").trim().toLowerCase() === "arif pambudi";
   });
+  const actionAgentSet = getMultiSet("actionAgentFilter");
   const agents = aggregateActionAgents(arifRows, selectedWeek).filter(row =>
-    !query || `${row.agent} ${row.leader}`.toLowerCase().includes(query)
+    matchMulti(actionAgentSet, row.agent) &&
+    (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
   );
   const openAgents = agents.filter(row => row.gap > 0);
   const totalGap = openAgents.reduce((sum, row) => sum + row.gap, 0);
@@ -2948,25 +3207,23 @@ function campaignCode(value) {
 function updateTopCampaignAgentOptions() {
   const selectedMonth = el("topCampaignMonth").value;
   const selectedWeek = el("topCampaignWeek").value;
-  const selectedCoach = el("topCampaignCoach").value;
+  const coachSet = getMultiSet("topCampaignCoach");
   const agents = [...new Set(allTransactionRows.filter(row => {
     const week = weekFor(row.weekName, row.weekNum);
     const rowMonth = week?.month;
     const rowWeek = week?.name;
     return (selectedMonth === "all" || rowMonth === selectedMonth) &&
       (selectedWeek === "all" || rowWeek === selectedWeek) &&
-      (selectedCoach === "all" || (row.leader || "-") === selectedCoach);
+      matchMulti(coachSet, row.leader || "-");
   }).map(row => row.agent))].sort((a, b) => a.localeCompare(b));
-  const current = el("topCampaignAgent").value;
-  el("topCampaignAgent").innerHTML = `<option value="all">Semua agent</option>${agents.map(agent => `<option value="${escapeHtml(agent)}">${escapeHtml(agent)}</option>`).join("")}`;
-  if (agents.includes(current)) el("topCampaignAgent").value = current;
+  setMultiOptions("topCampaignAgent", agents);
 }
 
 function renderTopCampaign() {
   const selectedMonth = el("topCampaignMonth").value;
   const selectedWeek = el("topCampaignWeek").value;
-  const selectedCoach = el("topCampaignCoach").value;
-  const selectedAgent = el("topCampaignAgent").value;
+  const coachSet = getMultiSet("topCampaignCoach");
+  const agentSet = getMultiSet("topCampaignAgent");
   const sortBy = el("topCampaignSort").value;
   const query = el("topCampaignSearch").value.trim().toLowerCase();
   
@@ -2979,8 +3236,8 @@ function renderTopCampaign() {
     const campaign = row.campaign || "No Campaign";
     return (selectedMonth === "all" || rowMonth === selectedMonth) &&
       (selectedWeek === "all" || rowWeek === selectedWeek) &&
-      (selectedCoach === "all" || (row.leader || "-") === selectedCoach) &&
-      (selectedAgent === "all" || row.agent === selectedAgent) &&
+      matchMulti(coachSet, row.leader || "-") &&
+      matchMulti(agentSet, row.agent) &&
       (!query || `${campaign} ${bucket} ${packageName}`.toLowerCase().includes(query));
   });
 
@@ -3015,7 +3272,7 @@ function renderTopCampaign() {
   el("topCampaignRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("topCampaignAovKpi").textContent = top ? top.txn.toLocaleString("id-ID") : "0";
   el("topCampaignCount").textContent = `${campaigns.length} campaign`;
-  el("topCampaignCaption").textContent = `${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek} - ${selectedCoach === "all" ? "Semua coach / leader" : selectedCoach} - ${selectedAgent === "all" ? "Semua agent" : selectedAgent} - sort by ${sortBy.toUpperCase()}`;
+  el("topCampaignCaption").textContent = `${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek} - ${multiText("topCampaignCoach", "Semua coach / leader")} - ${multiText("topCampaignAgent", "Semua agent")} - sort by ${sortBy.toUpperCase()}`;
   
   el("topCampaignList").innerHTML = campaigns.slice(0, 20).map((row, index) => {
     const share = totalRevenue ? row.revenue / totalRevenue : 0;
@@ -3509,13 +3766,15 @@ function renderAgentLeaderboard() {
   const selectedMonth = el("agentLeaderboardMonth").value;
   const mode = el("agentLeaderboardMode").value;
   const selectedWeek = el("agentLeaderboardWeek").value;
-  const selectedCoach = el("agentLeaderboardCoach").value;
+  const coachSet = getMultiSet("agentLeaderboardCoach");
+  const agentSet = getMultiSet("agentLeaderboardAgent");
   const query = el("agentLeaderboardSearch").value.trim().toLowerCase();
   el("agentLeaderboardWeek").disabled = mode === "monthly";
   const rows = layerOneRows.filter(row =>
     (selectedMonth === "all" || weekFor(row.weekName, row.weekNum)?.month === selectedMonth) &&
     (mode === "monthly" || weekFor(row.weekName, row.weekNum)?.name === selectedWeek) &&
-    (selectedCoach === "all" || (row.leader || "-") === selectedCoach) &&
+    matchMulti(coachSet, row.leader || "-") &&
+    matchMulti(agentSet, row.agent) &&
     (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
   );
   const byAgent = new Map();
@@ -3573,7 +3832,7 @@ function renderCompareTeam() {
   const selectedMonth = el("compareMonth").value;
   const mode = el("compareMode").value;
   const selectedWeek = el("compareWeek").value;
-  const compareCoach = el("compareCoach").value;
+  const compareCoaches = getMulti("compareCoach");
   const query = el("compareSearch").value.trim().toLowerCase();
   el("compareWeek").disabled = mode === "monthly";
   const monthWeeks = targetWeeksForMonth(selectedMonth);
@@ -3585,8 +3844,8 @@ function renderCompareTeam() {
     ? monthWeeks.reduce((sum, weekName) => sum + targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === weekName)), 0)
     : targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
   const arifAgents = aggregateAgentsByCoach(monthRows, "Arif Pambudi", mode, selectedWeek, query);
-  const compareAgents = aggregateAgentsByCoach(monthRows, compareCoach, mode, selectedWeek, query);
-  const allAgents = [...arifAgents, ...compareAgents];
+  const compareGroups = compareCoaches.map(coach => ({ coach, agents: aggregateAgentsByCoach(monthRows, coach, mode, selectedWeek, query) }));
+  const allAgents = [...arifAgents, ...compareGroups.flatMap(group => group.agents)];
   const totalRevenue = allAgents.reduce((sum, row) => sum + row.revenue, 0);
   const totalTarget = allAgents.reduce((sum, row) => sum + targetForRow(row), 0);
   const totalTxn = allAgents.reduce((sum, row) => sum + row.txn, 0);
@@ -3598,9 +3857,10 @@ function renderCompareTeam() {
   el("compareTopAgentKpi").textContent = top ? top.agent : "-";
   el("compareTopRevenueKpi").textContent = top ? `${top.leader} - ${rupiah(top.revenue)}` : "Rp0";
   el("compareTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
-  el("compareCount").textContent = `${arifAgents.length} vs ${compareAgents.length} agent`;
-  el("compareCaption").textContent = mode === "monthly" ? `Monthly ${selectedMonthLabel(selectedMonth)} - Arif Pambudi vs ${compareCoach}` : `${selectedWeek} - Arif Pambudi vs ${compareCoach}`;
-  el("compareList").innerHTML = renderTeamColumn("Arif Pambudi", arifAgents, targetForRow) + renderTeamColumn(compareCoach, compareAgents, targetForRow);
+  el("compareCount").textContent = `${[arifAgents.length, ...compareGroups.map(group => group.agents.length)].join(" vs ")} agent`;
+  const compareLabel = compareCoaches.length ? compareCoaches.join(", ") : "(pilih coach pembanding)";
+  el("compareCaption").textContent = mode === "monthly" ? `Monthly ${selectedMonthLabel(selectedMonth)} - Arif Pambudi vs ${compareLabel}` : `${selectedWeek} - Arif Pambudi vs ${compareLabel}`;
+  el("compareList").innerHTML = renderTeamColumn("Arif Pambudi", arifAgents, targetForRow) + compareGroups.map(group => renderTeamColumn(group.coach, group.agents, targetForRow)).join("");
 }
 
 function trendWeekWindow(endWeekName, windowSize) {
@@ -3722,27 +3982,18 @@ function populateTrendWeekOptions(month) {
   else if (weeks.length) select.value = weeks[weeks.length - 1];
 }
 
-function populateTrendCoachOptions() {
-  const leaders = [...new Set(layerOneRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
-  const select = el("trendCoachFilter");
-  const current = select.value;
-  select.innerHTML = leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("");
-  if (leaders.includes(current)) select.value = current;
-  else if (leaders.some(leader => leader.toLowerCase() === "arif pambudi")) select.value = leaders.find(leader => leader.toLowerCase() === "arif pambudi");
-  else if (leaders.length) select.value = leaders[0];
-}
-
 function renderTrendPanel() {
   const month = el("trendMonthFilter").value;
   populateTrendWeekOptions(month);
-  populateTrendCoachOptions();
   const endWeekName = el("trendWeekFilter").value;
   const windowSize = Number(el("trendWindowFilter").value) || 4;
-  const coach = el("trendCoachFilter").value;
+  const coachSet = getMultiSet("trendCoachFilter");
+  const agentSet = getMultiSet("trendAgentFilter");
+  const coachLabel = multiText("trendCoachFilter", "Semua coach");
   const query = el("trendSearchFilter").value.trim().toLowerCase();
 
   const windowWeeks = trendWeekWindow(endWeekName, windowSize);
-  if (!windowWeeks.length || !coach) {
+  if (!windowWeeks.length) {
     el("trendChartWrap").innerHTML = `<div class="detail-empty">Belum ada data untuk filter ini.</div>`;
     el("trendSummaryText").innerHTML = `<div class="detail-empty">Belum ada data.</div>`;
     el("trendTableHead").innerHTML = "";
@@ -3756,7 +4007,7 @@ function renderTrendPanel() {
   const endIndex = WEEK_PERIODS.findIndex(week => week.name === endWeekName);
   const nextWeekMeta = WEEK_PERIODS[endIndex + 1];
 
-  const coachRows = layerOneRows.filter(row => (row.leader || "-") === coach);
+  const coachRows = layerOneRows.filter(row => matchMulti(coachSet, row.leader || "-"));
   const byAgent = new Map();
   coachRows.forEach(row => {
     const week = weekFor(row.weekName, row.weekNum);
@@ -3768,7 +4019,7 @@ function renderTrendPanel() {
   });
 
   const agentTrends = [...byAgent.values()]
-    .filter(item => !query || item.agent.toLowerCase().includes(query))
+    .filter(item => matchMulti(agentSet, item.agent) && (!query || item.agent.toLowerCase().includes(query)))
     .map(item => {
       const trend = classifyTrend(item.values);
       return { agent: item.agent, values: item.values, trend, last: item.values[item.values.length - 1] };
@@ -3778,9 +4029,9 @@ function renderTrendPanel() {
   const teamValues = weekNames.map((weekName, idx) => agentTrends.reduce((sum, item) => sum + (item.values[idx] || 0), 0));
 
   el("trendTotalRevenue").textContent = rupiah(teamValues[teamValues.length - 1] || 0);
-  el("trendHeroSubtitle").textContent = `${coach} - ${weekNames[0]} s/d ${weekNames[weekNames.length - 1]}`;
+  el("trendHeroSubtitle").textContent = `${coachLabel} - ${weekNames[0]} s/d ${weekNames[weekNames.length - 1]}`;
   el("trendChartWrap").innerHTML = buildTeamTrendSvg(weekNames, teamValues);
-  el("trendChartCaption").textContent = `Revenue Tim per Minggu (Rp Jt) - ${coach}`;
+  el("trendChartCaption").textContent = `Revenue Tim per Minggu (Rp Jt) - ${coachLabel}`;
 
   const narrative = buildTeamTrendNarrative(weekNames, teamValues, agentTrends);
   el("trendSummaryText").innerHTML = `
@@ -3953,6 +4204,14 @@ function switchTab(tabId) {
   document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.toggle("active", panel.id === tabId));
 }
 
+[
+  ["incCoachFilter", "Semua coach"], ["incAgentFilter", "Semua agent"], ["actionAgentFilter", "Semua agent"],
+  ["topCampaignCoach", "Semua coach / leader"], ["topCampaignAgent", "Semua agent"],
+  ["dodolanLeaderFilter", "Semua leader"], ["dodolanAgentFilter", "Semua agent"],
+  ["agentLeaderboardCoach", "Semua coach"], ["agentLeaderboardAgent", "Semua agent"],
+  ["compareCoach", "Pilih coach"], ["trendCoachFilter", "Semua coach"], ["trendAgentFilter", "Semua agent"],
+].forEach(([id, label]) => initMulti(id, label));
+
 document.querySelectorAll(".tab-button").forEach(button => button.addEventListener("click", () => switchTab(button.dataset.tab)));
 el("weekFilter").addEventListener("change", render);
 el("monthFilter").addEventListener("change", () => {
@@ -3981,7 +4240,8 @@ el("dodolanMonthFilter").addEventListener("change", () => {
   renderDodolan();
 });
 el("dodolanWeekFilter").addEventListener("change", renderDodolan);
-el("dodolanLeaderFilter").addEventListener("change", renderDodolan);
+el("dodolanLeaderFilter").addEventListener("change", () => { syncAgentMulti("dodolanAgentFilter", dodolanRows, "dodolanLeaderFilter"); renderDodolan(); });
+el("dodolanAgentFilter").addEventListener("change", renderDodolan);
 el("dodolanSearchFilter").addEventListener("input", renderDodolan);
 el("leaderboardMonthFilter").addEventListener("change", () => {
   syncWeekOptions("leaderboardWeekFilter", el("leaderboardMonthFilter").value, true);
@@ -4003,7 +4263,8 @@ el("agentLeaderboardMonth").addEventListener("change", () => {
 });
 el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardWeek").addEventListener("change", renderAgentLeaderboard);
-el("agentLeaderboardCoach").addEventListener("change", renderAgentLeaderboard);
+el("agentLeaderboardCoach").addEventListener("change", () => { syncAgentMulti("agentLeaderboardAgent", layerOneRows, "agentLeaderboardCoach"); renderAgentLeaderboard(); });
+el("agentLeaderboardAgent").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardSearch").addEventListener("input", renderAgentLeaderboard);
 el("compareMonth").addEventListener("change", () => {
   syncWeekOptions("compareWeek", el("compareMonth").value, false);
@@ -4018,7 +4279,11 @@ el("trendMonthFilter").addEventListener("change", () => {
 });
 el("trendWeekFilter").addEventListener("change", renderTrendPanel);
 el("trendWindowFilter").addEventListener("change", renderTrendPanel);
-el("trendCoachFilter").addEventListener("change", renderTrendPanel);
+el("trendCoachFilter").addEventListener("change", () => { syncAgentMulti("trendAgentFilter", layerOneRows, "trendCoachFilter"); renderTrendPanel(); });
+el("trendAgentFilter").addEventListener("change", renderTrendPanel);
+el("incCoachFilter").addEventListener("change", () => { syncAgentMulti("incAgentFilter", layerOneRows, "incCoachFilter"); render(); });
+el("incAgentFilter").addEventListener("change", render);
+el("actionAgentFilter").addEventListener("change", renderActionCenter);
 el("trendSearchFilter").addEventListener("input", renderTrendPanel);
 el("compareSearch").exportResults;
 el("exportButton").addEventListener("click", exportResults);
