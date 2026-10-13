@@ -1408,6 +1408,165 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
 }
 .multi .multi-empty { padding: 10px 8px; color: var(--muted); font-size: 11px; text-align: center; }
 
+.trend-subtabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 10px; }
+.trend-subtabs button {
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--muted);
+  font-weight: 700;
+}
+.trend-subtabs button:hover { border-color: var(--teal); color: var(--teal-dark); }
+.trend-subtabs button.active { background: var(--teal); border-color: var(--teal); color: #fff; }
+.trend-howto {
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: #344054;
+  font-size: 11px;
+  line-height: 2;
+}
+.trend-howto strong { margin-right: 4px; color: var(--ink); }
+.how-chip {
+  display: inline-block;
+  margin: 0 3px 0 10px;
+  padding: 1px 8px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.how-chip.yes { background: var(--green-soft); border: 1px solid #9be4cb; color: #0a7a50; }
+.how-chip.no { background: var(--amber-soft); border: 1px solid #f0d089; color: var(--amber); }
+.how-chip.none { background: #eef2f6; border: 1px solid #d0d5dd; color: #475467; }
+.legend-cell {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 20px;
+  margin: 0 2px 0 8px;
+  padding: 0 4px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  vertical-align: middle;
+  font-size: 10px;
+  font-weight: 800;
+}
+.trend-scroll { max-height: 760px; overflow: auto; }
+.trend-inc-table, .trend-heat { border-collapse: separate; border-spacing: 0; width: max-content; min-width: 100%; }
+.trend-inc-table th, .trend-inc-table td, .trend-heat th, .trend-heat td { white-space: normal; vertical-align: middle; }
+.trend-inc-table tbody tr, .trend-heat tbody tr { cursor: default; }
+.trend-inc-table tbody tr:hover, .trend-heat tbody tr:hover { background: transparent; }
+.trend-inc-table th, .trend-heat th { text-transform: none; font-size: 11px; color: #475467; }
+.tr-name {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  min-width: 170px;
+  max-width: 210px;
+  background: #fff;
+  border-right: 1px solid var(--line);
+}
+th.tr-name { z-index: 4; background: #f8fafb; }
+.tr-name strong { display: block; font-size: 12px; color: var(--ink); }
+.tr-name small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; font-weight: 600; }
+.trend-inc-table td { padding: 6px 5px; border-bottom: 1px solid #edf0f3; }
+.inc-week-head { min-width: 118px; text-align: center; }
+.inc-week-head b { display: block; color: var(--ink); font-size: 11px; }
+.inc-week-head small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; font-weight: 600; }
+.inc-chip { padding: 6px 7px; border: 1px solid transparent; border-radius: 8px; text-align: center; line-height: 1.35; }
+.inc-chip b { display: block; font-size: 11px; }
+.inc-chip span { display: block; font-size: 10.5px; font-weight: 700; }
+.inc-chip small { display: block; font-size: 9.5px; font-weight: 600; opacity: .9; }
+.inc-chip.yes { background: var(--green-soft); border-color: #9be4cb; color: #0a7a50; }
+.inc-chip.no { background: var(--amber-soft); border-color: #f0d089; color: var(--amber); }
+.inc-chip.none { background: #f1f3f6; border-color: #d9dee5; color: #667085; }
+.inc-chip.live, .heat-status.live { border-style: dashed; }
+.inc-total { min-width: 120px; text-align: center; border-left: 1px solid var(--line); }
+.inc-total strong { display: block; font-size: 15px; }
+.inc-total small { display: block; margin-top: 3px; color: var(--muted); font-size: 9.5px; font-weight: 700; }
+.inc-dots { display: flex; justify-content: center; gap: 3px; margin-top: 4px; }
+.inc-dots i { width: 9px; height: 9px; border-radius: 50%; background: #d0d5dd; }
+.inc-dots i.yes { background: var(--green); }
+.inc-dots i.no { background: #f0b429; }
+.trend-inc-table tfoot td { padding: 8px 5px; background: #f8fafb; border-top: 1px solid var(--line); font-size: 11px; font-weight: 800; text-align: center; }
+.trend-inc-table tfoot td small { display: block; color: var(--muted); font-size: 9.5px; font-weight: 600; }
+.trend-inc-table tfoot td.tr-name { text-align: left; background: #f8fafb; }
+.trend-heat th.heat-week { min-width: 178px; padding: 6px 8px; text-align: center; border-left: 1px solid var(--line); }
+.heat-week-title b { display: block; color: var(--ink); font-size: 11px; }
+.heat-week-title small { display: block; margin-top: 1px; color: var(--muted); font-size: 9px; font-weight: 600; }
+.heat-days { display: grid; grid-template-columns: repeat(7, 22px); gap: 2px; justify-content: center; }
+.heat-daylabels { margin-top: 5px; }
+.heat-daylabels span { color: #667085; font-size: 8px; font-weight: 700; text-align: center; }
+.heat-daylabels span.we { color: #b0488a; }
+.trend-heat td.heat-week-cell { padding: 6px 8px; border-left: 1px solid #edf0f3; border-bottom: 1px solid #edf0f3; text-align: center; }
+.trend-heat td.tr-name { padding: 8px 10px; border-bottom: 1px solid #edf0f3; }
+.heat-status {
+  display: inline-block;
+  margin-bottom: 4px;
+  padding: 1px 7px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 9.5px;
+  font-weight: 800;
+}
+.heat-status.yes { background: var(--green-soft); color: #0a7a50; }
+.heat-status.no { background: var(--amber-soft); color: var(--amber); }
+.heat-status.none { background: #eef2f6; color: #667085; }
+.heat-cell {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.heat-cell.h0-wd, .legend-cell.h0-wd { background: #fde8e6; border: 1px dashed #f2b6ab; }
+.heat-cell.h0-we, .legend-cell.h0-we { background: #f1f3f6; border: 1px dashed #d0d5dd; }
+.heat-cell.h1, .legend-cell.h1 { background: #c9edf9; color: #0b4f6c; }
+.heat-cell.h2, .legend-cell.h2 { background: #7fd5ef; color: #05384f; }
+.heat-cell.h3, .legend-cell.h3 { background: #18bfe8; color: #fff; }
+.heat-cell.h5, .legend-cell.h5 { background: #0b6f96; color: #fff; }
+.heat-flags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 5px; }
+.flag { padding: 1px 6px; border-radius: 5px; font-size: 9px; font-weight: 800; }
+.flag.red { background: var(--red-soft); color: var(--red); }
+.flag.amber { background: var(--amber-soft); color: var(--amber); }
+.flag.green { background: var(--green-soft); color: #0a7a50; }
+.heat-sum { min-width: 160px; padding: 6px 10px; border-left: 1px solid var(--line); border-bottom: 1px solid #edf0f3; font-size: 10.5px; }
+.heat-sum div { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; }
+.heat-sum span { color: var(--muted); font-weight: 600; }
+.heat-sum b.bad { color: var(--red); }
+.trend-footnote { margin: 0; padding: 8px 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10.5px; line-height: 1.5; }
+.trend-insight { display: grid; gap: 12px; padding: 12px; }
+.insight-table { width: 100%; border-collapse: collapse; white-space: normal; }
+.insight-table th, .insight-table td {
+  position: static;
+  padding: 8px 10px;
+  border: 1px solid #e3e8ef;
+  font-size: 11px;
+  text-align: center;
+  text-transform: none;
+}
+.insight-table th { background: #f8fafb; color: #475467; }
+.insight-table td:first-child { font-weight: 800; text-align: left; }
+.insight-table tr.g-yes td:first-child { color: #0a7a50; background: var(--green-soft); }
+.insight-table tr.g-no td:first-child { color: var(--amber); background: var(--amber-soft); }
+.insight-sentence { margin: 0; color: #274357; font-size: 12px; line-height: 1.6; }
+.insight-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px; }
+.insight-card { padding: 10px 12px; border: 1px solid #e3e8ef; border-radius: 8px; background: #fff; }
+.insight-card h4 { margin: 0 0 6px; color: var(--muted); font-size: 11px; letter-spacing: .02em; text-transform: uppercase; }
+.insight-card ul { margin: 0; padding-left: 16px; color: #274357; font-size: 11.5px; line-height: 1.65; }
+.insight-card .none { margin: 0; color: var(--muted); font-size: 11px; }
+.insight-card.red { border-color: #f2b6ab; background: #fff8f7; }
+.insight-card.amber { border-color: #f0d089; background: #fffaf0; }
+.insight-card.green { border-color: #9be4cb; background: #f4fdf9; }
+.insight-card.gray { background: #f8fafb; }
+
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
   .divider { height: 1px; border-left: 0; border-top: 1px solid var(--line); }
@@ -1981,38 +2140,39 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         <div>
           <p class="eyebrow">WEEKLY TREND</p>
           <h2 id="trendHeroTitle">Trend Performa Agent</h2>
-          <p id="trendHeroSubtitle">Pilih coach dan periode untuk melihat tren beberapa minggu terakhir.</p>
+          <p id="trendHeroSubtitle">Pilih coach dan periode untuk melihat pergerakan agent.</p>
         </div>
         <div class="hero-number">
           <span>Revenue Minggu Terakhir</span>
           <strong id="trendTotalRevenue">Rp0</strong>
         </div>
       </div>
+
       <div class="filters">
         <div class="field">
-          <label for="trendMonthFilter">Bulan</label>
-          <select id="trendMonthFilter"></select>
-        </div>
-        <div class="field">
-          <label for="trendWeekFilter">Sampai Week</label>
-          <select id="trendWeekFilter"></select>
-        </div>
-        <div class="field">
-          <label for="trendWindowFilter">Jumlah Minggu</label>
-          <select id="trendWindowFilter">
-            <option value="3">3 minggu</option>
-            <option value="4" selected>4 minggu</option>
-            <option value="5">5 minggu</option>
-            <option value="6">6 minggu</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="trendCoachFilter">Coach</label>
+          <label>Coach</label>
           <div id="trendCoachFilter"></div>
         </div>
         <div class="field">
           <label>Agent</label>
           <div id="trendAgentFilter"></div>
+        </div>
+        <div class="field" data-trend-range>
+          <label for="trendFromWeek">Dari week</label>
+          <select id="trendFromWeek"></select>
+        </div>
+        <div class="field" data-trend-range>
+          <label for="trendToWeek">Sampai week</label>
+          <select id="trendToWeek"></select>
+        </div>
+        <div class="field" data-trend-range>
+          <label for="trendSort">Urutkan</label>
+          <select id="trendSort">
+            <option value="cair">Paling sering cair</option>
+            <option value="revenue">Revenue tertinggi</option>
+            <option value="days">Hari aktif terbanyak</option>
+            <option value="name">Nama A-Z</option>
+          </select>
         </div>
         <div class="field grow">
           <label for="trendSearchFilter">Cari agent</label>
@@ -2020,43 +2180,144 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
         </div>
       </div>
 
-      <div class="trend-grid">
-        <section class="trend-chart-card">
-          <h3 id="trendChartCaption">Revenue Tim per Minggu (Rp Jt)</h3>
-          <div id="trendChartWrap"></div>
-        </section>
-        <section class="trend-summary-card">
-          <h3>Ringkasan</h3>
-          <div id="trendSummaryText"></div>
+      <nav class="trend-subtabs" aria-label="Tampilan trend">
+        <button type="button" class="active" data-trendview="incentive">1. Incentive per Minggu</button>
+        <button type="button" data-trendview="daily">2. Transaksi Harian</button>
+        <button type="button" data-trendview="classic">Trend &amp; Rencana Aksi</button>
+      </nav>
+
+      <div id="trendViewIncentive" class="trend-view">
+        <div class="trend-howto">
+          <strong>Cara baca:</strong>
+          <span class="how-chip yes">CAIR</span> TH agent mencapai minimum minggu itu
+          <span class="how-chip no">BELUM</span> ada transaksi tapi TH di bawah minimum ("Kurang" = selisih revenue ke minimum)
+          <span class="how-chip none">0 TXN</span> tidak ada transaksi sama sekali di minggu itu
+        </div>
+        <div class="kpi-grid">
+          <article class="kpi"><span>Agent dipantau</span><strong id="incvAgentKpi">0</strong><small id="incvAgentNote">-</small></article>
+          <article class="kpi"><span>Rata-rata agent cair / minggu</span><strong id="incvAvgKpi">0</strong><small id="incvAvgNote">-</small></article>
+          <article class="kpi"><span>Cair di setiap minggu</span><strong id="incvAlwaysKpi">0</strong><small id="incvAlwaysNote">-</small></article>
+          <article class="kpi"><span>Belum pernah cair</span><strong id="incvNeverKpi">0</strong><small id="incvNeverNote">-</small></article>
+        </div>
+        <section class="table-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Siapa yang Cair di Tiap Minggu</h2>
+              <p id="incvCaption">-</p>
+            </div>
+            <span id="incvCount" class="count-chip">0 agent</span>
+          </div>
+          <div class="table-wrap trend-scroll">
+            <table class="trend-inc-table">
+              <thead id="incvHead"></thead>
+              <tbody id="incvBody"></tbody>
+              <tfoot id="incvFoot"></tfoot>
+            </table>
+          </div>
         </section>
       </div>
 
-      <section class="table-panel">
-        <div class="panel-heading">
-          <div>
-            <h2>Tabel Trend Revenue per Agent</h2>
-            <p>Revenue mingguan (Rp Jt) dan klasifikasi tren otomatis.</p>
+      <div id="trendViewDaily" class="trend-view" hidden>
+        <div class="trend-howto">
+          <strong>Cara baca:</strong>
+          1 kotak = 1 hari (Sen-Min), angka = jumlah transaksi masuk.
+          <span class="legend-cell h0-wd"></span> Sen-Jum kosong
+          <span class="legend-cell h0-we"></span> Sab-Min kosong
+          <span class="legend-cell h1">1</span><span class="legend-cell h2">2</span><span class="legend-cell h3">3-4</span><span class="legend-cell h5">5+</span> ada transaksi
+          &middot; Label di atas kotak: <span class="how-chip yes">&#10003; Cair</span><span class="how-chip no">&#10007; Belum</span>
+        </div>
+        <div class="kpi-grid">
+          <article class="kpi"><span>Rata-rata hari ada transaksi</span><strong id="dailyAvgKpi">0</strong><small id="dailyAvgNote">per agent per minggu (dari 7 hari)</small></article>
+          <article class="kpi"><span>Tidak ada transaksi weekend</span><strong id="dailyNoWeekendKpi">0</strong><small id="dailyNoWeekendNote">-</small></article>
+          <article class="kpi"><span>Pernah kosong total Sen-Jum</span><strong id="dailyNoWeekdayKpi">0</strong><small id="dailyNoWeekdayNote">-</small></article>
+          <article class="kpi"><span>Tidak ada transaksi sama sekali</span><strong id="dailyNoTxnKpi">0</strong><small id="dailyNoTxnNote">-</small></article>
+        </div>
+        <section class="table-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Temuan Otomatis</h2>
+              <p>Apakah agent yang cair transaksinya rutin masuk tiap hari? Dibandingkan dengan minggu belum cair.</p>
+            </div>
           </div>
-          <span id="trendRowCount" class="count-chip">0 agent</span>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead id="trendTableHead"></thead>
-            <tbody id="trendTableBody"></tbody>
-          </table>
-        </div>
-      </section>
+          <div id="dailyInsight" class="trend-insight"></div>
+        </section>
+        <section class="table-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Pergerakan Transaksi Harian (Senin-Minggu)</h2>
+              <p id="dailyCaption">-</p>
+            </div>
+            <span id="dailyCount" class="count-chip">0 agent</span>
+          </div>
+          <div class="table-wrap trend-scroll">
+            <table class="trend-heat">
+              <thead id="dailyHead"></thead>
+              <tbody id="dailyBody"></tbody>
+            </table>
+          </div>
+          <p id="dailyNote" class="trend-footnote"></p>
+        </section>
+      </div>
 
-      <section class="table-panel">
-        <div class="panel-heading">
-          <div>
-            <h2 id="trendPlanTitle">Rencana Aksi Minggu Depan</h2>
-            <p id="trendPlanNote">Target dan fokus kerja per agent untuk minggu berikutnya.</p>
+      <div id="trendViewClassic" class="trend-view" hidden>
+        <div class="filters">
+          <div class="field">
+            <label for="trendMonthFilter">Bulan</label>
+            <select id="trendMonthFilter"></select>
           </div>
-          <span id="trendPlanCount" class="count-chip">0 agent</span>
+          <div class="field">
+            <label for="trendWeekFilter">Sampai Week</label>
+            <select id="trendWeekFilter"></select>
+          </div>
+          <div class="field">
+            <label for="trendWindowFilter">Jumlah Minggu</label>
+            <select id="trendWindowFilter">
+              <option value="3">3 minggu</option>
+              <option value="4" selected>4 minggu</option>
+              <option value="5">5 minggu</option>
+              <option value="6">6 minggu</option>
+            </select>
+          </div>
         </div>
-        <div id="trendPlanList" class="trend-plan-list"></div>
-      </section>
+
+        <div class="trend-grid">
+          <section class="trend-chart-card">
+            <h3 id="trendChartCaption">Revenue Tim per Minggu (Rp Jt)</h3>
+            <div id="trendChartWrap"></div>
+          </section>
+          <section class="trend-summary-card">
+            <h3>Ringkasan</h3>
+            <div id="trendSummaryText"></div>
+          </section>
+        </div>
+
+        <section class="table-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Tabel Trend Revenue per Agent</h2>
+              <p>Revenue mingguan (Rp Jt) dan klasifikasi tren otomatis.</p>
+            </div>
+            <span id="trendRowCount" class="count-chip">0 agent</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead id="trendTableHead"></thead>
+              <tbody id="trendTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="table-panel">
+          <div class="panel-heading">
+            <div>
+              <h2 id="trendPlanTitle">Rencana Aksi Minggu Depan</h2>
+              <p id="trendPlanNote">Target dan fokus kerja per agent untuk minggu berikutnya.</p>
+            </div>
+            <span id="trendPlanCount" class="count-chip">0 agent</span>
+          </div>
+          <div id="trendPlanList" class="trend-plan-list"></div>
+        </section>
+      </div>
     </section>
   </main>
 
@@ -2727,7 +2988,8 @@ function prepareDashboard(sheetName, rawCount) {
   syncAgentMulti("incAgentFilter", layerOneRows, "incCoachFilter");
   syncAgentMulti("dodolanAgentFilter", dodolanRows, "dodolanLeaderFilter");
   syncAgentMulti("agentLeaderboardAgent", layerOneRows, "agentLeaderboardCoach");
-  syncAgentMulti("trendAgentFilter", layerOneRows, "trendCoachFilter");
+  syncTrendAgentOptions();
+  populateTrendRange();
   setMultiOptions("actionAgentFilter", [...new Set(layerOneRows.filter(row => (row.leader || "").trim().toLowerCase() === "arif pambudi").map(row => row.agent))].sort(byName));
   updateTopCampaignAgentOptions();
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
@@ -3863,6 +4125,364 @@ function renderCompareTeam() {
   el("compareList").innerHTML = renderTeamColumn("Arif Pambudi", arifAgents, targetForRow) + compareGroups.map(group => renderTeamColumn(group.coach, group.agents, targetForRow)).join("");
 }
 
+const DAY_NAMES = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
+const MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+const WEEKDAY_INDEX = { Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 };
+const jktPartsFmt = new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Jakarta", year: "numeric", month: "2-digit", day: "2-digit", weekday: "short" });
+let trendView = "incentive";
+
+function jktDay(date) {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) return null;
+  const parts = {};
+  jktPartsFmt.formatToParts(date).forEach(part => { parts[part.type] = part.value; });
+  const index = WEEKDAY_INDEX[parts.weekday];
+  return index === undefined ? null : { key: `${parts.year}-${parts.month}-${parts.day}`, index };
+}
+
+function isoWeekMonday(weekNum) { return Date.UTC(2025, 11, 29) + (weekNum - 1) * 7 * 86400000; }
+function utcDayKey(ms) { return new Date(ms).toISOString().slice(0, 10); }
+function dayDateLabel(weekNum, index) {
+  const date = new Date(isoWeekMonday(weekNum) + index * 86400000);
+  return `${DAY_NAMES[index]}, ${date.getUTCDate()} ${MONTH_ABBR[date.getUTCMonth()]}`;
+}
+function weekRangeLabel(weekNum) {
+  const a = new Date(isoWeekMonday(weekNum));
+  const b = new Date(isoWeekMonday(weekNum) + 6 * 86400000);
+  return `${a.getUTCDate()} ${MONTH_ABBR[a.getUTCMonth()]} - ${b.getUTCDate()} ${MONTH_ABBR[b.getUTCMonth()]}`;
+}
+function fmt1(value) { return new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format(value || 0); }
+function compactRupiah(value) {
+  const v = Math.round(value || 0);
+  if (v >= 1000000) return `Rp ${new Intl.NumberFormat("id-ID", { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(v / 1000000)} Jt`;
+  if (v >= 1000) return `Rp ${Math.round(v / 1000).toLocaleString("id-ID")} rb`;
+  return `Rp ${v.toLocaleString("id-ID")}`;
+}
+function namesNote(items, limit = 5) {
+  if (!items.length) return "-";
+  const shown = items.slice(0, limit).join(", ");
+  return items.length > limit ? `${shown} +${items.length - limit} lainnya` : shown;
+}
+
+function syncTrendAgentOptions() {
+  const coachSet = getMultiSet("trendCoachFilter");
+  const names = new Map();
+  layerOneRows.forEach(row => { if (matchMulti(coachSet, row.leader || "-")) names.set(row.agent.toLowerCase(), row.agent); });
+  targetRows.forEach(row => { if (row.team === "Layer 1" && matchMulti(coachSet, row.leader || "-")) names.set(row.agent.toLowerCase(), row.agent); });
+  setMultiOptions("trendAgentFilter", [...names.values()].sort((a, b) => a.localeCompare(b)));
+}
+
+function populateTrendRange() {
+  const weeks = availableWeeks("all");
+  const options = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
+  el("trendFromWeek").innerHTML = options;
+  el("trendToWeek").innerHTML = options;
+  if (!weeks.length) return;
+  const currentWeekNum = getISOWeekNumber(new Date());
+  const completed = weeks.filter(name => (WEEK_PERIODS.find(week => week.name === name)?.weekNum || 0) < currentWeekNum);
+  const pool = completed.length ? completed : weeks;
+  const to = pool[pool.length - 1];
+  el("trendToWeek").value = to;
+  el("trendFromWeek").value = weeks[Math.max(0, weeks.indexOf(to) - 5)];
+}
+
+function trendRangeWeeks() {
+  let from = WEEK_PERIODS.findIndex(week => week.name === el("trendFromWeek").value);
+  let to = WEEK_PERIODS.findIndex(week => week.name === el("trendToWeek").value);
+  if (from < 0 || to < 0) return [];
+  if (from > to) [from, to] = [to, from];
+  const currentWeekNum = getISOWeekNumber(new Date());
+  return WEEK_PERIODS.slice(from, to + 1).map(week => ({ ...week, inProgress: week.weekNum === currentWeekNum }));
+}
+
+function buildTrendDataset() {
+  const weeks = trendRangeWeeks();
+  if (!weeks.length) return null;
+  const weekIndex = new Map(weeks.map((week, index) => [week.name, index]));
+  const coachSet = getMultiSet("trendCoachFilter");
+  const agentSet = getMultiSet("trendAgentFilter");
+  const query = el("trendSearchFilter").value.trim().toLowerCase();
+  const roster = new Map();
+  const addAgent = (agent, leader) => {
+    const key = agent.toLowerCase();
+    if (roster.has(key)) return;
+    roster.set(key, {
+      key, agent, leader: leader || "-",
+      weeks: weeks.map(week => ({ week, revenue: 0, txn: 0, days: Array.from({ length: 7 }, () => ({ txn: 0, rev: 0 })) })),
+    });
+  };
+  layerOneRows.forEach(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    if (week && weekIndex.has(week.name) && matchMulti(coachSet, row.leader || "-")) addAgent(row.agent, row.leader);
+  });
+  targetRows.forEach(row => {
+    if (row.team === "Layer 1" && weekIndex.has(row.week) && matchMulti(coachSet, row.leader || "-")) addAgent(row.agent, row.leader);
+  });
+
+  let undated = 0;
+  let outside = 0;
+  layerOneRows.forEach(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    if (!week || !weekIndex.has(week.name)) return;
+    const item = roster.get(row.agent.toLowerCase());
+    if (!item) return;
+    const cell = item.weeks[weekIndex.get(week.name)];
+    cell.revenue += row.revenue;
+    cell.txn += 1;
+    const day = jktDay(row.date);
+    if (!day) { undated += 1; return; }
+    if (day.key < utcDayKey(isoWeekMonday(week.weekNum)) || day.key > utcDayKey(isoWeekMonday(week.weekNum) + 6 * 86400000)) outside += 1;
+    cell.days[day.index].txn += 1;
+    cell.days[day.index].rev += row.revenue;
+  });
+
+  const summaryMap = new Map(summary.map(row => [row.key, row]));
+  const agents = [...roster.values()]
+    .filter(item => matchMulti(agentSet, item.agent) && (!query || item.agent.toLowerCase().includes(query)))
+    .map(item => {
+      item.weeks.forEach(cell => {
+        const sum = summaryMap.get(`${cell.week.name}|${item.key}`);
+        cell.target = sum?.target || targetForAgentWeek(item.agent, cell.week);
+        cell.th = cell.target ? cell.revenue / cell.target : 0;
+        cell.eligible = Boolean(sum?.eligible);
+        cell.incentive = sum?.incentive || 0;
+        cell.needToMin = Math.max(0, cell.target * cell.week.minimum - cell.revenue);
+        cell.activeDays = cell.days.filter(day => day.txn > 0).length;
+        cell.weekdayActive = cell.days.slice(0, 5).filter(day => day.txn > 0).length;
+        cell.weekendActive = cell.days.slice(5).filter(day => day.txn > 0).length;
+        cell.state = cell.eligible ? "yes" : (cell.txn > 0 ? "no" : "none");
+      });
+      const counted = item.weeks.filter(cell => !cell.week.inProgress);
+      item.counted = counted;
+      item.cairWeeks = counted.filter(cell => cell.eligible).length;
+      item.totalRevenue = counted.reduce((sum, cell) => sum + cell.revenue, 0);
+      item.totalTxn = counted.reduce((sum, cell) => sum + cell.txn, 0);
+      item.activeDays = counted.reduce((sum, cell) => sum + cell.activeDays, 0);
+      item.weekdayEmpty = counted.length * 5 - counted.reduce((sum, cell) => sum + cell.weekdayActive, 0);
+      item.weekendEmpty = counted.length * 2 - counted.reduce((sum, cell) => sum + cell.weekendActive, 0);
+      item.weekendTxn = counted.reduce((sum, cell) => sum + cell.days[5].txn + cell.days[6].txn, 0);
+      item.weeksNoWeekend = counted.filter(cell => cell.weekendActive === 0).length;
+      item.noWeekdayWeeks = counted.filter(cell => cell.weekdayActive === 0).map(cell => cell.week.name);
+      item.avgActiveDays = counted.length ? item.activeDays / counted.length : 0;
+      let streak = 0;
+      for (let i = counted.length - 1; i >= 0 && counted[i].eligible; i -= 1) streak += 1;
+      item.streak = streak;
+      return item;
+    });
+  return { weeks, agents, undated, outside };
+}
+
+function sortTrendAgents(agents, mode) {
+  const byName = (a, b) => a.agent.localeCompare(b.agent);
+  const sorters = {
+    cair: (a, b) => b.cairWeeks - a.cairWeeks || b.streak - a.streak || b.totalRevenue - a.totalRevenue || byName(a, b),
+    revenue: (a, b) => b.totalRevenue - a.totalRevenue || byName(a, b),
+    days: (a, b) => b.activeDays - a.activeDays || byName(a, b),
+    name: byName,
+  };
+  return [...agents].sort(sorters[mode] || sorters.cair);
+}
+
+function weekHeadLabel(week) { return `${week.name}${week.inProgress ? " (berjalan)" : ""}`; }
+
+function incChip(cell) {
+  const live = cell.week.inProgress ? " live" : "";
+  if (cell.state === "none") return `<div class="inc-chip none${live}"><b>0 TXN</b><span>Tidak ada transaksi</span></div>`;
+  if (cell.state === "yes") return `<div class="inc-chip yes${live}"><b>CAIR &middot; ${percent(cell.th)}</b><span>${compactRupiah(cell.revenue)}</span><small>Insentif ${compactRupiah(cell.incentive)}</small></div>`;
+  return `<div class="inc-chip no${live}"><b>BELUM &middot; ${percent(cell.th)}</b><span>${compactRupiah(cell.revenue)}</span><small>Kurang ${compactRupiah(cell.needToMin)}</small></div>`;
+}
+
+function renderTrendIncentive(data) {
+  const { weeks, agents } = data;
+  const countedIdx = weeks.map((week, index) => (week.inProgress ? -1 : index)).filter(index => index >= 0);
+  const weekCair = weeks.map((week, index) => agents.filter(agent => agent.weeks[index].eligible).length);
+  const avgCair = countedIdx.length ? countedIdx.reduce((sum, index) => sum + weekCair[index], 0) / countedIdx.length : 0;
+  const always = agents.filter(agent => agent.counted.length && agent.cairWeeks === agent.counted.length).map(agent => agent.agent);
+  const never = agents.filter(agent => agent.cairWeeks === 0).map(agent => agent.agent);
+
+  el("incvAgentKpi").textContent = agents.length.toLocaleString("id-ID");
+  el("incvAgentNote").textContent = `${weeks.length} minggu: ${weeks[0].name} s/d ${weeks[weeks.length - 1].name}`;
+  el("incvAvgKpi").textContent = fmt1(avgCair);
+  el("incvAvgNote").textContent = `dari ${agents.length} agent (${percent(agents.length ? avgCair / agents.length : 0)}) per minggu`;
+  el("incvAlwaysKpi").textContent = always.length.toLocaleString("id-ID");
+  el("incvAlwaysNote").textContent = namesNote(always);
+  el("incvNeverKpi").textContent = never.length.toLocaleString("id-ID");
+  el("incvNeverNote").textContent = namesNote(never);
+  el("incvCount").textContent = `${agents.length} agent`;
+  el("incvCaption").textContent = `${multiText("trendCoachFilter", "Semua coach")} - ${weeks[0].name} s/d ${weeks[weeks.length - 1].name}${weeks.some(week => week.inProgress) ? " - minggu berjalan tidak dihitung di total cair" : ""}`;
+
+  el("incvHead").innerHTML = `<tr>
+    <th class="tr-name">Agent</th>
+    ${weeks.map(week => `<th class="inc-week-head"><b>${escapeHtml(weekHeadLabel(week))}</b><small>${weekRangeLabel(week.weekNum)} &middot; min TH ${percent(week.minimum)}</small></th>`).join("")}
+    <th class="inc-total">Cair</th>
+  </tr>`;
+  el("incvBody").innerHTML = agents.map(agent => `
+    <tr>
+      <td class="tr-name"><strong>${escapeHtml(agent.agent)}</strong><small>${escapeHtml(agent.leader)}</small></td>
+      ${agent.weeks.map(cell => `<td>${incChip(cell)}</td>`).join("")}
+      <td class="inc-total">
+        <strong>${agent.cairWeeks}/${agent.counted.length}</strong>
+        <div class="inc-dots">${agent.counted.map(cell => `<i class="${cell.state}" title="${escapeHtml(cell.week.name)}"></i>`).join("")}</div>
+        <small>${agent.streak >= 2 ? `${agent.streak} minggu berturut-turut` : agent.cairWeeks === 0 ? "belum pernah cair" : "&nbsp;"}</small>
+      </td>
+    </tr>
+  `).join("");
+  el("incvFoot").innerHTML = `<tr>
+    <td class="tr-name">Agent cair</td>
+    ${weeks.map((week, index) => `<td>${weekCair[index]}/${agents.length}<small>${percent(agents.length ? weekCair[index] / agents.length : 0)}</small></td>`).join("")}
+    <td></td>
+  </tr>`;
+}
+
+function heatCell(day, index, weekNum) {
+  const label = dayDateLabel(weekNum, index);
+  if (!day.txn) return `<span class="heat-cell ${index >= 5 ? "h0-we" : "h0-wd"}" title="${label} - tidak ada transaksi"></span>`;
+  const level = day.txn >= 5 ? "h5" : day.txn >= 3 ? "h3" : day.txn === 2 ? "h2" : "h1";
+  return `<span class="heat-cell ${level}" title="${label} - ${day.txn} txn - ${rupiah(day.rev)}">${day.txn}</span>`;
+}
+
+function heatStatus(cell) {
+  const live = cell.week.inProgress ? " live" : "";
+  if (cell.state === "yes") return `<span class="heat-status yes${live}">&#10003; Cair &middot; ${percent(cell.th)}</span>`;
+  if (cell.state === "no") return `<span class="heat-status no${live}">&#10007; Belum &middot; ${percent(cell.th)}</span>`;
+  return `<span class="heat-status none${live}">- Tanpa txn</span>`;
+}
+
+function insightCard(title, tone, items, emptyText) {
+  return `<div class="insight-card ${tone}"><h4>${title}</h4>${items.length ? `<ul>${items.map(item => `<li>${item}</li>`).join("")}</ul>` : `<p class="none">${emptyText}</p>`}</div>`;
+}
+
+function groupStats(cells) {
+  const n = cells.length;
+  const avg = fn => (n ? cells.reduce((sum, cell) => sum + fn(cell), 0) / n : 0);
+  return {
+    n,
+    days: avg(cell => cell.activeDays),
+    weekday: avg(cell => cell.weekdayActive),
+    weekend: avg(cell => cell.weekendActive),
+    weekendShare: n ? cells.filter(cell => cell.weekendActive > 0).length / n : 0,
+  };
+}
+
+function renderTrendDaily(data) {
+  const { weeks, agents } = data;
+  const countedCells = agents.flatMap(agent => agent.counted);
+  const noWeekend = agents.filter(agent => agent.counted.length && agent.totalTxn > 0 && agent.weekendTxn === 0);
+  const noWeekday = agents.filter(agent => agent.totalTxn > 0 && agent.noWeekdayWeeks.length > 0);
+  const noTxn = agents.filter(agent => agent.totalTxn === 0);
+  const avgDays = countedCells.length ? countedCells.reduce((sum, cell) => sum + cell.activeDays, 0) / countedCells.length : 0;
+
+  el("dailyAvgKpi").textContent = `${fmt1(avgDays)} / 7`;
+  el("dailyNoWeekendKpi").textContent = noWeekend.length.toLocaleString("id-ID");
+  el("dailyNoWeekendNote").textContent = noWeekend.length ? namesNote(noWeekend.map(agent => agent.agent)) : "semua agent pernah ada transaksi weekend";
+  el("dailyNoWeekdayKpi").textContent = noWeekday.length.toLocaleString("id-ID");
+  el("dailyNoWeekdayNote").textContent = noWeekday.length ? namesNote(noWeekday.map(agent => agent.agent)) : "tidak ada minggu kosong total Sen-Jum";
+  el("dailyNoTxnKpi").textContent = noTxn.length.toLocaleString("id-ID");
+  el("dailyNoTxnNote").textContent = noTxn.length ? namesNote(noTxn.map(agent => agent.agent)) : "semua agent ada transaksi";
+  el("dailyCount").textContent = `${agents.length} agent`;
+  el("dailyCaption").textContent = `${multiText("trendCoachFilter", "Semua coach")} - ${weeks[0].name} s/d ${weeks[weeks.length - 1].name} - arahkan kursor ke kotak untuk lihat tanggal dan revenue`;
+
+  const yes = groupStats(countedCells.filter(cell => cell.state === "yes"));
+  const no = groupStats(countedCells.filter(cell => cell.state === "no"));
+  const noneCount = countedCells.filter(cell => cell.state === "none").length;
+  const row = (label, cls, g) => `<tr class="${cls}"><td>${label}</td><td>${g.n}</td><td>${fmt1(g.days)}</td><td>${fmt1(g.weekday)}</td><td>${fmt1(g.weekend)}</td><td>${g.n ? percent(g.weekendShare) : "-"}</td></tr>`;
+  let sentence = "Belum cukup data untuk membandingkan minggu cair dan belum cair.";
+  if (yes.n && no.n) {
+    sentence = `Pada minggu cair, agent rata-rata punya transaksi di <b>${fmt1(yes.days)} hari</b>, sedangkan pada minggu belum cair <b>${fmt1(no.days)} hari</b> (selisih ${fmt1(yes.days - no.days)} hari). Transaksi weekend muncul di <b>${percent(yes.weekendShare)}</b> minggu cair vs <b>${percent(no.weekendShare)}</b> minggu belum cair.`;
+  } else if (yes.n) {
+    sentence = `Semua agent-minggu yang punya transaksi berstatus cair, rata-rata transaksi masuk di <b>${fmt1(yes.days)} hari</b> per minggu.`;
+  } else if (no.n) {
+    sentence = `Belum ada minggu cair pada periode ini. Rata-rata transaksi masuk di ${fmt1(no.days)} hari per minggu.`;
+  }
+
+  const totalWeeks = (agent) => agent.counted.length;
+  const nearAlways = agents
+    .filter(agent => totalWeeks(agent) && agent.cairWeeks >= Math.ceil(totalWeeks(agent) * 0.8))
+    .sort((a, b) => b.cairWeeks - a.cairWeeks || b.avgActiveDays - a.avgActiveDays)
+    .map(agent => `<b>${escapeHtml(agent.agent)}</b> - cair ${agent.cairWeeks}/${totalWeeks(agent)} minggu, rata-rata ${fmt1(agent.avgActiveDays)} hari aktif/minggu, weekend ada transaksi di ${totalWeeks(agent) - agent.weeksNoWeekend}/${totalWeeks(agent)} minggu`);
+  const mostRoutine = [...agents].filter(agent => totalWeeks(agent)).sort((a, b) => b.avgActiveDays - a.avgActiveDays).slice(0, 3)
+    .map(agent => `<b>${escapeHtml(agent.agent)}</b> - ${fmt1(agent.avgActiveDays)} hari aktif/minggu (cair ${agent.cairWeeks}/${totalWeeks(agent)})`);
+
+  el("dailyInsight").innerHTML = `
+    <table class="insight-table">
+      <thead><tr><th>Kelompok</th><th>Jumlah agent-minggu</th><th>Rata-rata hari ada transaksi (dari 7)</th><th>Sen-Jum (dari 5)</th><th>Sab-Min (dari 2)</th><th>% minggu ada transaksi weekend</th></tr></thead>
+      <tbody>${row("Minggu CAIR", "g-yes", yes)}${row("Minggu BELUM cair", "g-no", no)}</tbody>
+    </table>
+    <p class="insight-sentence">${sentence}${noneCount ? ` <span style="color:var(--muted)">(${noneCount} agent-minggu tanpa transaksi sama sekali tidak dihitung di tabel ini.)</span>` : ""}</p>
+    <div class="insight-cards">
+      ${insightCard("Agent yang cair hampir tiap minggu (&ge; 80%) - seberapa rutin?", "green", nearAlways, "Belum ada agent yang cair di &ge; 80% minggu terpilih.")}
+      ${insightCard("Paling rutin transaksi (hari aktif tertinggi)", "green", mostRoutine, "Belum ada data.")}
+      ${insightCard("Tidak ada transaksi weekend (Sab-Min) sama sekali", "red", noWeekend.map(agent => `<b>${escapeHtml(agent.agent)}</b> - kosong ${agent.weeksNoWeekend}/${totalWeeks(agent)} minggu`), "Semua agent pernah ada transaksi di weekend.")}
+      ${insightCard("Ada minggu tanpa transaksi Sen-Jum", "amber", noWeekday.map(agent => `<b>${escapeHtml(agent.agent)}</b> - ${escapeHtml(agent.noWeekdayWeeks.join(", "))}`), "Tidak ada minggu yang kosong total di Sen-Jum.")}
+      ${insightCard("Tidak ada transaksi sama sekali di periode ini", "gray", noTxn.map(agent => `<b>${escapeHtml(agent.agent)}</b>`), "Semua agent punya transaksi.")}
+    </div>`;
+
+  el("dailyHead").innerHTML = `<tr>
+    <th class="tr-name">Agent</th>
+    ${weeks.map(week => `<th class="heat-week"><div class="heat-week-title"><b>${escapeHtml(weekHeadLabel(week))}</b><small>${weekRangeLabel(week.weekNum)}</small></div><div class="heat-days heat-daylabels">${DAY_NAMES.map((name, index) => `<span class="${index >= 5 ? "we" : ""}">${name}</span>`).join("")}</div></th>`).join("")}
+    <th>Ringkasan</th>
+  </tr>`;
+
+  el("dailyBody").innerHTML = agents.map(agent => {
+    const n = agent.counted.length;
+    const flags = [];
+    if (n && agent.totalTxn === 0) flags.push(`<span class="flag red">Tidak ada transaksi</span>`);
+    else {
+      if (n && agent.weekendTxn === 0) flags.push(`<span class="flag red">0 txn weekend</span>`);
+      else if (n && agent.weeksNoWeekend >= Math.ceil(n / 2)) flags.push(`<span class="flag amber">Weekend kosong ${agent.weeksNoWeekend}/${n} mgg</span>`);
+      if (agent.noWeekdayWeeks.length) flags.push(`<span class="flag red">Sen-Jum kosong ${agent.noWeekdayWeeks.length} mgg</span>`);
+      if (n && agent.avgActiveDays >= 5) flags.push(`<span class="flag green">Rutin</span>`);
+    }
+    return `
+      <tr>
+        <td class="tr-name"><strong>${escapeHtml(agent.agent)}</strong><small>${escapeHtml(agent.leader)} &middot; cair ${agent.cairWeeks}/${n}</small><div class="heat-flags">${flags.join("")}</div></td>
+        ${agent.weeks.map(cell => `<td class="heat-week-cell">${heatStatus(cell)}<div class="heat-days">${cell.days.map((day, index) => heatCell(day, index, cell.week.weekNum)).join("")}</div></td>`).join("")}
+        <td class="heat-sum">
+          <div><span>Hari ada txn</span><b>${agent.activeDays}/${n * 7}</b></div>
+          <div><span>Sen-Jum kosong</span><b class="${agent.weekdayEmpty ? "bad" : ""}">${agent.weekdayEmpty}/${n * 5}</b></div>
+          <div><span>Sab-Min kosong</span><b class="${agent.weekendEmpty === n * 2 && n ? "bad" : ""}">${agent.weekendEmpty}/${n * 2}</b></div>
+          <div><span>Total txn</span><b>${agent.totalTxn}</b></div>
+        </td>
+      </tr>`;
+  }).join("");
+
+  const notes = [];
+  if (weeks.some(week => week.inProgress)) notes.push("Minggu berjalan ditampilkan (garis putus-putus) tapi tidak dihitung di ringkasan dan temuan.");
+  if (data.undated) notes.push(`${data.undated.toLocaleString("id-ID")} transaksi tidak punya tanggal yang terbaca sehingga tidak muncul di kotak harian.`);
+  if (data.outside) notes.push(`${data.outside.toLocaleString("id-ID")} transaksi tanggalnya di luar rentang Senin-Minggu week-nya; tetap ditaruh di hari yang sesuai tanggalnya.`);
+  notes.push("Hari dihitung memakai zona waktu WIB (Asia/Jakarta).");
+  el("dailyNote").textContent = notes.join(" ");
+}
+
+function renderTrendEmpty() {
+  ["incvHead", "incvFoot", "dailyHead", "dailyInsight"].forEach(id => { el(id).innerHTML = ""; });
+  el("incvBody").innerHTML = `<tr><td colspan="9"><div class="detail-empty">Tidak ada agent pada filter ini.</div></td></tr>`;
+  el("dailyBody").innerHTML = `<tr><td colspan="9"><div class="detail-empty">Tidak ada agent pada filter ini.</div></td></tr>`;
+  el("incvCount").textContent = "0 agent";
+  el("dailyCount").textContent = "0 agent";
+  el("trendTotalRevenue").textContent = rupiah(0);
+}
+
+function renderTrendPanel() {
+  if (trendView === "classic") { renderTrendClassic(); return; }
+  const data = buildTrendDataset();
+  if (!data || !data.agents.length) { renderTrendEmpty(); return; }
+  data.agents = sortTrendAgents(data.agents, el("trendSort").value);
+  const last = data.weeks.length - 1;
+  el("trendTotalRevenue").textContent = rupiah(data.agents.reduce((sum, agent) => sum + agent.weeks[last].revenue, 0));
+  el("trendHeroSubtitle").textContent = `${multiText("trendCoachFilter", "Semua coach")} - ${data.weeks[0].name} s/d ${data.weeks[last].name} (${data.weeks.length} minggu)`;
+  if (trendView === "incentive") renderTrendIncentive(data); else renderTrendDaily(data);
+}
+
+function setTrendView(view) {
+  trendView = view;
+  document.querySelectorAll("[data-trendview]").forEach(button => button.classList.toggle("active", button.dataset.trendview === view));
+  el("trendViewIncentive").hidden = view !== "incentive";
+  el("trendViewDaily").hidden = view !== "daily";
+  el("trendViewClassic").hidden = view !== "classic";
+  document.querySelectorAll("[data-trend-range]").forEach(field => { field.hidden = view === "classic"; });
+  renderTrendPanel();
+}
+
 function trendWeekWindow(endWeekName, windowSize) {
   const endIndex = WEEK_PERIODS.findIndex(week => week.name === endWeekName);
   if (endIndex === -1) return [];
@@ -3982,7 +4602,7 @@ function populateTrendWeekOptions(month) {
   else if (weeks.length) select.value = weeks[weeks.length - 1];
 }
 
-function renderTrendPanel() {
+function renderTrendClassic() {
   const month = el("trendMonthFilter").value;
   populateTrendWeekOptions(month);
   const endWeekName = el("trendWeekFilter").value;
@@ -4279,7 +4899,11 @@ el("trendMonthFilter").addEventListener("change", () => {
 });
 el("trendWeekFilter").addEventListener("change", renderTrendPanel);
 el("trendWindowFilter").addEventListener("change", renderTrendPanel);
-el("trendCoachFilter").addEventListener("change", () => { syncAgentMulti("trendAgentFilter", layerOneRows, "trendCoachFilter"); renderTrendPanel(); });
+el("trendCoachFilter").addEventListener("change", () => { syncTrendAgentOptions(); renderTrendPanel(); });
+el("trendFromWeek").addEventListener("change", renderTrendPanel);
+el("trendToWeek").addEventListener("change", renderTrendPanel);
+el("trendSort").addEventListener("change", renderTrendPanel);
+document.querySelectorAll("[data-trendview]").forEach(button => button.addEventListener("click", () => setTrendView(button.dataset.trendview)));
 el("trendAgentFilter").addEventListener("change", renderTrendPanel);
 el("incCoachFilter").addEventListener("change", () => { syncAgentMulti("incAgentFilter", layerOneRows, "incCoachFilter"); render(); });
 el("incAgentFilter").addEventListener("change", render);
