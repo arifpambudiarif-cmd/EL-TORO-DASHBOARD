@@ -1969,6 +1969,214 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .heat-cell.hf, .legend-cell.hf { background: repeating-linear-gradient(135deg, #f7f8fa 0 3px, #eceff3 3px 6px); border: 1px dashed #dfe3e9; }
 .heat-status.run, .inc-chip.run { background: #e3f1ff; border-color: #a9cdf5; color: #1d4ed8; }
 
+/* ---- shared widgets ---- */
+.multi.is-disabled { opacity: .45; pointer-events: none; }
+.ring {
+  --p: 0;
+  --rc: var(--accent);
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(var(--rc) calc(var(--p) * 1%), #e6edf4 0);
+}
+.ring::before { content: ""; position: absolute; inset: 14%; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1px #eef2f6; }
+.ring b { position: relative; color: var(--ink); font-size: 12px; font-weight: 800; }
+.stack-bar { display: flex; gap: 1px; height: 9px; overflow: hidden; border-radius: 999px; background: #e6edf4; }
+.stack-bar i { display: block; height: 100%; }
+.stack-legend { display: flex; flex-wrap: wrap; gap: 3px 12px; margin-top: 6px; color: var(--muted); font-size: 10px; font-weight: 700; }
+.stack-legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 5px; border-radius: 2px; background: var(--c); }
+.share-bar { height: 7px; margin-top: 6px; overflow: hidden; border-radius: 999px; background: #e6edf4; }
+.share-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+.podium-flush { padding: 10px; margin: 0; }
+.pod-bar { grid-column: 1 / -1; height: 6px; overflow: hidden; border-radius: 999px; background: rgba(0, 0, 0, .09); }
+.pod-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+.insight-strip {
+  margin-bottom: 10px;
+  padding: 11px 16px;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--accent);
+  border-radius: 14px;
+  background: linear-gradient(90deg, var(--accent-soft), #fff 70%);
+  color: #274357;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.insight-strip b { color: var(--ink); }
+.chip-tone { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 10px; font-weight: 800; white-space: nowrap; }
+.rank-title .chip-tone.hi { color: #4338ca; }
+.rank-title .chip-tone { align-self: flex-start; padding: 3px 10px; font-size: 10px; line-height: 1.4; }
+.chip-tone.hi { background: #e0e7ff; color: #4338ca; }
+.rank-title .chip-tone.ok, .chip-tone.ok { background: #d1fae5; color: #047857; }
+.rank-title .chip-tone.mid, .chip-tone.mid { background: #fef3c7; color: #92400e; }
+.rank-title .chip-tone.low, .chip-tone.low { background: #ffe4e1; color: #b42318; }
+.rank-bar span.tone-hi { background: linear-gradient(90deg, #6366f1, #ec4899); }
+.rank-bar span.tone-ok { background: linear-gradient(90deg, #10b981, #34d399); }
+.rank-bar span.tone-mid { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.rank-bar span.tone-low { background: linear-gradient(90deg, #f43f5e, #fb923c); }
+.lb-gap { color: var(--accent-dark); font-weight: 800; }
+.rank-title .name-line { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.rank-title .name-line .avatar { width: 28px; height: 28px; font-size: 10px; }
+.rank-main .stack-bar { margin-top: 8px; }
+.rank-main .stack-legend { margin-top: 5px; }
+.rank-meta { flex-wrap: wrap; }
+.rank-meta .pill { margin: 0 4px 0 0; }
+
+/* ---- action center ---- */
+.status-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 26px -22px rgba(6, 34, 58, .7);
+}
+.status-chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+.status-chip b { font-size: 15px; }
+.status-chip.need { background: var(--red-soft); color: var(--red); }
+.status-chip.near { background: var(--amber-soft); color: var(--amber); }
+.status-chip.track { background: var(--teal-soft); color: var(--teal-dark); }
+.status-chip.done { background: var(--green-soft); color: #047857; }
+.team-meter { flex: 1; min-width: 260px; margin-left: 8px; }
+.team-meter-head { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 6px; font-size: 11px; font-weight: 800; }
+.team-meter-head span:last-child { color: var(--muted); }
+.meter { position: relative; height: 11px; border-radius: 999px; background: #e6edf4; }
+.meter i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+.meter u { position: absolute; top: -4px; width: 3px; height: 19px; border-radius: 2px; background: #0b1f3a; }
+.act-card {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--accent);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 14px 26px -22px rgba(6, 34, 58, .8);
+}
+.act-card.st-need { border-left-color: #ef4444; }
+.act-card.st-near { border-left-color: #f59e0b; }
+.act-card.st-track { border-left-color: #0ea5c6; }
+.act-card.st-done { border-left-color: #10b981; }
+.act-head { display: flex; align-items: center; gap: 12px; }
+.act-who { flex: 1; min-width: 0; }
+.act-who strong { display: block; font-size: 14px; color: var(--ink); }
+.act-who small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; font-weight: 700; }
+.act-progress { display: flex; align-items: center; gap: 16px; margin: 12px 0 8px; }
+.act-nums { flex: 1; min-width: 0; }
+.act-main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.act-main strong { font-size: 21px; color: var(--ink); }
+.act-main small { color: var(--muted); font-size: 11px; font-weight: 700; }
+.act-nums .meter { margin-top: 10px; }
+.act-trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.act-trio div { padding: 7px 10px; border: 1px solid #e3ebf3; border-radius: 10px; background: #f6f9fc; }
+.act-trio span { display: block; color: var(--muted); font-size: 9.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.act-trio b { font-size: 13px; }
+.act-plan { margin-top: 10px; overflow: hidden; border: 1px solid #f2b6ab; border-radius: 12px; background: linear-gradient(180deg, #fff3f1, #fff); }
+.act-plan.plan-near { border-color: #f0d089; background: linear-gradient(180deg, #fffaef, #fff); }
+.act-plan.plan-track { border-color: #a9dcee; background: linear-gradient(180deg, #eff9fd, #fff); }
+.act-plan.plan-done { border-color: #a6e6cd; background: linear-gradient(180deg, #eefdf7, #fff); }
+.act-plan-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; background: rgba(255, 255, 255, .65); }
+.act-plan-head b { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; }
+.act-plan-head span { color: var(--muted); font-size: 10px; font-weight: 700; }
+.act-goal { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 10px 12px 4px; }
+.act-goal span { display: block; color: var(--muted); font-size: 9.5px; font-weight: 800; }
+.act-goal strong { display: block; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; }
+.act-steps { display: grid; gap: 6px; margin: 6px 12px 12px; padding: 0; list-style: none; counter-reset: step; }
+.act-steps li {
+  position: relative;
+  padding: 7px 10px 7px 40px;
+  border: 1px solid rgba(0, 0, 0, .05);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .85);
+  font-size: 11px;
+  line-height: 1.45;
+  counter-increment: step;
+}
+.act-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  transform: translateY(-50%);
+}
+.snap-top { display: flex; align-items: center; gap: 14px; padding: 12px; border: 1px solid #e3e8ef; border-radius: 12px; background: linear-gradient(135deg, var(--accent-soft), #fff); }
+.snap-top strong { display: block; font-size: 13px; }
+.snap-top span { display: block; margin-top: 2px; color: var(--muted); font-size: 10.5px; font-weight: 700; }
+.mini-bar-card { padding: 9px 11px; border: 1px solid #e3e8ef; border-radius: 10px; background: #fff; }
+.mini-bar-top { display: flex; justify-content: space-between; gap: 10px; }
+.mini-bar-top strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; }
+.mini-bar-top b { font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.mini-bar-card > span { display: block; margin-top: 5px; color: var(--muted); font-size: 10px; font-weight: 700; }
+
+/* ---- top campaign ---- */
+.camp-top { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr); gap: 10px; }
+.camp-mix { display: flex; align-items: center; gap: 18px; padding: 16px; }
+.donut { position: relative; flex: none; width: 124px; height: 124px; border-radius: 50%; }
+.donut::before { content: ""; position: absolute; inset: 26px; border-radius: 50%; background: #fff; }
+.donut b { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink); font-size: 11px; text-align: center; line-height: 1.25; }
+.mix-legend { display: grid; flex: 1; gap: 8px; min-width: 0; }
+.mix-item { display: flex; align-items: center; gap: 9px; }
+.mix-item i { flex: none; width: 12px; height: 12px; border-radius: 4px; }
+.mix-item div { flex: 1; min-width: 0; }
+.mix-item b { display: block; font-size: 11.5px; color: var(--ink); }
+.mix-item small { color: var(--muted); font-size: 10px; font-weight: 700; }
+.mix-item em { font-size: 12px; font-style: normal; font-weight: 800; }
+.camp-row { display: grid; grid-template-columns: 44px minmax(0, 1fr) 190px; gap: 14px; align-items: center; padding: 12px 14px; border: 1px solid #e3e8ef; border-radius: 14px; background: #fff; }
+.camp-rank { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; background: var(--accent-soft); color: var(--accent-dark); font-weight: 800; }
+.camp-title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.camp-title strong { font-size: 13px; color: var(--ink); }
+.camp-title .pill { margin: 0; }
+.camp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 7px 0 9px; }
+.camp-chips span { padding: 2px 9px; border-radius: 999px; background: #f1f5f9; color: #475467; font-size: 10px; font-weight: 800; }
+.camp-value { text-align: right; }
+.camp-value strong { display: block; font-size: 15px; font-variant-numeric: tabular-nums; }
+.camp-value span { color: var(--muted); font-size: 10px; font-weight: 700; }
+
+/* ---- spv ---- */
+.spv-who { display: flex; align-items: center; gap: 12px; }
+.spv-rank { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; font-size: 15px; font-weight: 800; }
+.spv-total { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+.spv-total strong { font-size: 17px; }
+.spv-mix { padding: 10px 12px 2px; background: #fbfcfd; }
+.spv-product-grid .spv-product-cell { border-top: 4px solid var(--pc, #94a3b8); }
+.spv-product-cell .share-bar { margin-top: 7px; height: 5px; }
+.pct-pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-weight: 800; }
+.pct-pill.hi { background: #e0e7ff; color: #4338ca; }
+.pct-pill.ok { background: #d1fae5; color: #047857; }
+.pct-pill.mid { background: #fef3c7; color: #92400e; }
+.pct-pill.low { background: #ffe4e1; color: #b42318; }
+
+/* ---- compare ---- */
+.compare-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 10px; padding: 10px 10px 0; }
+.cmp-card { position: relative; padding: 14px; border: 1px solid var(--line); border-top: 5px solid var(--cc, var(--accent)); border-radius: 16px; background: #fff; box-shadow: 0 14px 26px -22px rgba(6, 34, 58, .8); }
+.cmp-card.lead { border-color: #f0c24b; border-top-color: #e4a900; background: linear-gradient(160deg, #fff, #fff7d6); }
+.cmp-crown { position: absolute; right: 12px; top: 12px; padding: 2px 10px; border-radius: 999px; background: #c99600; color: #fff; font-size: 9.5px; font-weight: 800; letter-spacing: .05em; }
+.cmp-top { display: flex; align-items: center; gap: 10px; }
+.cmp-top strong { display: block; font-size: 14px; }
+.cmp-top small { display: block; margin-top: 1px; color: var(--muted); font-size: 10px; font-weight: 700; }
+.cmp-top .avatar { background: var(--cc, var(--accent)); }
+.cmp-revenue { margin: 10px 0 8px; font-size: 21px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.cmp-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 9px; }
+.cmp-stats div { padding: 6px 8px; border-radius: 9px; background: #f6f9fc; }
+.cmp-stats span { display: block; color: var(--muted); font-size: 9px; font-weight: 800; text-transform: uppercase; }
+.cmp-stats b { font-size: 12px; }
+.cmp-diff { margin-top: 9px; font-size: 11px; font-weight: 800; }
+.cmp-diff.up { color: #047857; }
+.cmp-diff.down { color: #b42318; }
+.mini-bar-row > span { color: #36739a; }
+
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
   .divider { height: 1px; border-left: 0; border-top: 1px solid var(--line); }
@@ -1989,6 +2197,12 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
   .trend-grid { grid-template-columns: 1fr; }
   .trend-plan-list { grid-template-columns: 1fr; }
   .inc-podium { grid-template-columns: 1fr; }
+  .camp-top { grid-template-columns: 1fr; }
+  .camp-row { grid-template-columns: 38px minmax(0, 1fr); }
+  .camp-value { grid-column: 2; text-align: left; }
+  .act-goal { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .act-progress { flex-direction: column; align-items: flex-start; }
+  .act-trio { grid-template-columns: 1fr; }
   .leader-summary { grid-template-columns: 26px 38px minmax(120px, 1fr) 74px 110px; }
   .leader-chips { display: none; }
 }
@@ -2164,7 +2378,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       <div class="leaderboard-hero action-hero">
         <div>
           <p class="eyebrow">DAILY OPERATING VIEW</p>
-          <h2>Action Center Tim Arif Pambudi</h2>
+          <h2 id="actionHeroTitle">Action Center Tim Arif Pambudi</h2>
           <p>Halaman action harian untuk agent: lihat gap, transaksi yang dibutuhkan, dan fokus kerja hari ini.</p>
         </div>
         <div class="hero-number">
@@ -2178,18 +2392,27 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
           <select id="actionMonthFilter"></select>
         </div>
         <div class="field">
-          <label for="actionWeekFilter">Week</label>
+          <label for="actionWeekFilter">Week (satu week per tampilan)</label>
           <select id="actionWeekFilter"></select>
+        </div>
+        <div class="field">
+          <label>Coach</label>
+          <div id="actionCoachFilter"></div>
         </div>
         <div class="field">
           <label>Agent</label>
           <div id="actionAgentFilter"></div>
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <div id="actionStatusFilter"></div>
         </div>
         <div class="field grow">
           <label for="actionSearchFilter">Cari agent</label>
           <input id="actionSearchFilter" type="search" placeholder="Ketik nama...">
         </div>
       </div>
+      <div id="actionStatusStrip" class="status-strip"></div>
       <div class="kpi-grid action-kpis">
         <article class="kpi"><span>Need Push</span><strong id="actionNeedPushKpi">0</strong><small>TH di bawah minimum</small></article>
         <article class="kpi"><span>Near Incentive</span><strong id="actionNearKpi">0</strong><small>Mendekati minimum TH</small></article>
@@ -2244,7 +2467,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
         <div>
           <p class="eyebrow">WEEKLY CAMPAIGN SIGNAL</p>
           <h2>Top Campaign</h2>
-          <p>Campaign terbaik per minggu berdasarkan revenue dan transaksi supaya agent tahu fokus kerja yang paling menjanjikan.</p>
+          <p>Campaign terbaik berdasarkan revenue dan transaksi, supaya agent tahu fokus kerja yang paling menjanjikan.</p>
         </div>
         <div class="hero-number">
           <span>Total Revenue</span>
@@ -2253,26 +2476,34 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       </div>
       <div class="filters">
         <div class="field">
-          <label for="topCampaignMonth">Bulan</label>
-          <select id="topCampaignMonth"></select>
+          <label>Bulan</label>
+          <div id="topCampaignMonth"></div>
         </div>
         <div class="field">
-          <label for="topCampaignWeek">Week</label>
-          <select id="topCampaignWeek"></select>
+          <label>Week</label>
+          <div id="topCampaignWeek"></div>
         </div>
         <div class="field">
-          <label for="topCampaignCoach">Coach / Leader</label>
+          <label>Layer</label>
+          <div id="topCampaignLayer"></div>
+        </div>
+        <div class="field">
+          <label>Coach / Leader</label>
           <div id="topCampaignCoach"></div>
         </div>
         <div class="field">
-          <label for="topCampaignAgent">Agent</label>
+          <label>Agent</label>
           <div id="topCampaignAgent"></div>
         </div>
         <div class="field">
-          <label for="topCampaignSort">Sort by</label>
+          <label>Produk</label>
+          <div id="topCampaignProduct"></div>
+        </div>
+        <div class="field">
+          <label for="topCampaignSort">Urutkan</label>
           <select id="topCampaignSort">
             <option value="revenue">Revenue</option>
-            <option value="txn">Txn</option>
+            <option value="txn">Jumlah transaksi</option>
           </select>
         </div>
         <div class="field grow">
@@ -2282,9 +2513,30 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       </div>
       <div class="kpi-grid leaderboard-kpis">
         <article class="kpi"><span>Campaign aktif</span><strong id="topCampaignCountKpi">0</strong><small id="topCampaignWeekNote">Weekly</small></article>
-        <article class="kpi"><span>Total transaksi</span><strong id="topCampaignTxnKpi">0</strong><small>Semua layer / coach</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="topCampaignTxnKpi">0</strong><small>Sesuai filter aktif</small></article>
         <article class="kpi"><span>Top campaign</span><strong id="topCampaignNameKpi">-</strong><small id="topCampaignRevenueKpi">Rp0</small></article>
         <article class="kpi"><span>Txn top campaign</span><strong id="topCampaignAovKpi">0</strong><small>Jumlah transaksi campaign #1</small></article>
+      </div>
+      <div id="campInsight" class="insight-strip"></div>
+      <div class="camp-top">
+        <section class="table-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Top 3 Campaign</h2>
+              <p>Paling layak difokuskan agent</p>
+            </div>
+          </div>
+          <div id="topCampaignPodium" class="inc-podium podium-flush"></div>
+        </section>
+        <section class="table-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Komposisi Jenis Campaign</h2>
+              <p>Share revenue per jenis</p>
+            </div>
+          </div>
+          <div id="campMix" class="camp-mix"></div>
+        </section>
       </div>
       <section class="table-panel leaderboard-panel">
         <div class="panel-heading">
@@ -2381,7 +2633,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
         <div>
           <p class="eyebrow">MONTHLY RACE</p>
           <h2>Revenue Leaderboard</h2>
-          <p>Total revenue coach per bulan, bisa difilter per layer termasuk S2S.</p>
+          <p>Peringkat coach berdasarkan total revenue, lengkap dengan progres ke target dan selisih ke peringkat di atasnya.</p>
         </div>
         <div class="hero-number">
           <span>Total Revenue</span>
@@ -2391,21 +2643,20 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 
       <div class="filters">
         <div class="field">
-          <label for="leaderboardMonthFilter">Bulan</label>
-          <select id="leaderboardMonthFilter"></select>
+          <label>Bulan</label>
+          <div id="leaderboardMonthFilter"></div>
         </div>
         <div class="field">
-          <label for="leaderboardWeekFilter">Week</label>
-          <select id="leaderboardWeekFilter"></select>
+          <label>Week</label>
+          <div id="leaderboardWeekFilter"></div>
         </div>
         <div class="field">
-          <label for="leaderboardLayerFilter">Layer</label>
-          <select id="leaderboardLayerFilter">
-            <option value="all">Semua layer</option>
-            <option value="S2S">S2S</option>
-            <option value="Layer 1">Layer 1</option>
-            <option value="Layer 2">Layer 2</option>
-          </select>
+          <label>Layer</label>
+          <div id="leaderboardLayerFilter"></div>
+        </div>
+        <div class="field">
+          <label>Coach</label>
+          <div id="leaderboardCoachFilter"></div>
         </div>
       </div>
 
@@ -2416,11 +2667,13 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
         <article class="kpi"><span>Total to target</span><strong id="leaderboardTotalToTargetKpi">0%</strong><small id="leaderboardTargetNote">Target bulan terpilih</small></article>
       </div>
 
+      <div id="leaderboardPodium" class="inc-podium" hidden></div>
+
       <section class="table-panel leaderboard-panel">
         <div class="panel-heading">
           <div>
             <h2>Ranking Coach</h2>
-            <p>Revenue tertinggi menjadi posisi teratas</p>
+            <p>Klik nama coach untuk melihat persebaran produk</p>
           </div>
           <span id="leaderboardCount" class="count-chip">0 coach</span>
         </div>
@@ -2433,7 +2686,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
         <div>
           <p class="eyebrow">LAYER 1 RACE</p>
           <h2>Agent Leaderboard</h2>
-          <p>Ranking agent Layer 1 berdasarkan revenue, tersedia weekly dan monthly.</p>
+          <p>Ranking agent Layer 1 berdasarkan revenue. Pilih Monthly untuk bulan, atau Weekly untuk satu atau beberapa week.</p>
         </div>
         <div class="hero-number">
           <span>Total Revenue</span>
@@ -2443,8 +2696,8 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 
       <div class="filters">
         <div class="field">
-          <label for="agentLeaderboardMonth">Bulan</label>
-          <select id="agentLeaderboardMonth"></select>
+          <label>Bulan</label>
+          <div id="agentLeaderboardMonth"></div>
         </div>
         <div class="field">
           <label for="agentLeaderboardMode">Mode</label>
@@ -2454,11 +2707,11 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
           </select>
         </div>
         <div class="field">
-          <label for="agentLeaderboardWeek">Week</label>
-          <select id="agentLeaderboardWeek"></select>
+          <label>Week (mode Weekly)</label>
+          <div id="agentLeaderboardWeek"></div>
         </div>
         <div class="field">
-          <label for="agentLeaderboardCoach">Coach</label>
+          <label>Coach</label>
           <div id="agentLeaderboardCoach"></div>
         </div>
         <div class="field">
@@ -2477,6 +2730,8 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
         <article class="kpi"><span>Top agent</span><strong id="agentLeaderboardTopAgentKpi">-</strong><small id="agentLeaderboardTopRevenueKpi">Rp0</small></article>
         <article class="kpi"><span>Total to target</span><strong id="agentLeaderboardTotalToTargetKpi">0%</strong><small>Target Layer 1</small></article>
       </div>
+
+      <div id="agentLeaderboardPodium" class="inc-podium" hidden></div>
 
       <section class="table-panel leaderboard-panel">
         <div class="panel-heading">
@@ -2504,12 +2759,24 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       </div>
       <div class="filters">
         <div class="field">
-          <label for="spvMonthFilter">Bulan</label>
-          <select id="spvMonthFilter"></select>
+          <label>Bulan</label>
+          <div id="spvMonthFilter"></div>
         </div>
         <div class="field">
-          <label for="spvWeekFilter">Week</label>
-          <select id="spvWeekFilter"></select>
+          <label>Week</label>
+          <div id="spvWeekFilter"></div>
+        </div>
+        <div class="field">
+          <label>SPV</label>
+          <div id="spvSpvFilter"></div>
+        </div>
+        <div class="field">
+          <label>Coach / Leader</label>
+          <div id="spvCoachFilter"></div>
+        </div>
+        <div class="field">
+          <label>Agent</label>
+          <div id="spvAgentFilter"></div>
         </div>
       </div>
       <div class="kpi-grid leaderboard-kpis">
@@ -2535,7 +2802,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
         <div>
           <p class="eyebrow">TEAM COMPARISON</p>
           <h2>Arif Pambudi vs Coach Pembanding</h2>
-          <p>Bandingkan ranking 1-12 agent tim Arif Pambudi dengan tim coach lain.</p>
+          <p>Bandingkan tim Arif Pambudi dengan satu atau beberapa tim coach lain: revenue, pencapaian target, dan ranking 12 agent teratas.</p>
         </div>
         <div class="hero-number">
           <span>Total Revenue</span>
@@ -2544,8 +2811,8 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       </div>
       <div class="filters">
         <div class="field">
-          <label for="compareMonth">Bulan</label>
-          <select id="compareMonth"></select>
+          <label>Bulan</label>
+          <div id="compareMonth"></div>
         </div>
         <div class="field">
           <label for="compareMode">Mode</label>
@@ -2555,11 +2822,11 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
           </select>
         </div>
         <div class="field">
-          <label for="compareWeek">Week</label>
-          <select id="compareWeek"></select>
+          <label>Week (mode Weekly)</label>
+          <div id="compareWeek"></div>
         </div>
         <div class="field">
-          <label for="compareCoach">Compare dengan</label>
+          <label>Compare dengan</label>
           <div id="compareCoach"></div>
         </div>
         <div class="field grow">
@@ -2576,11 +2843,12 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       <section class="table-panel leaderboard-panel">
         <div class="panel-heading">
           <div>
-            <h2>Comparison Ranking</h2>
+            <h2>Adu Tim</h2>
             <p id="compareCaption">Monthly</p>
           </div>
           <span id="compareCount" class="count-chip">0 agent</span>
         </div>
+        <div id="compareSummary" class="compare-summary"></div>
         <div id="compareList" class="leaderboard-list compare-grid"></div>
       </section>
     </section>
@@ -3080,6 +3348,13 @@ function closeMulti(id) {
   root.querySelector(".multi-btn").setAttribute("aria-expanded", "false");
 }
 
+function setMultiDisabled(id, disabled) {
+  const root = el(id);
+  root.classList.toggle("is-disabled", disabled);
+  root.querySelector(".multi-btn").disabled = disabled;
+  if (disabled) closeMulti(id);
+}
+
 function toggleMulti(id) {
   const panel = el(id).querySelector(".multi-panel");
   if (panel.hidden) openMulti(id); else closeMulti(id);
@@ -3393,6 +3668,12 @@ function loadRows(rows, sheetName, targetSheetRows = []) {
   targetRows = normalizeTargetRows(targetSheetRows);
   console.info(`Loaded ${targetRows.length.toLocaleString("id-ID")} target rows from TARGET AGENT.`);
   const normalized = normalizeRows(rows);
+  normalized.forEach(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    row.week = week.name;
+    row.month = week.month;
+    row.product = productBucket(row);
+  });
   allTransactionRows = normalized;
   layerOneRows = normalized.filter(row => row.team.toLowerCase() === "layer 1");
   summary = calculate(layerOneRows);
@@ -3409,10 +3690,10 @@ function prepareDashboard(sheetName, rawCount) {
   el("dataStatus").textContent = `Update ${formatUpdateTime(new Date())}`;
   el("dataStatus").classList.add("ready");
   const months = availableMonths();
-  ["actionMonthFilter", "topCampaignMonth", "leaderboardMonthFilter", "agentLeaderboardMonth", "compareMonth", "trendMonthFilter"].forEach(id => {
+  ["actionMonthFilter", "trendMonthFilter"].forEach(id => {
     el(id).innerHTML = monthOptions(months);
   });
-  el("spvMonthFilter").innerHTML = monthOptions(months);
+  ["topCampaignMonth", "leaderboardMonthFilter", "agentLeaderboardMonth", "compareMonth", "spvMonthFilter"].forEach(id => setMultiOptions(id, months));
   setMultiOptions("monthFilter", months);
   setMultiOptions("dodolanMonthFilter", months);
   syncWeekMulti("weekFilter", "monthFilter");
@@ -3420,12 +3701,14 @@ function prepareDashboard(sheetName, rawCount) {
   setMultiOptions("statusFilter", [{ value: "eligible", label: "Cair" }, { value: "not-eligible", label: "Belum cair" }]);
   setMultiOptions("dodolanCampaignFilter", [...new Set(dodolanRows.map(row => row.campaign))].sort((a, b) => a.localeCompare(b)));
   setMultiOptions("dodolanProductFilter", [...new Set(dodolanRows.map(row => row.product))].sort((a, b) => a.localeCompare(b)));
-  syncWeekOptions("leaderboardWeekFilter", "all", true);
-  syncWeekOptions("topCampaignWeek", "all", true);
-  syncWeekOptions("spvWeekFilter", "all", true);
-  syncWeekOptions("agentLeaderboardWeek", "all", false);
-  syncWeekOptions("compareWeek", "all", false);
+  syncWeekMulti("leaderboardWeekFilter", "leaderboardMonthFilter");
+  syncWeekMulti("topCampaignWeek", "topCampaignMonth");
+  syncWeekMulti("spvWeekFilter", "spvMonthFilter");
+  syncWeekMulti("agentLeaderboardWeek", "agentLeaderboardMonth");
+  syncWeekMulti("compareWeek", "compareMonth");
   syncWeekOptions("actionWeekFilter", "all", false);
+  const startWeek = latestActiveWeek();
+  if (startWeek && [...el("actionWeekFilter").options].some(option => option.value === startWeek)) el("actionWeekFilter").value = startWeek;
   const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   const allLeaders = [...new Set(allTransactionRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   const byName = (a, b) => a.localeCompare(b);
@@ -3445,7 +3728,16 @@ function prepareDashboard(sheetName, rawCount) {
   syncAgentMulti("agentLeaderboardAgent", layerOneRows, "agentLeaderboardCoach");
   syncTrendAgentOptions();
   populateTrendRange();
-  setMultiOptions("actionAgentFilter", [...new Set(layerOneRows.filter(row => (row.leader || "").trim().toLowerCase() === "arif pambudi").map(row => row.agent))].sort(byName));
+  setMultiOptions("actionCoachFilter", layerOneLeaders);
+  if (arifName && !getMulti("actionCoachFilter").length) setMultiSelected("actionCoachFilter", [arifName]);
+  syncAgentMulti("actionAgentFilter", layerOneRows, "actionCoachFilter");
+  setMultiOptions("actionStatusFilter", ACTION_STATUS_OPTIONS);
+  setMultiOptions("topCampaignLayer", [...new Set(allTransactionRows.map(row => row.team).filter(Boolean))].sort(byName));
+  setMultiOptions("topCampaignProduct", [...new Set(allTransactionRows.map(row => row.product))].sort(byName));
+  setMultiOptions("leaderboardLayerFilter", Object.keys(LEADERBOARD_WEEKLY_TARGETS));
+  setMultiOptions("leaderboardCoachFilter", [...new Set(leaderboardRows.filter(row => LEADERBOARD_WEEKLY_TARGETS[row.team]).map(row => row.leader || "-"))].sort(byName));
+  setMultiOptions("spvSpvFilter", SPV_ORDER);
+  syncSpvFilters();
   updateTopCampaignAgentOptions();
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
   render();
@@ -3822,7 +4114,7 @@ function paceInfo(row, daysPassed) {
   return { key: "behind", label: `Di bawah pace - seharusnya sudah ${rupiah(expectedByNow)} sampai hari ini` };
 }
 
-function aggregateActionAgents(rows, selectedWeek) {
+function aggregateActionAgents(rows, selectedWeek, roster = []) {
   const byAgent = new Map();
   const selectedWeekMeta = WEEK_PERIODS.find(week => week.name === selectedWeek);
   rows.forEach(row => {
@@ -3839,6 +4131,10 @@ function aggregateActionAgents(rows, selectedWeek) {
     item.txn += 1;
     item.products[product] = (item.products[product] || 0) + row.revenue;
     item.campaigns[campaign] = (item.campaigns[campaign] || 0) + row.revenue;
+  });
+  roster.forEach(member => {
+    const key = member.agent.toLowerCase();
+    if (!byAgent.has(key)) byAgent.set(key, { agent: member.agent, leader: member.leader || "-", revenue: 0, txn: 0, products: {}, campaigns: {} });
   });
   return [...byAgent.values()].map(row => {
     row.week = selectedWeek;
@@ -3864,7 +4160,60 @@ function aggregateActionAgents(rows, selectedWeek) {
   });
 }
 
-function renderMiniAggregate(elementId, rows, keyFn, limit) {
+const FAMILY_COLORS = { BAON: "#18bfe8", "Ruangguru Private": "#367ff0", Ruangbelajar: "#16c995", "Brain Academy": "#ff9f2f", Others: "#94a3b8" };
+const TONE_COLORS = { hi: "#6366f1", ok: "#10b981", mid: "#f59e0b", low: "#f43f5e" };
+const TONE_LABELS = { hi: "Target tercapai", ok: "Di jalur", mid: "Perlu dorong", low: "Tertinggal" };
+const ACTION_STATUS_OPTIONS = [
+  { value: "need", label: "Need Push" }, { value: "near", label: "Near Incentive" },
+  { value: "track", label: "On Track" }, { value: "done", label: "Over Target" },
+];
+
+function toneFor(pct, minimum = 0.5) { return pct >= 1 ? "hi" : pct >= minimum ? "ok" : pct >= 0.3 ? "mid" : "low"; }
+
+function ringHtml(pct, color, size = 58) {
+  const p = Math.min(100, Math.max(0, (pct || 0) * 100));
+  return `<div class="ring" style="--p:${p.toFixed(1)};--rc:${color};width:${size}px;height:${size}px"><b>${Math.round((pct || 0) * 100)}%</b></div>`;
+}
+
+function stackBar(parts) {
+  const total = parts.reduce((sum, part) => sum + part.value, 0) || 1;
+  return `<div class="stack-bar">${parts.filter(part => part.value > 0).map(part => `<i style="width:${(part.value / total * 100).toFixed(1)}%;background:${part.color}" title="${escapeHtml(part.key)} ${percent(part.value / total)}"></i>`).join("")}</div>`;
+}
+
+function stackLegend(parts, limit = 4) {
+  const total = parts.reduce((sum, part) => sum + part.value, 0) || 1;
+  return `<div class="stack-legend">${parts.filter(part => part.value > 0).slice(0, limit).map(part => `<span style="--c:${part.color}">${escapeHtml(part.key)} ${percent(part.value / total)}</span>`).join("")}</div>`;
+}
+
+function podiumHtml(items) {
+  return items.slice(0, 3).map((item, index) => `
+    <article class="podium-card pod-${index + 1}">
+      <span class="pod-medal">${index + 1}</span>
+      <div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.sub)}</small></div>
+      <div class="pod-amount">${item.value}<small>${escapeHtml(item.valueSub)}</small></div>
+      ${item.pct === undefined ? "" : `<div class="pod-bar"><i style="width:${Math.min(100, Math.max(3, item.pct * 100))}%"></i></div>`}
+    </article>
+  `).join("");
+}
+
+function targetWeeksForMonths(monthSet) {
+  return WEEK_PERIODS.filter(week => matchMulti(monthSet, week.month)).map(week => week.name);
+}
+
+function latestActiveWeek(monthSet = new Set()) {
+  const currentWeekNum = getISOWeekNumber(new Date());
+  const weeks = availableWeeks("all").filter(name => matchMulti(monthSet, WEEK_PERIODS.find(week => week.name === name)?.month));
+  const notFuture = weeks.filter(name => (WEEK_PERIODS.find(week => week.name === name)?.weekNum || 0) <= currentWeekNum);
+  return (notFuture.length ? notFuture : weeks).slice(-1)[0] || "";
+}
+
+function periodLabel(monthId, weekId, fallback = "Semua bulan") {
+  if (getMulti(weekId).length) return multiText(weekId, "");
+  if (getMulti(monthId).length) return multiText(monthId, "");
+  return fallback;
+}
+
+function renderMiniAggregate(elementId, rows, keyFn, limit, colorFn) {
   const groups = new Map();
   rows.forEach(row => {
     const key = keyFn(row);
@@ -3874,105 +4223,143 @@ function renderMiniAggregate(elementId, rows, keyFn, limit) {
     item.txn += 1;
   });
   const list = [...groups.values()].sort((a, b) => b.revenue - a.revenue).slice(0, limit);
+  const max = Math.max(...list.map(row => row.revenue), 1);
   el(elementId).innerHTML = list.map(row => `
-    <div class="mini-row">
-      <div><strong>${escapeHtml(row.key)}</strong><span>${row.txn.toLocaleString("id-ID")} TXN - AOV ${rupiah(row.revenue / row.txn)}</span></div>
-      <div class="mini-value">${rupiah(row.revenue)}</div>
+    <div class="mini-bar-card">
+      <div class="mini-bar-top"><strong>${escapeHtml(row.key)}</strong><b>${rupiah(row.revenue)}</b></div>
+      <div class="share-bar"><i style="width:${Math.max(4, row.revenue / max * 100)}%;background:${colorFn(row.key)}"></i></div>
+      <span>${row.txn.toLocaleString("id-ID")} TXN - AOV ${rupiah(row.revenue / row.txn)}</span>
     </div>
   `).join("") || `<div class="detail-empty">Tidak ada data.</div>`;
 }
 
+function actionCardHtml(row, ctx) {
+  const { daysLeft, daysPassed, isPast, minimum } = ctx;
+  const tone = row.th >= 1 ? "hi" : row.status.key === "track" ? "ok" : row.status.key === "near" ? "mid" : "low";
+  const runRate = row.revenue / Math.max(1, daysPassed);
+  const projected = runRate * 6;
+  const expectedPct = isPast ? 0 : Math.min(1, daysPassed / 6);
+  const plan = tomorrowPlan(row, daysLeft);
+  const pace = isPast ? null : paceInfo(row, daysPassed);
+  const eligible = row.th >= minimum;
+  const barWidth = Math.min(100, Math.max(2, row.th * 100));
+  let planHtml;
+  if (isPast) {
+    const need = Math.max(0, row.target * minimum - row.revenue);
+    planHtml = `
+      <div class="act-plan ${eligible ? "plan-done" : "plan-need"}">
+        <div class="act-plan-head"><b>Hasil akhir ${escapeHtml(row.week)}</b><span>Week sudah selesai</span></div>
+        <div class="act-goal">
+          <div><span>Status</span><strong>${eligible ? "Incentive cair" : "Belum cair"}</strong></div>
+          <div><span>Revenue</span><strong>${rupiah(row.revenue)}</strong></div>
+          <div><span>TH akhir</span><strong>${percent(row.th)}</strong></div>
+          <div><span>${eligible ? "Minimum TH" : "Kurang ke minimum"}</span><strong>${eligible ? percent(minimum) : rupiah(need)}</strong></div>
+        </div>
+        <ul class="act-steps">
+          <li>Campaign yang paling sering closing: <b>${escapeHtml(row.historyCampaign)}</b></li>
+          <li>Produk andalan: <b>${escapeHtml(row.historyProduct)}</b> dengan ARPU acuan ${rupiah(plan.arpu)}</li>
+        </ul>
+      </div>`;
+  } else {
+    const goals = row.th >= 1
+      ? [["Status", "Target tercapai"], ["Est. incentive / TXN baru", rupiah(row.upsideIncentive)], ["ARPU acuan", rupiah(plan.arpu)], ["TH saat ini", percent(row.th)]]
+      : [["Target revenue besok", rupiah(plan.dailyNeed)], ["Transaksi dibutuhkan", plan.neededTxn ? `${plan.neededTxn} TXN` : "-"], ["ARPU acuan", rupiah(plan.arpu)], ["Jika tercapai, TH jadi", percent(plan.projectedTh)]];
+    planHtml = `
+      <div class="act-plan plan-${row.status.key}">
+        <div class="act-plan-head"><b>${row.th >= 1 ? "Jaga momentum" : "Rencana Besok"}</b><span>${daysLeft <= 1 ? "Hari terakhir week ini" : `${Math.max(1, Math.round(daysLeft - 1))} hari kerja setelah ini`}</span></div>
+        <div class="act-goal">${goals.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</div>
+        <ol class="act-steps">${plan.checklist.map(item => `<li>${item}</li>`).join("")}</ol>
+      </div>`;
+  }
+  return `
+    <article class="act-card st-${row.status.key}">
+      <div class="act-head">
+        <span class="avatar av-${avatarTone(row.agent)}">${escapeHtml(initialsOf(row.agent))}</span>
+        <div class="act-who"><strong>${escapeHtml(row.agent)}</strong><small>${escapeHtml(row.leader || "-")} - ${row.txn.toLocaleString("id-ID")} TXN - AOV ${rupiah(row.aov)}</small></div>
+        <span class="action-status ${row.status.key}">${row.status.label}</span>
+      </div>
+      <div class="act-progress">
+        ${ringHtml(row.th, TONE_COLORS[tone], 70)}
+        <div class="act-nums">
+          <div class="act-main"><strong>${rupiah(row.revenue)}</strong><small>dari target ${rupiah(row.target)}</small></div>
+          <div class="meter"><i style="width:${barWidth}%"></i>${isPast ? "" : `<u style="left:calc(${(expectedPct * 100).toFixed(1)}% - 1px)" title="Posisi ideal hari ini"></u>`}</div>
+          <div class="act-trio">
+            <div><span>${isPast ? "Selisih ke target" : "Sisa gap"}</span><b>${rupiah(row.gap)}</b></div>
+            <div><span>${isPast ? "Rata-rata / hari" : "Run rate"}</span><b>${rupiah(runRate)}/hari</b></div>
+            <div><span>${isPast ? "TXN" : "Proyeksi akhir week"}</span><b>${isPast ? row.txn.toLocaleString("id-ID") : rupiah(projected)}</b></div>
+          </div>
+        </div>
+      </div>
+      ${pace ? `<div class="pace-note pace-${pace.key}">${pace.label}</div>` : ""}
+      ${planHtml}
+    </article>`;
+}
+
 function renderActionCenter() {
-  const selectedMonth = el("actionMonthFilter").value;
   const selectedWeek = el("actionWeekFilter").value;
   const query = el("actionSearchFilter").value.trim().toLowerCase();
+  const coachSet = getMultiSet("actionCoachFilter");
+  const agentSet = getMultiSet("actionAgentFilter");
+  const statusSet = getMultiSet("actionStatusFilter");
+  const weekMeta = WEEK_PERIODS.find(week => week.name === selectedWeek);
+  const isPast = weekMeta ? weekMeta.weekNum < getISOWeekNumber(new Date()) : false;
+  const minimum = weekMeta?.minimum || 0.5;
   const daysLeft = weekDaysLeft(selectedWeek);
   const daysPassed = weekDaysPassed(selectedWeek);
-  const arifRows = layerOneRows.filter(row => {
-    const month = weekFor(row.weekName, row.weekNum)?.month;
-    return (selectedMonth === "all" || month === selectedMonth) && (row.leader || "").trim().toLowerCase() === "arif pambudi";
-  });
-  const actionAgentSet = getMultiSet("actionAgentFilter");
-  const agents = aggregateActionAgents(arifRows, selectedWeek).filter(row =>
-    matchMulti(actionAgentSet, row.agent) &&
-    (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
+  const coachLabel = multiText("actionCoachFilter", "Semua coach");
+  const scopeRows = layerOneRows.filter(row => matchMulti(coachSet, row.leader || "-"));
+  const roster = targetRows
+    .filter(row => row.team === "Layer 1" && row.week === selectedWeek && matchMulti(coachSet, row.leader || "-"))
+    .map(row => ({ agent: row.agent, leader: row.leader }));
+  const everyone = aggregateActionAgents(scopeRows, selectedWeek, roster).filter(row =>
+    matchMulti(agentSet, row.agent) && (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
   );
+  const agents = everyone.filter(row => statusSet.size === 0 || statusSet.has(row.status.key));
   const openAgents = agents.filter(row => row.gap > 0);
-  const totalGap = openAgents.reduce((sum, row) => sum + row.gap, 0);
-  const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
-  const target = agents.reduce((sum, row) => sum + row.target, 0) || weeklyTargetForWeek(WEEK_PERIODS.find(week => week.name === selectedWeek)) * Math.max(1, agents.length);
-  const nextAction = openAgents[0];
+  const totalGap = everyone.filter(row => row.gap > 0).reduce((sum, row) => sum + row.gap, 0);
+  const totalRevenue = everyone.reduce((sum, row) => sum + row.revenue, 0);
+  const target = everyone.reduce((sum, row) => sum + row.target, 0);
+  const nextAction = everyone.find(row => row.gap > 0);
   const projectedRevenue = totalRevenue / Math.max(1, daysPassed) * 6;
   const teamRunRate = totalRevenue / Math.max(1, daysPassed);
+  const teamPct = target ? totalRevenue / target : 0;
+  const counts = { need: 0, near: 0, track: 0, done: 0 };
+  everyone.forEach(row => { counts[row.status.key] += 1; });
 
+  el("actionHeroTitle").textContent = `Action Center Tim ${coachLabel}`;
   el("actionTotalGap").textContent = rupiah(totalGap);
-  el("actionNeedPushKpi").textContent = agents.filter(row => row.status.key === "need").length.toLocaleString("id-ID");
-  el("actionNearKpi").textContent = agents.filter(row => row.status.key === "near").length.toLocaleString("id-ID");
-  el("actionDailyNeedKpi").textContent = rupiah(totalGap / daysLeft);
+  el("actionNeedPushKpi").textContent = counts.need.toLocaleString("id-ID");
+  el("actionNearKpi").textContent = counts.near.toLocaleString("id-ID");
+  el("actionDailyNeedKpi").textContent = isPast ? "-" : rupiah(totalGap / daysLeft);
   el("actionTopCoachKpi").textContent = nextAction ? nextAction.agent : "Semua aman";
   el("actionTopCoachGap").textContent = nextAction ? `Next action - ${rupiah(nextAction.gap)} gap` : "Tidak ada gap";
   el("actionAgentCount").textContent = `${agents.length} agent`;
-  el("actionAgentCaption").textContent = `Tim Arif Pambudi - ${selectedWeek} - ${daysLeft} hari kerja tersisa`;
+  el("actionAgentCaption").textContent = isPast
+    ? `${coachLabel} - ${selectedWeek} - week sudah selesai (hasil akhir)`
+    : `${coachLabel} - ${selectedWeek} - ${daysLeft} hari kerja tersisa`;
 
-  el("actionAgentList").innerHTML = agents.map(row => {
-    const width = Math.min(100, Math.max(4, row.th * 100));
-    const runRate = row.revenue / Math.max(1, daysPassed);
-    const projected = runRate * 6;
-    const plan = tomorrowPlan(row, daysLeft);
-    const pace = paceInfo(row, daysPassed);
-    const neededTxnLabel = plan.neededTxn ? `${plan.neededTxn} TXN` : "Sudah 100%";
-    return `
-      <article class="action-agent-card simple-action-card st-${row.status.key}">
-        <div>
-          <div class="action-agent-head">
-            <div><strong>${escapeHtml(row.agent)}</strong><span>Tim Arif Pambudi</span></div>
-            <span class="action-status ${row.status.key}">${row.status.label}</span>
-          </div>
-          <div class="action-readout">
-            <div><span>Revenue</span><strong>${rupiah(row.revenue)}</strong></div>
-            <div><span>Target</span><strong>${rupiah(row.target)}</strong></div>
-            <div><span>Gap</span><strong>${rupiah(row.gap)}</strong></div>
-            <div><span>TH</span><strong>${percent(row.th)}</strong></div>
-            <div><span>Run rate</span><strong>${rupiah(runRate)}/hari</strong></div>
-            <div><span>Proyeksi akhir week</span><strong>${rupiah(projected)}</strong></div>
-          </div>
-          <div class="rank-bar"><span style="width:${width}%"></span></div>
-          ${pace ? `<div class="pace-note pace-${pace.key}">${pace.label}</div>` : ""}
+  el("actionStatusStrip").innerHTML = `
+    <span class="status-chip need"><b>${counts.need}</b> Need Push</span>
+    <span class="status-chip near"><b>${counts.near}</b> Near Incentive</span>
+    <span class="status-chip track"><b>${counts.track}</b> On Track</span>
+    <span class="status-chip done"><b>${counts.done}</b> Over Target</span>
+    <div class="team-meter">
+      <div class="team-meter-head"><span>Pencapaian tim ${percent(teamPct)}</span><span>${rupiah(totalRevenue)} / ${rupiah(target)}</span></div>
+      <div class="meter"><i style="width:${Math.min(100, Math.max(1, teamPct * 100))}%"></i>${isPast ? "" : `<u style="left:calc(${(Math.min(1, daysPassed / 6) * 100).toFixed(1)}% - 1px)" title="Posisi ideal hari ini"></u>`}</div>
+    </div>`;
 
-          <div class="tomorrow-plan-box plan-${row.status.key}">
-            <div class="tomorrow-plan-head">
-              <strong>Rencana Besok</strong>
-              <span>${daysLeft <= 1 ? "Hari terakhir week ini" : `${Math.max(1, Math.round(daysLeft - 1))} hari kerja setelah ini`}</span>
-            </div>
-            <div class="tomorrow-plan-grid">
-              <div><span>Target revenue besok</span><strong>${rupiah(plan.dailyNeed)}</strong></div>
-              <div><span>Transaksi dibutuhkan</span><strong>${neededTxnLabel}</strong></div>
-              <div><span>ARPU acuan</span><strong>${rupiah(plan.arpu)}</strong></div>
-              <div><span>Jika tercapai, TH jadi</span><strong>${percent(plan.projectedTh)}</strong></div>
-            </div>
-            <ul class="tomorrow-checklist">
-              ${plan.checklist.map(item => `<li>${item}</li>`).join("")}
-            </ul>
-          </div>
-        </div>
-        <div class="action-money">
-          <strong>${row.th >= 1 ? rupiah(row.upsideIncentive) : rupiah(plan.dailyNeed)}</strong>
-          <span>${row.th >= 1 ? "Est. incentive / TXN baru" : "Target revenue / hari"}</span>
-          <small>${row.txn.toLocaleString("id-ID")} TXN minggu ini - AOV ${rupiah(row.aov)}</small>
-        </div>
-      </article>
-    `;
-  }).join("") || `<div class="detail-empty">Tidak ada agent Arif Pambudi pada filter ini.</div>`;
+  const ctx = { daysLeft, daysPassed, isPast, minimum };
+  el("actionAgentList").innerHTML = agents.map(row => actionCardHtml(row, ctx)).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`;
 
-  const weekRows = arifRows.filter(row => weekFor(row.weekName, row.weekNum)?.name === selectedWeek);
+  const weekRows = scopeRows.filter(row => row.week === selectedWeek && matchMulti(agentSet, row.agent));
+  const snapTone = toneFor(teamPct, minimum);
   el("actionCoachList").innerHTML = `
-    <div class="mini-row"><div><strong>Total revenue tim</strong><span>${agents.length.toLocaleString("id-ID")} agent aktif</span></div><div class="mini-value">${rupiah(totalRevenue)}</div></div>
-    <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(target / Math.max(1, agents.length))} avg per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
-    <div class="mini-row"><div><strong>Pencapaian tim</strong><span>Revenue / target</span></div><div class="mini-value">${percent(target ? totalRevenue / target : 0)}</div></div>
-    <div class="mini-row"><div><strong>Run rate tim</strong><span>Projected ${rupiah(projectedRevenue)}</span></div><div class="mini-value">${rupiah(teamRunRate)}/hari</div></div>
+    <div class="snap-top">${ringHtml(teamPct, TONE_COLORS[snapTone], 64)}<div><strong>Pencapaian tim</strong><span>${rupiah(totalRevenue)} dari ${rupiah(target)}</span><span>${everyone.length.toLocaleString("id-ID")} agent aktif</span></div></div>
+    <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(target / Math.max(1, everyone.length))} avg per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
+    <div class="mini-row"><div><strong>Run rate tim</strong><span>Proyeksi ${rupiah(projectedRevenue)}</span></div><div class="mini-value">${rupiah(teamRunRate)}/hari</div></div>
   `;
-  renderMiniAggregate("actionCampaignList", weekRows, row => row.campaign || "No Campaign", 5);
-  renderMiniAggregate("actionProductList", weekRows, row => productBucket(row), 5);
+  renderMiniAggregate("actionCampaignList", weekRows, row => row.campaign || "No Campaign", 5, name => CAMPAIGN_KINDS[campaignClass(name)].color);
+  renderMiniAggregate("actionProductList", weekRows, row => productBucket(row), 5, name => productColor(name));
 }
 
 function campaignClass(value) {
@@ -3993,41 +4380,31 @@ function campaignCode(value) {
 
 
 function updateTopCampaignAgentOptions() {
-  const selectedMonth = el("topCampaignMonth").value;
-  const selectedWeek = el("topCampaignWeek").value;
+  const monthSet = getMultiSet("topCampaignMonth");
+  const weekSet = getMultiSet("topCampaignWeek");
+  const layerSet = getMultiSet("topCampaignLayer");
   const coachSet = getMultiSet("topCampaignCoach");
-  const agents = [...new Set(allTransactionRows.filter(row => {
-    const week = weekFor(row.weekName, row.weekNum);
-    const rowMonth = week?.month;
-    const rowWeek = week?.name;
-    return (selectedMonth === "all" || rowMonth === selectedMonth) &&
-      (selectedWeek === "all" || rowWeek === selectedWeek) &&
-      matchMulti(coachSet, row.leader || "-");
-  }).map(row => row.agent))].sort((a, b) => a.localeCompare(b));
+  const agents = [...new Set(allTransactionRows.filter(row =>
+    matchMulti(monthSet, row.month) && matchMulti(weekSet, row.week) && matchMulti(layerSet, row.team) && matchMulti(coachSet, row.leader || "-")
+  ).map(row => row.agent))].sort((a, b) => a.localeCompare(b));
   setMultiOptions("topCampaignAgent", agents);
 }
 
 function renderTopCampaign() {
-  const selectedMonth = el("topCampaignMonth").value;
-  const selectedWeek = el("topCampaignWeek").value;
+  const monthSet = getMultiSet("topCampaignMonth");
+  const weekSet = getMultiSet("topCampaignWeek");
+  const layerSet = getMultiSet("topCampaignLayer");
   const coachSet = getMultiSet("topCampaignCoach");
   const agentSet = getMultiSet("topCampaignAgent");
+  const productSet = getMultiSet("topCampaignProduct");
   const sortBy = el("topCampaignSort").value;
   const query = el("topCampaignSearch").value.trim().toLowerCase();
-  
-  const rows = allTransactionRows.filter(row => {
-    const week = weekFor(row.weekName, row.weekNum);
-    const rowMonth = week?.month;
-    const rowWeek = week?.name;
-    const bucket = productBucket(row);
-    const packageName = row.packageName || row.product_type || "-";
-    const campaign = row.campaign || "No Campaign";
-    return (selectedMonth === "all" || rowMonth === selectedMonth) &&
-      (selectedWeek === "all" || rowWeek === selectedWeek) &&
-      matchMulti(coachSet, row.leader || "-") &&
-      matchMulti(agentSet, row.agent) &&
-      (!query || `${campaign} ${bucket} ${packageName}`.toLowerCase().includes(query));
-  });
+
+  const rows = allTransactionRows.filter(row =>
+    matchMulti(monthSet, row.month) && matchMulti(weekSet, row.week) && matchMulti(layerSet, row.team) &&
+    matchMulti(coachSet, row.leader || "-") && matchMulti(agentSet, row.agent) && matchMulti(productSet, row.product) &&
+    (!query || `${row.campaign || "No Campaign"} ${row.product} ${row.packageName || row.product_type || "-"}`.toLowerCase().includes(query))
+  );
 
   const groups = new Map();
   rows.forEach(row => {
@@ -4036,47 +4413,81 @@ function renderTopCampaign() {
     const item = groups.get(key);
     item.revenue += row.revenue;
     item.txn += 1;
-    const bucket = productBucket(row);
-    item.products[bucket] = (item.products[bucket] || 0) + row.revenue;
+    item.products[row.product] = (item.products[row.product] || 0) + row.revenue;
     item.agents.add(row.agent);
-    const week = weekFor(row.weekName, row.weekNum);
-    if (week) item.weeks.add(week.name);
+    item.weeks.add(row.week);
   });
-
   const campaigns = [...groups.values()].map(row => {
     row.topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+    row.kind = campaignClass(row.campaign);
     return row;
   }).sort((a, b) => sortBy === "txn" ? b.txn - a.txn || b.revenue - a.revenue : b.revenue - a.revenue || b.txn - a.txn);
 
   const totalRevenue = campaigns.reduce((sum, row) => sum + row.revenue, 0);
   const totalTxn = campaigns.reduce((sum, row) => sum + row.txn, 0);
   const top = campaigns[0];
+  const byTxn = [...campaigns].sort((a, b) => b.txn - a.txn)[0];
+  const periodText = periodLabel("topCampaignMonth", "topCampaignWeek");
 
   el("topCampaignTotalRevenue").textContent = rupiah(totalRevenue);
   el("topCampaignCountKpi").textContent = campaigns.length.toLocaleString("id-ID");
-  el("topCampaignWeekNote").textContent = selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek;
+  el("topCampaignWeekNote").textContent = periodText;
   el("topCampaignTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
   el("topCampaignNameKpi").textContent = top ? top.campaign : "-";
   el("topCampaignRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("topCampaignAovKpi").textContent = top ? top.txn.toLocaleString("id-ID") : "0";
   el("topCampaignCount").textContent = `${campaigns.length} campaign`;
-  el("topCampaignCaption").textContent = `${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek} - ${multiText("topCampaignCoach", "Semua coach / leader")} - ${multiText("topCampaignAgent", "Semua agent")} - sort by ${sortBy.toUpperCase()}`;
-  
-  el("topCampaignList").innerHTML = campaigns.slice(0, 20).map((row, index) => {
+  el("topCampaignCaption").textContent = `${periodText} - ${multiText("topCampaignLayer", "Semua layer")} - ${multiText("topCampaignCoach", "Semua coach / leader")} - urut ${sortBy === "txn" ? "jumlah transaksi" : "revenue"}`;
+
+  el("campInsight").innerHTML = top
+    ? `<b>${escapeHtml(top.campaign)}</b> adalah campaign dengan revenue tertinggi: <b>${rupiah(top.revenue)}</b> (${percent(totalRevenue ? top.revenue / totalRevenue : 0)} dari total) lewat ${top.txn.toLocaleString("id-ID")} transaksi, produk andalan <b>${escapeHtml(top.topProduct)}</b>. Campaign dengan transaksi terbanyak: <b>${escapeHtml(byTxn.campaign)}</b> (${byTxn.txn.toLocaleString("id-ID")} TXN). Prioritaskan follow-up leads dari campaign ini lebih dulu.`
+    : "Belum ada transaksi pada filter ini.";
+
+  const podium = campaigns.slice(0, 3);
+  el("topCampaignPodium").hidden = podium.length === 0;
+  el("topCampaignPodium").innerHTML = podiumHtml(podium.map(row => ({
+    name: row.campaign,
+    sub: `${row.txn.toLocaleString("id-ID")} TXN - ${row.topProduct}`,
+    value: rupiah(row.revenue),
+    valueSub: `Share ${percent(totalRevenue ? row.revenue / totalRevenue : 0)}`,
+    pct: top && top.revenue ? row.revenue / top.revenue : 0,
+  })));
+
+  const kinds = new Map();
+  campaigns.forEach(row => {
+    if (!kinds.has(row.kind)) kinds.set(row.kind, { kind: row.kind, revenue: 0, txn: 0 });
+    const item = kinds.get(row.kind);
+    item.revenue += row.revenue;
+    item.txn += row.txn;
+  });
+  const kindList = Object.keys(CAMPAIGN_KINDS).filter(kind => kinds.has(kind)).map(kind => ({ ...kinds.get(kind), ...CAMPAIGN_KINDS[kind] }));
+  let acc = 0;
+  const stops = kindList.map(item => {
+    const start = acc;
+    acc += totalRevenue ? item.revenue / totalRevenue * 100 : 0;
+    return `${item.color} ${start.toFixed(2)}% ${acc.toFixed(2)}%`;
+  });
+  el("campMix").innerHTML = kindList.length ? `
+    <div class="donut" style="background:conic-gradient(${stops.join(",")})"><b>${compactRupiah(totalRevenue)}<br>${totalTxn.toLocaleString("id-ID")} TXN</b></div>
+    <div class="mix-legend">${kindList.map(item => `
+      <div class="mix-item"><i style="background:${item.color}"></i><div><b>${item.label}</b><small>${item.txn.toLocaleString("id-ID")} TXN - ${compactRupiah(item.revenue)}</small></div><em>${percent(totalRevenue ? item.revenue / totalRevenue : 0)}</em></div>
+    `).join("")}</div>` : `<div class="detail-empty">Belum ada data.</div>`;
+
+  const rest = campaigns.slice(3, 20);
+  el("topCampaignList").innerHTML = rest.map((row, offset) => {
     const share = totalRevenue ? row.revenue / totalRevenue : 0;
-    const width = Math.min(100, Math.max(4, share * 100));
+    const parts = Object.entries(row.products).sort((a, b) => b[1] - a[1]).map(([key, value]) => ({ key, value, color: productColor(key) }));
     return `
-      <article class="campaign-rank-card rank-${index + 1}">
-        <div class="rank-number">${index + 1}</div>
-        <div class="campaign-rank-main">
-          <strong>${escapeHtml(row.campaign)}</strong>
-          <span>${row.txn.toLocaleString("id-ID")} TXN - Top product: ${escapeHtml(row.topProduct)}</span>
-          <div class="rank-bar"><span style="width:${width}%"></span></div>
+      <article class="camp-row">
+        <div class="camp-rank">${offset + 4}</div>
+        <div class="camp-main">
+          <div class="camp-title"><strong>${escapeHtml(row.campaign)}</strong><span class="pill ${row.kind}">${CAMPAIGN_KINDS[row.kind].label}</span></div>
+          <div class="camp-chips"><span>${row.txn.toLocaleString("id-ID")} TXN</span><span>AOV ${compactRupiah(row.revenue / row.txn)}</span><span>${row.agents.size} agent</span><span>${row.weeks.size} week</span></div>
+          ${stackBar(parts)}${stackLegend(parts, 3)}
         </div>
-        <div class="campaign-rank-value"><strong>${rupiah(row.revenue)}</strong><span>Share ${percent(share)}</span></div>
-      </article>
-    `;
-  }).join("") || `<div class="detail-empty">Tidak ada campaign pada filter ini.</div>`;
+        <div class="camp-value"><strong>${rupiah(row.revenue)}</strong><span>Share ${percent(share)}</span><div class="share-bar"><i style="width:${Math.max(3, share * 100)}%"></i></div></div>
+      </article>`;
+  }).join("") || (campaigns.length ? `<div class="detail-empty">Semua campaign sudah tampil di Top 3.</div>` : `<div class="detail-empty">Tidak ada campaign pada filter ini.</div>`);
 }
 
 function renderDodolan() {
@@ -4187,37 +4598,34 @@ function renderDodolan() {
 }
 
 function renderLeaderboard() {
-  const selectedMonth = el("leaderboardMonthFilter").value;
-  const selectedWeek = el("leaderboardWeekFilter").value;
-  const selectedLayer = el("leaderboardLayerFilter").value;
+  const monthSet = getMultiSet("leaderboardMonthFilter");
+  const weekSet = getMultiSet("leaderboardWeekFilter");
+  const layerSet = getMultiSet("leaderboardLayerFilter");
+  const coachSet = getMultiSet("leaderboardCoachFilter");
   const byLeader = new Map();
   leaderboardRows.forEach(row => {
     if (!LEADERBOARD_WEEKLY_TARGETS[row.team]) return;
-    if (selectedMonth !== "all" && row.month !== selectedMonth) return;
-    if (selectedWeek !== "all" && row.week !== selectedWeek) return;
-    if (selectedLayer !== "all" && row.team !== selectedLayer) return;
+    if (!matchMulti(monthSet, row.month) || !matchMulti(weekSet, row.week) || !matchMulti(layerSet, row.team) || !matchMulti(coachSet, row.leader || "-")) return;
     const leader = row.leader || "-";
-    if (!byLeader.has(leader)) {
-      byLeader.set(leader, { leader, revenue: 0, target: 0, txn: 0, agents: new Set(), weeks: new Set(), products: {}, teams: {} });
-    }
+    if (!byLeader.has(leader)) byLeader.set(leader, { leader, revenue: 0, target: 0, txn: 0, agents: new Set(), products: {}, teams: {} });
     const item = byLeader.get(leader);
     item.revenue += row.revenue;
     item.txn += 1;
     item.agents.add(row.agent);
-    item.weeks.add(row.week);
     item.products[row.product] = (item.products[row.product] || 0) + row.revenue;
     item.teams[row.team] = (item.teams[row.team] || 0) + row.revenue;
   });
 
+  const periodText = periodLabel("leaderboardMonthFilter", "leaderboardWeekFilter");
+  const layerText = multiText("leaderboardLayerFilter", "Semua layer");
+  const activeWeeks = weekSet.size
+    ? WEEK_PERIODS.filter(week => weekSet.has(week.name) && matchMulti(monthSet, week.month)).map(week => week.name)
+    : targetWeeksForMonths(monthSet);
   const leaders = [...byLeader.values()].sort((a, b) => b.revenue - a.revenue);
   leaders.forEach(row => {
-    row.primaryTeam = selectedLayer === "all"
-      ? Object.entries(row.teams).sort((a, b) => b[1] - a[1])[0]?.[0] || "-"
-      : selectedLayer;
-    row.activeWeeks = selectedWeek === "all" ? targetWeeksForMonth(selectedMonth) : [...row.weeks];
-    row.weeklyTarget = row.activeWeeks.length ? totalLeaderboardTarget(row.primaryTeam, row.activeWeeks) / row.activeWeeks.length : leaderboardTargetForTeam(row.primaryTeam);
-    row.agentCount = selectedLayer === "all" ? (LEADERBOARD_AGENT_COUNTS[row.primaryTeam] || row.agents.size) : row.agents.size;
-    row.target = targetForLeaderTeamWeeks(row.leader, row.primaryTeam, row.activeWeeks);
+    row.primaryTeam = layerSet.size === 1 ? [...layerSet][0] : Object.entries(row.teams).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+    row.agentCount = layerSet.size === 1 ? row.agents.size : (LEADERBOARD_AGENT_COUNTS[row.primaryTeam] || row.agents.size);
+    row.target = targetForLeaderTeamWeeks(row.leader, row.primaryTeam, activeWeeks);
     row.toTarget = row.target ? row.revenue / row.target : 0;
   });
   const totalRevenue = leaders.reduce((sum, row) => sum + row.revenue, 0);
@@ -4228,21 +4636,29 @@ function renderLeaderboard() {
   el("leaderboardTotalRevenue").textContent = rupiah(totalRevenue);
   el("leaderboardLeaderKpi").textContent = leaders.length.toLocaleString("id-ID");
   el("leaderboardTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
-  el("leaderboardTxnNote").textContent = selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek;
+  el("leaderboardTxnNote").textContent = periodText;
   el("leaderboardTopLeaderKpi").textContent = top ? top.leader : "-";
   el("leaderboardTopRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("leaderboardTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
-  el("leaderboardTargetNote").textContent = selectedWeek === "all" ? `Target ${selectedMonthLabel(selectedMonth)}` : `Target ${selectedWeek}`;
-  el("leaderboardLayerNote").textContent = `${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek} - ${selectedLayer === "all" ? "Semua layer" : selectedLayer}`;
+  el("leaderboardTargetNote").textContent = `Target ${periodText}`;
+  el("leaderboardLayerNote").textContent = `${periodText} - ${layerText}`;
   el("leaderboardCount").textContent = `${leaders.length} coach`;
+
+  el("leaderboardPodium").hidden = leaders.length === 0;
+  el("leaderboardPodium").innerHTML = podiumHtml(leaders.map(row => ({
+    name: row.leader,
+    sub: `${LEADERBOARD_TARGET_LABELS[row.primaryTeam] || row.primaryTeam} - ${percent(row.toTarget)} dari target`,
+    value: rupiah(row.revenue),
+    valueSub: `${row.txn.toLocaleString("id-ID")} TXN`,
+    pct: row.toTarget,
+  })));
 
   el("leaderboardList").innerHTML = leaders.map((row, index) => {
     const share = totalRevenue ? row.revenue / totalRevenue : 0;
-    const productBreakdown = Object.entries(row.products)
-      .sort((a, b) => b[1] - a[1])
-      .map(([product, revenue]) => ({ product, revenue, share: row.revenue ? revenue / row.revenue : 0 }));
-    const topProduct = productBreakdown[0]?.product || "-";
-    const targetWidth = Math.min(100, Math.max(4, row.toTarget * 100));
+    const tone = toneFor(row.toTarget);
+    const parts = Object.entries(row.products).sort((a, b) => b[1] - a[1]).map(([key, value]) => ({ key, value, color: productColor(key) }));
+    const targetWidth = Math.min(100, Math.max(3, row.toTarget * 100));
+    const gapText = index === 0 ? "Peringkat 1 - pertahankan!" : `${rupiah(leaders[index - 1].revenue - row.revenue)} lagi untuk naik ke #${index}`;
     return `
       <article class="rank-card rank-${index + 1}" data-leader-rank>
         <div class="rank-number">${index + 1}</div>
@@ -4250,36 +4666,35 @@ function renderLeaderboard() {
           <div class="rank-title">
             <button class="leader-drilldown-trigger" type="button" aria-expanded="false">
               <strong>${escapeHtml(row.leader)}</strong>
-              <span>Detail product</span>
+              <span>Lihat persebaran produk</span>
             </button>
-            <span>${escapeHtml(LEADERBOARD_TARGET_LABELS[row.primaryTeam] || row.primaryTeam)} - ${row.agentCount.toLocaleString("id-ID")} agent target - ${row.txn.toLocaleString("id-ID")} TXN</span>
+            <span class="chip-tone ${tone}">${TONE_LABELS[tone]}</span>
           </div>
-          <div class="rank-bar"><span style="width:${targetWidth}%"></span></div>
-          <div class="rank-meta">
-            <span>${selectedWeek === "all" ? `Target ${selectedMonthLabel(selectedMonth)}` : `Target ${selectedWeek}`}: ${rupiah(row.target)} - Top product: ${escapeHtml(topProduct)}</span>
-            <span>${percent(row.toTarget)} to target - Share ${percent(share)}</span>
-          </div>
+          <div class="rank-meta"><span>${escapeHtml(LEADERBOARD_TARGET_LABELS[row.primaryTeam] || row.primaryTeam)} - ${row.agentCount.toLocaleString("id-ID")} agent - ${row.txn.toLocaleString("id-ID")} TXN</span></div>
+          <div class="rank-bar"><span class="tone-${tone}" style="width:${targetWidth}%"></span></div>
+          <div class="rank-meta"><span>Target ${rupiah(row.target)} - ${percent(row.toTarget)} tercapai</span><span class="lb-gap">${gapText}</span></div>
+          ${stackBar(parts)}${stackLegend(parts, 4)}
           <div class="leader-product-breakdown" hidden>
             <div class="leader-product-head">
               <strong>Persebaran product</strong>
-              <span>${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek} - total ${rupiah(row.revenue)}</span>
+              <span>${escapeHtml(periodText)} - total ${rupiah(row.revenue)}</span>
             </div>
-            ${productBreakdown.map(item => `
+            ${parts.map(item => `
               <div class="leader-product-row">
                 <div>
-                  <strong>${escapeHtml(item.product)}</strong>
-                  <span>${percent(item.share)} dari revenue leader</span>
+                  <strong>${escapeHtml(item.key)}</strong>
+                  <span>${percent(row.revenue ? item.value / row.revenue : 0)} dari revenue leader</span>
                 </div>
-                <div class="leader-product-bar"><span style="width:${Math.max(3, item.share * 100)}%"></span></div>
-                <b>${rupiah(item.revenue)}</b>
+                <div class="leader-product-bar"><span style="width:${Math.max(3, row.revenue ? item.value / row.revenue * 100 : 0)}%;background:${item.color}"></span></div>
+                <b>${rupiah(item.value)}</b>
               </div>
             `).join("") || `<div class="detail-empty">Belum ada product.</div>`}
           </div>
         </div>
-        <div class="rank-revenue"><strong>${rupiah(row.revenue)}</strong><span>${percent(row.toTarget)} target</span></div>
+        <div class="rank-revenue"><strong>${rupiah(row.revenue)}</strong><span>Share ${percent(share)}</span></div>
       </article>
     `;
-  }).join("");
+  }).join("") || `<div class="detail-empty">Tidak ada coach pada filter ini.</div>`;
   document.querySelectorAll("[data-leader-rank]").forEach(card => {
     const trigger = card.querySelector(".leader-drilldown-trigger");
     const breakdown = card.querySelector(".leader-product-breakdown");
@@ -4292,22 +4707,34 @@ function renderLeaderboard() {
   });
 }
 
-function getTargetMetaMap(selectedMonth, selectedWeek) {
+function canonicalSpv(spv) {
+  const text = String(spv || "").trim();
+  return SPV_ORDER.find(name => name.toLowerCase() === text.toLowerCase()) || text || "Tanpa SPV";
+}
+
+function getTargetMetaMap(monthSet, weekSet) {
   const map = new Map();
   targetRows.forEach(row => {
     if (!row.agent) return;
-    if (selectedWeek !== "all" && row.week !== selectedWeek) return;
     const rowMonth = WEEK_PERIODS.find(week => week.name === row.week)?.month;
-    if (selectedMonth !== "all" && rowMonth !== selectedMonth) return;
+    if (!matchMulti(weekSet, row.week) || !matchMulti(monthSet, rowMonth)) return;
     const key = row.agent.toLowerCase();
-    if (!map.has(key)) map.set(key, { agent: row.agent, leader: row.leader, spv: row.spv, target: 0, weeks: new Set() });
+    if (!map.has(key)) map.set(key, { agent: row.agent, leader: row.leader, spv: canonicalSpv(row.spv), target: 0, weeks: new Set() });
     const item = map.get(key);
     item.target += row.target;
     item.weeks.add(row.week);
     if (!item.leader && row.leader) item.leader = row.leader;
-    if (!item.spv && row.spv) item.spv = row.spv;
+    if (!item.spv || item.spv === "Tanpa SPV") item.spv = canonicalSpv(row.spv);
   });
   return map;
+}
+
+function syncSpvFilters() {
+  const mainRows = targetRows.filter(row => row.agent && isMainSpv(row.spv));
+  const spvSet = getMultiSet("spvSpvFilter");
+  setMultiOptions("spvCoachFilter", [...new Set(mainRows.filter(row => matchMulti(spvSet, canonicalSpv(row.spv))).map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b)));
+  const coachSet = getMultiSet("spvCoachFilter");
+  setMultiOptions("spvAgentFilter", [...new Set(mainRows.filter(row => matchMulti(spvSet, canonicalSpv(row.spv)) && matchMulti(coachSet, row.leader || "-")).map(row => row.agent))].sort((a, b) => a.localeCompare(b)));
 }
 
 function createProductTotals() {
@@ -4342,13 +4769,19 @@ function spvSort(a, b) {
 }
 
 function renderSpvDivision() {
-  const selectedMonth = el("spvMonthFilter").value;
-  const selectedWeek = el("spvWeekFilter").value;
-  const metaMap = getTargetMetaMap(selectedMonth, selectedWeek);
+  const monthSet = getMultiSet("spvMonthFilter");
+  const weekSet = getMultiSet("spvWeekFilter");
+  const spvSet = getMultiSet("spvSpvFilter");
+  const coachSet = getMultiSet("spvCoachFilter");
+  const agentSet = getMultiSet("spvAgentFilter");
+  const metaMap = getTargetMetaMap(monthSet, weekSet);
+  metaMap.forEach((meta, key) => {
+    if (!matchMulti(spvSet, meta.spv) || !matchMulti(coachSet, meta.leader || "-") || !matchMulti(agentSet, meta.agent)) metaMap.delete(key);
+  });
   const bySpv = new Map();
 
   metaMap.forEach(meta => {
-    const spv = meta.spv || "Tanpa SPV";
+    const spv = meta.spv;
     if (!isMainSpv(spv)) return;
     if (!bySpv.has(spv)) bySpv.set(spv, { spv, revenue: 0, target: 0, txn: 0, agents: new Map(), products: createProductTotals() });
     const item = bySpv.get(spv);
@@ -4357,13 +4790,11 @@ function renderSpvDivision() {
   });
 
   leaderboardRows.forEach(row => {
-    const week = weekFor(row.weekName, row.weekNum);
-    if (selectedMonth !== "all" && week?.month !== selectedMonth) return;
-    if (selectedWeek !== "all" && row.week !== selectedWeek) return;
+    if (!matchMulti(monthSet, row.month) || !matchMulti(weekSet, row.week)) return;
     const key = row.agent.toLowerCase();
     const meta = metaMap.get(key);
     if (!meta) return;
-    const spv = meta.spv || "Tanpa SPV";
+    const spv = meta.spv;
     if (!isMainSpv(spv)) return;
     if (!bySpv.has(spv)) bySpv.set(spv, { spv, revenue: 0, target: 0, txn: 0, agents: new Map(), products: createProductTotals() });
     const group = bySpv.get(spv);
@@ -4386,16 +4817,17 @@ function renderSpvDivision() {
   const totalTarget = groups.reduce((sum, group) => sum + group.target, 0);
   const totalTxn = groups.reduce((sum, group) => sum + group.txn, 0);
   const totalAgents = groups.reduce((sum, group) => sum + group.agents.size, 0);
+  const periodText = periodLabel("spvMonthFilter", "spvWeekFilter");
 
   el("spvTotalRevenue").textContent = rupiah(totalRevenue);
   el("spvRevenueKpi").textContent = rupiah(totalRevenue);
   el("spvTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
   el("spvAgentKpi").textContent = totalAgents.toLocaleString("id-ID");
   el("spvToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
-  el("spvRevenueNote").textContent = selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek;
+  el("spvRevenueNote").textContent = periodText;
   el("spvTxnNote").textContent = `${groups.length.toLocaleString("id-ID")} SPV`;
   el("spvAgentNote").textContent = "Dari sheet Target Agent";
-  el("spvTargetNote").textContent = `Target ${selectedWeek === "all" ? selectedMonthLabel(selectedMonth) : selectedWeek}`;
+  el("spvTargetNote").textContent = `Target ${periodText}`;
   el("spvCount").textContent = `${groups.length} SPV`;
   el("spvBoard").innerHTML = groups.map((group, index) => renderSpvCard(group, index)).join("") || `<div class="detail-empty">Tidak ada data pada filter ini.</div>`;
 }
@@ -4421,12 +4853,15 @@ function renderSpvCard(group, index) {
   }, new Map());
   const leaderRows = [...leaders.values()].sort((a, b) => b.revenue - a.revenue || a.leader.localeCompare(b.leader));
   const achievement = group.target ? group.revenue / group.target : 0;
+  const tone = toneFor(achievement);
+  const familyParts = PRODUCT_FAMILY_ORDER.map(family => ({ key: family, value: group.products[family].revenue, color: FAMILY_COLORS[family] })).sort((a, b) => b.value - a.value);
   return `
     <section class="spv-card spv-${index + 1}">
       <div class="spv-card-head">
-        <div><strong>${escapeHtml(group.spv)}</strong><span>${leaderRows.length.toLocaleString("id-ID")} leader - ${group.agents.size.toLocaleString("id-ID")} agent - ${group.txn.toLocaleString("id-ID")} TXN</span></div>
-        <div><strong>${rupiah(group.revenue)}</strong><span>${percent(achievement)} to target</span></div>
+        <div class="spv-who"><b class="spv-rank">${index + 1}</b><div><strong>${escapeHtml(group.spv)}</strong><span>${leaderRows.length.toLocaleString("id-ID")} leader - ${group.agents.size.toLocaleString("id-ID")} agent - ${group.txn.toLocaleString("id-ID")} TXN</span></div></div>
+        <div class="spv-total"><div><strong>${rupiah(group.revenue)}</strong><span>Target ${rupiah(group.target)}</span></div>${ringHtml(achievement, TONE_COLORS[tone], 58)}</div>
       </div>
+      <div class="spv-mix">${stackBar(familyParts)}${stackLegend(familyParts, 5)}</div>
       <div class="spv-product-grid">${PRODUCT_FAMILY_ORDER.map(product => renderSpvProductCell(product, group.products[product], group.revenue)).join("")}</div>
       <div class="spv-agent-table-wrap">
         <table class="spv-agent-table">
@@ -4461,12 +4896,14 @@ function renderSpvCard(group, index) {
 
 function renderSpvProductCell(label, item, totalRevenue) {
   const share = totalRevenue ? item.revenue / totalRevenue : 0;
+  const color = FAMILY_COLORS[label] || "#94a3b8";
   const children = Object.entries(item.children || {}).filter(([, child]) => child.revenue > 0);
   return `
-    <div class="spv-product-cell ${label === "BAON" ? "has-children" : ""}">
+    <div class="spv-product-cell ${label === "BAON" ? "has-children" : ""}" style="--pc:${color}">
       <span>${escapeHtml(label)}</span>
       <strong>${rupiah(item.revenue)}</strong>
       <small>${percent(share)} - ${item.txn.toLocaleString("id-ID")} TXN</small>
+      <div class="share-bar"><i style="width:${Math.max(share ? 4 : 0, share * 100)}%;background:${color}"></i></div>
       ${children.length ? `<div class="spv-child-products">${children.map(([name, child]) => `<div><span>${escapeHtml(name.replace("BAON ", ""))}</span><b>${rupiah(child.revenue)}</b></div>`).join("")}</div>` : ""}
     </div>
   `;
@@ -4478,12 +4915,12 @@ function renderSpvLeaderRow(leader, index) {
   return `
     <tr>
       <td>${index + 1}</td>
-      <td>${escapeHtml(leader.leader || "-")}</td>
+      <td><strong>${escapeHtml(leader.leader || "-")}</strong></td>
       <td class="number">${leader.agents.toLocaleString("id-ID")}</td>
       <td class="money">${rupiah(leader.target)}</td>
-      <td class="money">${rupiah(leader.revenue)}</td>
+      <td class="money"><strong>${rupiah(leader.revenue)}</strong></td>
       <td class="number">${leader.txn.toLocaleString("id-ID")}</td>
-      <td class="number">${percent(achievement)}</td>
+      <td class="number"><span class="pct-pill ${toneFor(achievement)}">${percent(achievement)}</span></td>
       <td class="money">${rupiah(baon.revenue)}</td>
       <td class="money">${rupiah(baon.children["BAON Reg"]?.revenue || 0)}</td>
       <td class="money">${rupiah(baon.children["BAON Prem"]?.revenue || 0)}</td>
@@ -4496,70 +4933,38 @@ function renderSpvLeaderRow(leader, index) {
   `;
 }
 
-function aggregateAgentsByCoach(rows, coach, mode, selectedWeek, query) {
+function modeContext(monthId, modeId, weekId) {
+  const monthSet = getMultiSet(monthId);
+  const mode = el(modeId).value;
+  const weekSet = getMultiSet(weekId);
+  setMultiDisabled(weekId, mode === "monthly");
+  const effectiveWeeks = mode === "weekly" ? (weekSet.size ? [...weekSet] : [latestActiveWeek(monthSet)].filter(Boolean)) : [];
+  const weekSetEff = new Set(effectiveWeeks);
+  const monthWeeks = targetWeeksForMonths(monthSet);
+  const targetForAgent = agent => (mode === "monthly" ? monthWeeks : effectiveWeeks)
+    .reduce((sum, weekName) => sum + targetForAgentWeek(agent, WEEK_PERIODS.find(week => week.name === weekName)), 0);
+  const periodText = mode === "monthly"
+    ? `Monthly ${monthSet.size ? multiText(monthId, "") : "Semua bulan"}`
+    : `${effectiveWeeks.join(", ") || "-"}${weekSet.size ? "" : " (otomatis: week terakhir)"}`;
+  return { monthSet, mode, weekSet, effectiveWeeks, weekSetEff, targetForAgent, periodText };
+}
+
+function aggregateAgentsByCoach(rows, coach, ctx) {
   const byAgent = new Map();
   rows.forEach(row => {
     if ((row.leader || "-") !== coach) return;
-    const week = weekFor(row.weekName, row.weekNum);
-    if (mode === "weekly" && week?.name !== selectedWeek) return;
-    if (query && !`${row.agent}`.toLowerCase().includes(query)) return;
+    if (!matchMulti(ctx.monthSet, row.month)) return;
+    if (ctx.mode === "weekly" && !ctx.weekSetEff.has(row.week)) return;
+    if (ctx.query && !row.agent.toLowerCase().includes(ctx.query)) return;
     const key = row.agent.toLowerCase();
-    if (!byAgent.has(key)) {
-      byAgent.set(key, { agent: row.agent, leader: row.leader, revenue: 0, txn: 0, weeks: new Set(), products: {} });
-    }
+    if (!byAgent.has(key)) byAgent.set(key, { agent: row.agent, leader: row.leader, revenue: 0, txn: 0, weeks: new Set(), products: {} });
     const item = byAgent.get(key);
-    const product = productBucket(row);
     item.revenue += row.revenue;
     item.txn += 1;
-    item.weeks.add(week.name);
-    item.products[product] = (item.products[product] || 0) + row.revenue;
+    item.weeks.add(row.week);
+    item.products[row.product] = (item.products[row.product] || 0) + row.revenue;
   });
   return [...byAgent.values()].sort((a, b) => b.revenue - a.revenue).slice(0, 12);
-}
-
-function renderTeamColumn(title, agents, target) {
-  const selectedMonth = el("compareMonth").value;
-  const mode = el("compareMode").value;
-  const selectedWeek = el("compareWeek").value;
-  const sourceRows = layerOneRows.filter(row => {
-    const week = weekFor(row.weekName, row.weekNum);
-    return (row.leader || "-") === title &&
-      (selectedMonth === "all" || week?.month === selectedMonth) &&
-      (mode === "monthly" || week?.name === selectedWeek);
-  });
-  const productRows = topGroupRows(sourceRows, row => productBucket(row), 5);
-  const campaignRows = topGroupRows(sourceRows, row => campaignCode(row.campaign || "No Campaign"), 5);
-  return `
-    <section class="compare-column">
-      <div class="compare-column-head">
-        <div><h3>${escapeHtml(title)}</h3><span>${agents.length.toLocaleString("id-ID")} agent</span></div>
-        <strong>${rupiah(agents.reduce((sum, row) => sum + row.revenue, 0))}</strong>
-      </div>
-      <div class="compare-breakdown">
-        <div><strong>Product</strong>${renderMiniBars(productRows)}</div>
-        <div><strong>Campaign</strong>${renderMiniBars(campaignRows)}</div>
-      </div>
-      <div class="compare-agent-list">
-        ${agents.map((row, index) => {
-          const rowTarget = typeof target === "function" ? target(row) : target;
-          const toTarget = rowTarget ? row.revenue / rowTarget : 0;
-          const width = Math.min(100, Math.max(4, toTarget * 100));
-          const topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
-          return `
-            <article class="compare-agent-card rank-${index + 1}">
-              <div class="rank-number">${index + 1}</div>
-              <div class="compare-agent-main">
-                <strong>${escapeHtml(row.agent)}</strong>
-                <span>${row.txn.toLocaleString("id-ID")} TXN - ${escapeHtml(topProduct)}</span>
-                <div class="rank-bar"><span style="width:${width}%"></span></div>
-              </div>
-              <div class="compare-agent-value"><strong>${rupiah(row.revenue)}</strong><span>${percent(toTarget)}</span></div>
-            </article>
-          `;
-        }).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`}
-      </div>
-    </section>
-  `;
 }
 
 function topGroupRows(rows, keyFn, limit) {
@@ -4574,28 +4979,67 @@ function topGroupRows(rows, keyFn, limit) {
   return [...groups.values()].sort((a, b) => b.revenue - a.revenue).slice(0, limit);
 }
 
-function renderMiniBars(rows) {
+function renderMiniBars(rows, colorFn) {
   const max = Math.max(...rows.map(row => row.revenue), 1);
   return `<div class="mini-bars">${rows.map((row, index) => `
     <div class="mini-bar-row">
       <span>${escapeHtml(row.key)}</span>
-      <div><i class="bar-color-${(index % 6) + 1}" style="width:${Math.max(5, row.revenue / max * 100)}%"></i></div>
+      <div><i class="${colorFn ? "" : `bar-color-${(index % 6) + 1}`}" style="width:${Math.max(5, row.revenue / max * 100)}%;${colorFn ? `background:${colorFn(row.key)}` : ""}"></i></div>
       <b>${rupiah(row.revenue)}</b>
     </div>
   `).join("")}</div>`;
 }
 
+function renderTeamColumn(title, agents, targetFn, ctx, color) {
+  const sourceRows = layerOneRows.filter(row =>
+    (row.leader || "-") === title && matchMulti(ctx.monthSet, row.month) && (ctx.mode === "monthly" || ctx.weekSetEff.has(row.week))
+  );
+  const productRows = topGroupRows(sourceRows, row => row.product, 5);
+  const campaignRows = topGroupRows(sourceRows, row => campaignCode(row.campaign || "No Campaign"), 5);
+  const campaignColor = key => CAMPAIGN_KINDS[campaignClass(key)].color;
+  return `
+    <section class="compare-column" style="--cc:${color}">
+      <div class="compare-column-head">
+        <div><h3>${escapeHtml(title)}</h3><span>${agents.length.toLocaleString("id-ID")} agent</span></div>
+        <strong>${rupiah(agents.reduce((sum, row) => sum + row.revenue, 0))}</strong>
+      </div>
+      <div class="compare-breakdown">
+        <div><strong>Produk terlaris</strong>${renderMiniBars(productRows, key => productColor(key))}</div>
+        <div><strong>Campaign terlaris</strong>${renderMiniBars(campaignRows, campaignColor)}</div>
+      </div>
+      <div class="compare-agent-list">
+        ${agents.map((row, index) => {
+          const rowTarget = targetFn(row);
+          const toTarget = rowTarget ? row.revenue / rowTarget : 0;
+          const tone = toneFor(toTarget);
+          const width = Math.min(100, Math.max(3, toTarget * 100));
+          const parts = Object.entries(row.products).sort((a, b) => b[1] - a[1]);
+          const topProduct = parts[0]?.[0] || "-";
+          return `
+            <article class="compare-agent-card rank-${index + 1}">
+              <div class="rank-number">${index + 1}</div>
+              <div class="compare-agent-main">
+                <strong>${escapeHtml(row.agent)}</strong>
+                <span>${row.txn.toLocaleString("id-ID")} TXN - ${escapeHtml(topProduct)}</span>
+                <div class="rank-bar"><span class="tone-${tone}" style="width:${width}%"></span></div>
+              </div>
+              <div class="compare-agent-value"><strong>${rupiah(row.revenue)}</strong><span>${percent(toTarget)}</span></div>
+            </article>
+          `;
+        }).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`}
+      </div>
+    </section>
+  `;
+}
+
 function renderAgentLeaderboard() {
-  const selectedMonth = el("agentLeaderboardMonth").value;
-  const mode = el("agentLeaderboardMode").value;
-  const selectedWeek = el("agentLeaderboardWeek").value;
+  const ctx = modeContext("agentLeaderboardMonth", "agentLeaderboardMode", "agentLeaderboardWeek");
   const coachSet = getMultiSet("agentLeaderboardCoach");
   const agentSet = getMultiSet("agentLeaderboardAgent");
   const query = el("agentLeaderboardSearch").value.trim().toLowerCase();
-  el("agentLeaderboardWeek").disabled = mode === "monthly";
   const rows = layerOneRows.filter(row =>
-    (selectedMonth === "all" || weekFor(row.weekName, row.weekNum)?.month === selectedMonth) &&
-    (mode === "monthly" || weekFor(row.weekName, row.weekNum)?.name === selectedWeek) &&
+    matchMulti(ctx.monthSet, row.month) &&
+    (ctx.mode === "monthly" || ctx.weekSetEff.has(row.week)) &&
     matchMulti(coachSet, row.leader || "-") &&
     matchMulti(agentSet, row.agent) &&
     (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
@@ -4605,46 +5049,55 @@ function renderAgentLeaderboard() {
     const key = row.agent.toLowerCase();
     if (!byAgent.has(key)) byAgent.set(key, { agent: row.agent, leader: row.leader, revenue: 0, txn: 0, weeks: new Set(), products: {} });
     const item = byAgent.get(key);
-    const week = weekFor(row.weekName, row.weekNum);
-    const product = productBucket(row);
     item.revenue += row.revenue;
     item.txn += 1;
-    item.weeks.add(week.name);
-    item.products[product] = (item.products[product] || 0) + row.revenue;
+    item.weeks.add(row.week);
+    item.products[row.product] = (item.products[row.product] || 0) + row.revenue;
   });
   const agents = [...byAgent.values()].sort((a, b) => b.revenue - a.revenue);
-  const monthWeeks = targetWeeksForMonth(selectedMonth);
-  const targetForRow = row => mode === "monthly"
-    ? monthWeeks.reduce((sum, weekName) => sum + targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === weekName)), 0)
-    : targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
-  const target = agents.length ? agents.reduce((sum, row) => sum + targetForRow(row), 0) / agents.length : 0;
   const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
-  const totalTarget = agents.reduce((sum, row) => sum + targetForRow(row), 0);
+  const totalTarget = agents.reduce((sum, row) => sum + ctx.targetForAgent(row.agent), 0);
   const totalTxn = agents.reduce((sum, row) => sum + row.txn, 0);
   const top = agents[0];
+  const currentWeekNum = getISOWeekNumber(new Date());
+  const showAction = ctx.mode === "weekly" && ctx.effectiveWeeks.length === 1 && WEEK_PERIODS.find(week => week.name === ctx.effectiveWeeks[0])?.weekNum === currentWeekNum;
+
   el("agentLeaderboardTotalRevenue").textContent = rupiah(totalRevenue);
   el("agentLeaderboardAgentKpi").textContent = agents.length.toLocaleString("id-ID");
   el("agentLeaderboardTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
-  el("agentLeaderboardTxnNote").textContent = mode === "monthly" ? `Monthly ${selectedMonthLabel(selectedMonth)}` : selectedWeek;
+  el("agentLeaderboardTxnNote").textContent = ctx.periodText;
   el("agentLeaderboardTopAgentKpi").textContent = top ? top.agent : "-";
   el("agentLeaderboardTopRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
   el("agentLeaderboardTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
   el("agentLeaderboardCount").textContent = `${agents.length} agent`;
-  el("agentLeaderboardCaption").textContent = mode === "monthly" ? `Monthly ${selectedMonthLabel(selectedMonth)} - target ${rupiah(target)} per agent` : `${selectedWeek} - target ${rupiah(target)} per agent`;
+  el("agentLeaderboardCaption").textContent = `${ctx.periodText} - ${multiText("agentLeaderboardCoach", "Semua coach")}`;
+
+  el("agentLeaderboardPodium").hidden = agents.length === 0;
+  el("agentLeaderboardPodium").innerHTML = podiumHtml(agents.map(row => {
+    const rowTarget = ctx.targetForAgent(row.agent);
+    return { name: row.agent, sub: `${row.leader || "-"} - ${percent(rowTarget ? row.revenue / rowTarget : 0)} dari target`, value: rupiah(row.revenue), valueSub: `${row.txn.toLocaleString("id-ID")} TXN`, pct: rowTarget ? row.revenue / rowTarget : 0 };
+  }));
+
   el("agentLeaderboardList").classList.remove("compare-grid");
   el("agentLeaderboardList").innerHTML = agents.map((row, index) => {
-    const rowTarget = targetForRow(row);
+    const rowTarget = ctx.targetForAgent(row.agent);
     const toTarget = rowTarget ? row.revenue / rowTarget : 0;
-    const width = Math.min(100, Math.max(4, toTarget * 100));
+    const tone = toneFor(toTarget);
+    const width = Math.min(100, Math.max(3, toTarget * 100));
     const topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
+    const gapText = index === 0 ? "Peringkat 1" : `${rupiah(agents[index - 1].revenue - row.revenue)} lagi untuk naik ke #${index}`;
     return `
       <article class="rank-card rank-${index + 1}">
         <div class="rank-number">${index + 1}</div>
         <div class="rank-main">
-          <div class="rank-title"><strong>${escapeHtml(row.agent)}</strong><span>${escapeHtml(row.leader || "-")} - ${row.txn.toLocaleString("id-ID")} TXN</span></div>
-          <div class="rank-bar"><span style="width:${width}%"></span></div>
-          <div class="rank-meta"><span>Target: ${rupiah(rowTarget)} - Top product: ${escapeHtml(topProduct)}</span><span>${percent(toTarget)} to target</span></div>
-          ${mode === "weekly" ? weeklyActionBlock(row.revenue, rowTarget) : ""}
+          <div class="rank-title">
+            <div class="name-line"><span class="avatar av-${avatarTone(row.agent)}">${escapeHtml(initialsOf(row.agent))}</span><strong>${escapeHtml(row.agent)}</strong></div>
+            <span class="chip-tone ${tone}">${TONE_LABELS[tone]}</span>
+          </div>
+          <div class="rank-meta"><span>${escapeHtml(row.leader || "-")} - ${row.txn.toLocaleString("id-ID")} TXN - <span class="pill prod-pill" style="background:${productColor(topProduct)}">${escapeHtml(topProduct)}</span></span></div>
+          <div class="rank-bar"><span class="tone-${tone}" style="width:${width}%"></span></div>
+          <div class="rank-meta"><span>Target ${rupiah(rowTarget)} - ${percent(toTarget)} tercapai</span><span class="lb-gap">${gapText}</span></div>
+          ${showAction ? weeklyActionBlock(row.revenue, rowTarget) : ""}
         </div>
         <div class="rank-revenue"><strong>${rupiah(row.revenue)}</strong><span>${percent(toTarget)} target</span></div>
       </article>`;
@@ -4652,38 +5105,54 @@ function renderAgentLeaderboard() {
 }
 
 function renderCompareTeam() {
-  const selectedMonth = el("compareMonth").value;
-  const mode = el("compareMode").value;
-  const selectedWeek = el("compareWeek").value;
+  const ctx = modeContext("compareMonth", "compareMode", "compareWeek");
+  ctx.query = el("compareSearch").value.trim().toLowerCase();
   const compareCoaches = getMulti("compareCoach");
-  const query = el("compareSearch").value.trim().toLowerCase();
-  el("compareWeek").disabled = mode === "monthly";
-  const monthWeeks = targetWeeksForMonth(selectedMonth);
-  const monthRows = layerOneRows.filter(row => {
-    const week = weekFor(row.weekName, row.weekNum);
-    return selectedMonth === "all" || week?.month === selectedMonth;
-  });
-  const targetForRow = row => mode === "monthly"
-    ? monthWeeks.reduce((sum, weekName) => sum + targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === weekName)), 0)
-    : targetForAgentWeek(row.agent, WEEK_PERIODS.find(week => week.name === selectedWeek));
-  const arifAgents = aggregateAgentsByCoach(monthRows, "Arif Pambudi", mode, selectedWeek, query);
-  const compareGroups = compareCoaches.map(coach => ({ coach, agents: aggregateAgentsByCoach(monthRows, coach, mode, selectedWeek, query) }));
-  const allAgents = [...arifAgents, ...compareGroups.flatMap(group => group.agents)];
+  const arifAgents = aggregateAgentsByCoach(layerOneRows, "Arif Pambudi", ctx);
+  const groups = [{ coach: "Arif Pambudi", agents: arifAgents }, ...compareCoaches.map(coach => ({ coach, agents: aggregateAgentsByCoach(layerOneRows, coach, ctx) }))];
+  const allAgents = groups.flatMap(group => group.agents);
   const totalRevenue = allAgents.reduce((sum, row) => sum + row.revenue, 0);
-  const totalTarget = allAgents.reduce((sum, row) => sum + targetForRow(row), 0);
+  const totalTarget = allAgents.reduce((sum, row) => sum + ctx.targetForAgent(row.agent), 0);
   const totalTxn = allAgents.reduce((sum, row) => sum + row.txn, 0);
   const top = [...allAgents].sort((a, b) => b.revenue - a.revenue)[0];
+
   el("compareTotalRevenue").textContent = rupiah(totalRevenue);
   el("compareAgentKpi").textContent = allAgents.length.toLocaleString("id-ID");
   el("compareTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
-  el("compareTxnNote").textContent = mode === "monthly" ? `Monthly ${selectedMonthLabel(selectedMonth)}` : selectedWeek;
+  el("compareTxnNote").textContent = ctx.periodText;
   el("compareTopAgentKpi").textContent = top ? top.agent : "-";
   el("compareTopRevenueKpi").textContent = top ? `${top.leader} - ${rupiah(top.revenue)}` : "Rp0";
   el("compareTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
-  el("compareCount").textContent = `${[arifAgents.length, ...compareGroups.map(group => group.agents.length)].join(" vs ")} agent`;
-  const compareLabel = compareCoaches.length ? compareCoaches.join(", ") : "(pilih coach pembanding)";
-  el("compareCaption").textContent = mode === "monthly" ? `Monthly ${selectedMonthLabel(selectedMonth)} - Arif Pambudi vs ${compareLabel}` : `${selectedWeek} - Arif Pambudi vs ${compareLabel}`;
-  el("compareList").innerHTML = renderTeamColumn("Arif Pambudi", arifAgents, targetForRow) + compareGroups.map(group => renderTeamColumn(group.coach, group.agents, targetForRow)).join("");
+  el("compareCount").textContent = `${groups.map(group => group.agents.length).join(" vs ")} agent`;
+  el("compareCaption").textContent = `${ctx.periodText} - Arif Pambudi vs ${compareCoaches.length ? compareCoaches.join(", ") : "(pilih coach pembanding)"}`;
+
+  const summaries = groups.map((group, index) => {
+    const revenue = group.agents.reduce((sum, row) => sum + row.revenue, 0);
+    const target = group.agents.reduce((sum, row) => sum + ctx.targetForAgent(row.agent), 0);
+    const txn = group.agents.reduce((sum, row) => sum + row.txn, 0);
+    return { ...group, revenue, target, txn, pct: target ? revenue / target : 0, color: LEADER_COLORS[(index + 2) % LEADER_COLORS.length], avg: group.agents.length ? revenue / group.agents.length : 0 };
+  });
+  const leadRevenue = Math.max(...summaries.map(item => item.revenue), 0);
+  const base = summaries[0];
+  el("compareSummary").innerHTML = summaries.map((item, index) => {
+    const isLead = item.revenue > 0 && item.revenue === leadRevenue;
+    const diff = index === 0 ? null : item.revenue - base.revenue;
+    return `
+      <article class="cmp-card${isLead ? " lead" : ""}" style="--cc:${item.color}">
+        ${isLead ? `<span class="cmp-crown">REVENUE TERTINGGI</span>` : ""}
+        <div class="cmp-top"><span class="avatar">${escapeHtml(initialsOf(item.coach))}</span><div><strong>${escapeHtml(item.coach)}</strong><small>${item.agents.length} agent - ${item.txn.toLocaleString("id-ID")} TXN</small></div></div>
+        <div class="cmp-revenue">${rupiah(item.revenue)}</div>
+        <div class="meter"><i style="width:${Math.min(100, Math.max(2, item.pct * 100))}%;background:${TONE_COLORS[toneFor(item.pct)]}"></i></div>
+        <div class="cmp-stats">
+          <div><span>Target</span><b>${percent(item.pct)}</b></div>
+          <div><span>Rata-rata / agent</span><b>${compactRupiah(item.avg)}</b></div>
+          <div><span>Agent #1</span><b>${escapeHtml(item.agents[0]?.agent || "-")}</b></div>
+        </div>
+        ${diff === null ? "" : `<div class="cmp-diff ${diff >= 0 ? "up" : "down"}">${diff >= 0 ? "Unggul" : "Tertinggal"} ${compactRupiah(Math.abs(diff))} dari ${escapeHtml(base.coach)}</div>`}
+      </article>`;
+  }).join("");
+
+  el("compareList").innerHTML = summaries.map(item => renderTeamColumn(item.coach, item.agents, row => ctx.targetForAgent(row.agent), ctx, item.color)).join("");
 }
 
 const DAY_NAMES = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
@@ -5406,6 +5875,11 @@ function switchTab(tabId) {
   ["dodolanLeaderFilter", "Semua leader"], ["dodolanAgentFilter", "Semua agent"],
   ["agentLeaderboardCoach", "Semua coach"], ["agentLeaderboardAgent", "Semua agent"],
   ["compareCoach", "Pilih coach"], ["trendCoachFilter", "Semua coach"], ["trendAgentFilter", "Semua agent"],
+  ["actionCoachFilter", "Semua coach"], ["actionStatusFilter", "Semua status"],
+  ["topCampaignMonth", "Semua bulan"], ["topCampaignWeek", "Semua week"], ["topCampaignLayer", "Semua layer"], ["topCampaignProduct", "Semua produk"],
+  ["leaderboardMonthFilter", "Semua bulan"], ["leaderboardWeekFilter", "Semua week"], ["leaderboardLayerFilter", "Semua layer"], ["leaderboardCoachFilter", "Semua coach"],
+  ["spvMonthFilter", "Semua bulan"], ["spvWeekFilter", "Semua week"], ["spvSpvFilter", "Semua SPV"], ["spvCoachFilter", "Semua coach"], ["spvAgentFilter", "Semua agent"],
+  ["agentLeaderboardMonth", "Semua bulan"], ["agentLeaderboardWeek", "Semua week"], ["compareMonth", "Semua bulan"], ["compareWeek", "Semua week"],
 ].forEach(([id, label]) => initMulti(id, label));
 
 document.querySelectorAll(".tab-button").forEach(button => button.addEventListener("click", () => switchTab(button.dataset.tab)));
@@ -5417,16 +5891,21 @@ el("monthFilter").addEventListener("change", () => {
 el("searchFilter").addEventListener("input", render);
 el("statusFilter").addEventListener("change", render);
 el("actionMonthFilter").addEventListener("change", () => {
-  syncWeekOptions("actionWeekFilter", el("actionMonthFilter").value, false);
+  const month = el("actionMonthFilter").value;
+  syncWeekOptions("actionWeekFilter", month, false);
+  const pick = latestActiveWeek(month === "all" ? new Set() : new Set([month]));
+  if (pick && [...el("actionWeekFilter").options].some(option => option.value === pick)) el("actionWeekFilter").value = pick;
   renderActionCenter();
 });
+el("actionCoachFilter").addEventListener("change", () => { syncAgentMulti("actionAgentFilter", layerOneRows, "actionCoachFilter"); renderActionCenter(); });
+el("actionStatusFilter").addEventListener("change", renderActionCenter);
 el("topCampaignMonth").addEventListener("change", () => {
-  syncWeekOptions("topCampaignWeek", el("topCampaignMonth").value, true);
+  syncWeekMulti("topCampaignWeek", "topCampaignMonth");
   updateTopCampaignAgentOptions();
   renderTopCampaign();
 });
-el("topCampaignWeek").addEventListener("change", () => { updateTopCampaignAgentOptions(); renderTopCampaign(); });
-el("topCampaignCoach").addEventListener("change", () => { updateTopCampaignAgentOptions(); renderTopCampaign(); });
+["topCampaignWeek", "topCampaignLayer", "topCampaignCoach"].forEach(id => el(id).addEventListener("change", () => { updateTopCampaignAgentOptions(); renderTopCampaign(); }));
+el("topCampaignProduct").addEventListener("change", renderTopCampaign);
 el("topCampaignAgent").addEventListener("change", renderTopCampaign);
 el("topCampaignSort").addEventListener("change", renderTopCampaign);
 el("topCampaignSearch").addEventListener("input", renderTopCampaign);
@@ -5461,21 +5940,22 @@ el("dodolanLeaderFilter").addEventListener("change", () => { syncAgentMulti("dod
 el("dodolanAgentFilter").addEventListener("change", renderDodolan);
 el("dodolanSearchFilter").addEventListener("input", renderDodolan);
 el("leaderboardMonthFilter").addEventListener("change", () => {
-  syncWeekOptions("leaderboardWeekFilter", el("leaderboardMonthFilter").value, true);
+  syncWeekMulti("leaderboardWeekFilter", "leaderboardMonthFilter");
   renderLeaderboard();
 });
-el("leaderboardWeekFilter").addEventListener("change", renderLeaderboard);
-el("leaderboardLayerFilter").addEventListener("change", renderLeaderboard);
-el("spvMonthFilter").instance = null;
+["leaderboardWeekFilter", "leaderboardLayerFilter", "leaderboardCoachFilter"].forEach(id => el(id).addEventListener("change", renderLeaderboard));
 el("spvMonthFilter").addEventListener("change", () => {
-  syncWeekOptions("spvWeekFilter", el("spvMonthFilter").value, true);
+  syncWeekMulti("spvWeekFilter", "spvMonthFilter");
   renderSpvDivision();
 });
 el("spvWeekFilter").addEventListener("change", renderSpvDivision);
+el("spvSpvFilter").addEventListener("change", () => { syncSpvFilters(); renderSpvDivision(); });
+el("spvCoachFilter").addEventListener("change", () => { syncSpvFilters(); renderSpvDivision(); });
+el("spvAgentFilter").addEventListener("change", renderSpvDivision);
 el("actionWeekFilter").addEventListener("change", renderActionCenter);
 el("actionSearchFilter").addEventListener("input", renderActionCenter);
 el("agentLeaderboardMonth").addEventListener("change", () => {
-  syncWeekOptions("agentLeaderboardWeek", el("agentLeaderboardMonth").value, false);
+  syncWeekMulti("agentLeaderboardWeek", "agentLeaderboardMonth");
   renderAgentLeaderboard();
 });
 el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
@@ -5484,7 +5964,7 @@ el("agentLeaderboardCoach").addEventListener("change", () => { syncAgentMulti("a
 el("agentLeaderboardAgent").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardSearch").addEventListener("input", renderAgentLeaderboard);
 el("compareMonth").addEventListener("change", () => {
-  syncWeekOptions("compareWeek", el("compareMonth").value, false);
+  syncWeekMulti("compareWeek", "compareMonth");
   renderCompareTeam();
 });
 el("compareMode").addEventListener("change", renderCompareTeam);
