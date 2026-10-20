@@ -2177,6 +2177,45 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .cmp-diff.down { color: #b42318; }
 .mini-bar-row > span { color: #36739a; }
 
+/* ---- leaderboard agent: tabel lengkap ---- */
+.alb-scroll { max-height: 78vh; overflow: auto; }
+.alb-table { width: max-content; min-width: 100%; border-collapse: separate; border-spacing: 0; font-size: 11px; }
+.alb-table th, .alb-table td { padding: 5px 8px; border-right: 1px solid #d5dde8; border-bottom: 1px solid #d5dde8; text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.alb-table thead th { position: sticky; z-index: 3; border-color: #2c4c7c; background: #12315c; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 0; text-transform: none; }
+.alb-table thead tr:nth-child(1) th { top: 0; height: 30px; }
+.alb-table thead tr:nth-child(2) th { top: 30px; height: 28px; background: #1d4574; }
+.alb-table thead th[rowspan="2"] { top: 0; z-index: 4; }
+.alb-table thead th[data-sort] { cursor: pointer; }
+.alb-table thead th[data-sort]:hover { filter: brightness(1.25); }
+.alb-table thead th.grp-all { background: #0b2a55; }
+.alb-table thead th.grp-nb { background: #14456b; }
+.alb-table thead th.grp-prod { background: #3a2f7a; }
+.alb-table thead tr:nth-child(2) th.pct-head { background: #f59e0b; color: #2f1d00; }
+.alb-table thead th.sorted-desc::after { content: " \25BC"; font-size: 8px; }
+.alb-table thead th.sorted-asc::after { content: " \25B2"; font-size: 8px; }
+.alb-table th.c-rank, .alb-table td.c-rank { position: sticky; left: 0; min-width: 40px; width: 40px; }
+.alb-table th.c-coach, .alb-table td.c-coach { position: sticky; left: 40px; min-width: 132px; max-width: 132px; }
+.alb-table th.c-agent, .alb-table td.c-agent { position: sticky; left: 172px; min-width: 184px; max-width: 184px; }
+.alb-table thead th.c-rank, .alb-table thead th.c-coach, .alb-table thead th.c-agent { z-index: 6; }
+.alb-table td.c-rank { z-index: 2; background: #dff3e6; font-weight: 800; }
+.alb-table td.c-coach { z-index: 2; overflow: hidden; text-overflow: ellipsis; text-align: left; font-weight: 700; }
+.alb-table td.c-agent { z-index: 2; overflow: hidden; text-overflow: ellipsis; background: #fff; text-align: left; font-weight: 800; color: var(--ink); border-right: 2px solid #b7c6da; }
+.alb-table td.k-lav { background: #ece8fb; }
+.alb-table td.k-zero { background: #fde1df; color: #b42318; }
+.alb-table td.k-full { background: #d6f5e3; color: #047857; font-weight: 800; }
+.alb-table td.k-strong { font-weight: 800; }
+.alb-table td.pt-hi { background: #dfe3ff; color: #3730a3; font-weight: 800; }
+.alb-table td.pt-ok { background: #d6f5e3; color: #047857; font-weight: 800; }
+.alb-table td.pt-mid { background: #fff0c7; color: #92400e; font-weight: 800; }
+.alb-table td.pt-low { background: #ffdcd8; color: #b42318; font-weight: 800; }
+.alb-table td.pr-hi { background: #bdeccd; font-weight: 800; }
+.alb-table td.pr-ok { background: #e1f6e8; }
+.alb-table td.pr-mid { background: #fff0c7; }
+.alb-table td.pr-low { background: #fdd9d5; }
+.alb-table tbody tr:hover td { filter: brightness(.96); }
+.alb-table tfoot td { position: static; background: #12315c; border-color: #2c4c7c; color: #fff; font-weight: 800; }
+.alb-table tfoot td.c-rank, .alb-table tfoot td.c-coach, .alb-table tfoot td.c-agent { position: sticky; background: #12315c; color: #fff; }
+
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
   .divider { height: 1px; border-left: 0; border-top: 1px solid var(--line); }
@@ -2731,18 +2770,45 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
         <article class="kpi"><span>Total to target</span><strong id="agentLeaderboardTotalToTargetKpi">0%</strong><small>Target Layer 1</small></article>
       </div>
 
-      <div id="agentLeaderboardPodium" class="inc-podium" hidden></div>
+      <nav class="trend-subtabs" aria-label="Tampilan leaderboard agent">
+        <button type="button" class="active" data-albview="table">Tabel Lengkap</button>
+        <button type="button" data-albview="cards">Kartu Ranking</button>
+      </nav>
 
-      <section class="table-panel leaderboard-panel">
-        <div class="panel-heading">
-          <div>
-            <h2>Ranking Agent Layer 1</h2>
-            <p id="agentLeaderboardCaption">Monthly</p>
+      <div id="albViewTable">
+        <section class="table-panel leaderboard-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Leaderboard Agent Layer 1 - Tabel Lengkap</h2>
+              <p id="albTableCaption">Klik judul kolom untuk mengurutkan</p>
+            </div>
+            <span id="albTableCount" class="count-chip">0 agent</span>
           </div>
-          <span id="agentLeaderboardCount" class="count-chip">0 agent</span>
-        </div>
-        <div id="agentLeaderboardList" class="leaderboard-list"></div>
-      </section>
+          <div class="table-wrap alb-scroll">
+            <table class="alb-table">
+              <thead id="albHead"></thead>
+              <tbody id="albBody"></tbody>
+              <tfoot id="albFoot"></tfoot>
+            </table>
+          </div>
+          <p id="albNote" class="trend-footnote"></p>
+        </section>
+      </div>
+
+      <div id="albViewCards" hidden>
+        <div id="agentLeaderboardPodium" class="inc-podium" hidden></div>
+
+        <section class="table-panel leaderboard-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Ranking Agent Layer 1</h2>
+              <p id="agentLeaderboardCaption">Monthly</p>
+            </div>
+            <span id="agentLeaderboardCount" class="count-chip">0 agent</span>
+          </div>
+          <div id="agentLeaderboardList" class="leaderboard-list"></div>
+        </section>
+      </div>
     </section>
 
     <section id="spvPanel" class="tab-panel">
@@ -4946,7 +5012,8 @@ function modeContext(monthId, modeId, weekId) {
   const periodText = mode === "monthly"
     ? `Monthly ${monthSet.size ? multiText(monthId, "") : "Semua bulan"}`
     : `${effectiveWeeks.join(", ") || "-"}${weekSet.size ? "" : " (otomatis: week terakhir)"}`;
-  return { monthSet, mode, weekSet, effectiveWeeks, weekSetEff, targetForAgent, periodText };
+  const scopeWeeks = mode === "monthly" ? monthWeeks : effectiveWeeks;
+  return { monthSet, mode, weekSet, effectiveWeeks, weekSetEff, targetForAgent, periodText, scopeWeeks };
 }
 
 function aggregateAgentsByCoach(rows, coach, ctx) {
@@ -5032,6 +5099,152 @@ function renderTeamColumn(title, agents, targetFn, ctx, color) {
   `;
 }
 
+const ALB_GROUPS = [
+  { key: "baon", label: "Brain Academy Online" },
+  { key: "rb", label: "Ruangbelajar" },
+  { key: "ba", label: "Brain Academy" },
+  { key: "others", label: "Others" },
+];
+const RENEWAL_PATTERN = /renewal|perpanjang/i;
+const COACH_TINTS = ["#f9d5ec", "#fff3a8", "#b8f2c0", "#ffe2b8", "#b8ecff", "#d9d4ff", "#ffd0cc", "#cdeccf"];
+let albView = "table";
+let albSort = { key: "allRev", dir: "desc" };
+
+function isNewBusiness(row) { return !RENEWAL_PATTERN.test(row.campaign || ""); }
+function albGroupOf(product) {
+  if (String(product).startsWith("BAON")) return "baon";
+  if (product === "RB") return "rb";
+  if (product === "BAC & Mathchamps Offline") return "ba";
+  return "others";
+}
+function pct2(value) { return `${new Intl.NumberFormat("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format((value || 0) * 100)}%`; }
+function numId(value) { return new Intl.NumberFormat("id-ID").format(Math.round(value || 0)); }
+
+function workingDaysFor(weekNames) {
+  const currentWeekNum = getISOWeekNumber(new Date());
+  const today = jktDay(new Date());
+  const todayIndex = today ? today.index : 4;
+  return weekNames.reduce((sum, name) => {
+    const week = WEEK_PERIODS.find(item => item.name === name);
+    if (!week) return sum;
+    if (week.weekNum < currentWeekNum) return sum + 5;
+    if (week.weekNum === currentWeekNum) return sum + Math.min(5, todayIndex + 1);
+    return sum;
+  }, 0);
+}
+
+function albValue(model, key) { return key.split(".").reduce((obj, part) => obj?.[part], model); }
+
+function albModel(item, ctx, wd) {
+  const target = ctx.targetForAgent(item.agent);
+  const g = {};
+  ALB_GROUPS.forEach(group => {
+    const part = item.groups[group.key];
+    g[group.key] = { txn: part.txn, rev: part.rev, pct: item.nbTxn ? part.txn / item.nbTxn : 0 };
+  });
+  return {
+    agent: item.agent, leader: item.leader || "-", wd, target,
+    allTxn: item.txn, allRev: item.revenue, pctTarget: target ? item.revenue / target : 0, allArpu: item.txn ? item.revenue / item.txn : 0,
+    nbTxn: item.nbTxn, nbRev: item.nbRevenue, nbPct: item.txn ? item.nbTxn / item.txn : 0, nbArpu: item.nbTxn ? item.nbRevenue / item.nbTxn : 0,
+    g, prod: wd ? item.txn / wd : 0, arpu: item.nbTxn ? item.revenue / item.nbTxn : 0,
+  };
+}
+
+function renderAlbTable(models, ctx, weekLabel) {
+  const { key, dir } = albSort;
+  const factor = dir === "asc" ? 1 : -1;
+  const sorted = [...models].sort((a, b) => {
+    const va = albValue(a, key);
+    const vb = albValue(b, key);
+    const base = typeof va === "string" ? va.localeCompare(vb) : va - vb;
+    return factor * base || b.allRev - a.allRev || a.agent.localeCompare(b.agent);
+  });
+  const maxRev = Math.max(...models.map(model => model.allRev), 1);
+  const maxArpu = Math.max(...models.map(model => model.arpu), 1);
+  const coaches = [...new Set(models.map(model => model.leader))].sort((a, b) => a.localeCompare(b));
+  const tint = new Map(coaches.map((coach, index) => [coach, COACH_TINTS[index % COACH_TINTS.length]]));
+  const th = (label, sortKey, cls = "") => `<th data-sort="${sortKey}" class="${cls}${albSort.key === sortKey ? ` sorted-${albSort.dir}` : ""}">${label}</th>`;
+
+  el("albHead").innerHTML = `
+    <tr>
+      <th rowspan="2" class="c-rank">${escapeHtml(weekLabel)}</th>
+      <th rowspan="2" class="c-coach" data-sort="leader">Coach</th>
+      <th rowspan="2" class="c-agent" data-sort="agent">Agent</th>
+      <th rowspan="2" data-sort="wd">WD</th>
+      <th rowspan="2" data-sort="target">Target</th>
+      <th colspan="4" class="grp-all">Achievement All Product</th>
+      <th colspan="4" class="grp-nb">Achievement New Business</th>
+      ${ALB_GROUPS.map(group => `<th colspan="3" class="grp-prod">${group.label}</th>`).join("")}
+      <th rowspan="2" data-sort="prod">Prod</th>
+      <th rowspan="2" data-sort="arpu">ARPU</th>
+    </tr>
+    <tr>
+      ${th("Txn", "allTxn")}${th("Revenue", "allRev")}${th("% to Target", "pctTarget", "pct-head")}${th("ARPU", "allArpu")}
+      ${th("Txn", "nbTxn")}${th("Revenue", "nbRev")}${th("% to All", "nbPct", "pct-head")}${th("ARPU", "nbArpu")}
+      ${ALB_GROUPS.map(group => `${th("Txn", `g.${group.key}.txn`)}${th("Revenue", `g.${group.key}.rev`)}${th("% to All", `g.${group.key}.pct`, "pct-head")}`).join("")}
+    </tr>`;
+
+  const groupCells = (part) => {
+    const cls = part.txn === 0 ? "k-zero" : part.pct >= 0.9999 ? "k-full" : "k-lav";
+    return `<td class="${cls}">${part.txn}</td><td class="${cls}">${numId(part.rev)}</td><td class="${cls}">${pct2(part.pct)}</td>`;
+  };
+  el("albBody").innerHTML = sorted.map((model, index) => {
+    const tone = toneFor(model.pctTarget);
+    const heat = (0.08 + 0.5 * (model.allRev / maxRev)).toFixed(2);
+    const prodClass = model.prod >= 2 ? "pr-hi" : model.prod >= 1 ? "pr-ok" : model.prod >= 0.6 ? "pr-mid" : "pr-low";
+    const arpuHeat = (0.05 + 0.4 * (model.arpu / maxArpu)).toFixed(2);
+    return `
+    <tr>
+      <td class="c-rank">${index + 1}</td>
+      <td class="c-coach" style="background:${tint.get(model.leader)}" title="${escapeHtml(model.leader)}">${escapeHtml(model.leader)}</td>
+      <td class="c-agent" title="${escapeHtml(model.agent)}">${escapeHtml(model.agent)}</td>
+      <td>${model.wd}</td>
+      <td>${numId(model.target)}</td>
+      <td class="k-strong">${model.allTxn}</td>
+      <td class="k-strong" style="background:rgba(14,165,198,${heat})">${numId(model.allRev)}</td>
+      <td class="pt-${tone}">${pct2(model.pctTarget)}</td>
+      <td>${numId(model.allArpu)}</td>
+      <td class="${model.nbTxn === 0 ? "k-zero" : "k-lav"}">${model.nbTxn}</td>
+      <td class="${model.nbTxn === 0 ? "k-zero" : "k-lav"}">${numId(model.nbRev)}</td>
+      <td class="${model.nbPct >= 0.9999 ? "k-full" : model.nbTxn === 0 ? "k-zero" : "k-lav"}">${pct2(model.nbPct)}</td>
+      <td class="k-lav">${numId(model.nbArpu)}</td>
+      ${ALB_GROUPS.map(group => groupCells(model.g[group.key])).join("")}
+      <td class="${prodClass}">${model.prod.toFixed(2).replace(".", ",")}</td>
+      <td style="background:rgba(16,185,129,${arpuHeat})">${numId(model.arpu)}</td>
+    </tr>`;
+  }).join("") || `<tr><td colspan="27"><div class="detail-empty">Tidak ada agent pada filter ini.</div></td></tr>`;
+
+  const sum = fn => models.reduce((total, model) => total + fn(model), 0);
+  const total = { target: sum(m => m.target), allTxn: sum(m => m.allTxn), allRev: sum(m => m.allRev), nbTxn: sum(m => m.nbTxn), nbRev: sum(m => m.nbRev), wd: models[0]?.wd || 0 };
+  const groupTotals = ALB_GROUPS.map(group => ({ txn: sum(m => m.g[group.key].txn), rev: sum(m => m.g[group.key].rev) }));
+  el("albFoot").innerHTML = models.length ? `
+    <tr>
+      <td class="c-rank"></td><td class="c-coach">TOTAL</td><td class="c-agent">${models.length} agent</td>
+      <td>${total.wd}</td><td>${numId(total.target)}</td>
+      <td>${total.allTxn}</td><td>${numId(total.allRev)}</td><td>${pct2(total.target ? total.allRev / total.target : 0)}</td><td>${numId(total.allTxn ? total.allRev / total.allTxn : 0)}</td>
+      <td>${total.nbTxn}</td><td>${numId(total.nbRev)}</td><td>${pct2(total.allTxn ? total.nbTxn / total.allTxn : 0)}</td><td>${numId(total.nbTxn ? total.nbRev / total.nbTxn : 0)}</td>
+      ${groupTotals.map(part => `<td>${part.txn}</td><td>${numId(part.rev)}</td><td>${pct2(total.nbTxn ? part.txn / total.nbTxn : 0)}</td>`).join("")}
+      <td>${total.wd ? (total.allTxn / models.length / total.wd).toFixed(2).replace(".", ",") : "0,00"}</td><td>${numId(total.nbTxn ? total.allRev / total.nbTxn : 0)}</td>
+    </tr>` : "";
+
+  el("albTableCount").textContent = `${models.length} agent`;
+  el("albTableCaption").textContent = `${ctx.periodText} - ${multiText("agentLeaderboardCoach", "Semua coach")} - klik judul kolom untuk mengurutkan`;
+  const notes = [
+    "WD = hari kerja Senin-Jumat yang sudah berjalan (maks. 5 per week).",
+    "Prod = Txn All Product / WD. ARPU kolom kanan = Revenue All Product / Txn New Business.",
+    "New Business = transaksi yang campaign-nya bukan Renewal/Perpanjangan. % to All di kolom New Business = Txn NB / Txn All Product; di kolom produk = Txn produk / Txn NB.",
+    "Brain Academy Online = BAON (Reg/Prem/Elite), Brain Academy = BAC & Mathchamps Offline, Others = RGP, Math Champs Online, Skill Academy, dan lainnya.",
+  ];
+  el("albNote").textContent = notes.join(" ");
+}
+
+function setAlbView(view) {
+  albView = view;
+  document.querySelectorAll("[data-albview]").forEach(button => button.classList.toggle("active", button.dataset.albview === view));
+  el("albViewTable").hidden = view !== "table";
+  el("albViewCards").hidden = view !== "cards";
+}
+
 function renderAgentLeaderboard() {
   const ctx = modeContext("agentLeaderboardMonth", "agentLeaderboardMode", "agentLeaderboardWeek");
   const coachSet = getMultiSet("agentLeaderboardCoach");
@@ -5044,17 +5257,36 @@ function renderAgentLeaderboard() {
     matchMulti(agentSet, row.agent) &&
     (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
   );
+  const blank = () => ({ txn: 0, rev: 0 });
+  const newItem = (agent, leader) => ({ agent, leader, revenue: 0, txn: 0, weeks: new Set(), products: {}, nbTxn: 0, nbRevenue: 0, groups: { baon: blank(), rb: blank(), ba: blank(), others: blank() } });
   const byAgent = new Map();
   rows.forEach(row => {
     const key = row.agent.toLowerCase();
-    if (!byAgent.has(key)) byAgent.set(key, { agent: row.agent, leader: row.leader, revenue: 0, txn: 0, weeks: new Set(), products: {} });
+    if (!byAgent.has(key)) byAgent.set(key, newItem(row.agent, row.leader));
     const item = byAgent.get(key);
     item.revenue += row.revenue;
     item.txn += 1;
     item.weeks.add(row.week);
     item.products[row.product] = (item.products[row.product] || 0) + row.revenue;
+    if (isNewBusiness(row)) {
+      item.nbTxn += 1;
+      item.nbRevenue += row.revenue;
+      const part = item.groups[albGroupOf(row.product)];
+      part.txn += 1;
+      part.rev += row.revenue;
+    }
   });
-  const agents = [...byAgent.values()].sort((a, b) => b.revenue - a.revenue);
+  const scopeSet = new Set(ctx.scopeWeeks);
+  targetRows.forEach(row => {
+    if (row.team !== "Layer 1" || !row.agent || !scopeSet.has(row.week)) return;
+    if (!matchMulti(coachSet, row.leader || "-") || !matchMulti(agentSet, row.agent)) return;
+    if (query && !`${row.agent} ${row.leader}`.toLowerCase().includes(query)) return;
+    const key = row.agent.toLowerCase();
+    if (!byAgent.has(key)) byAgent.set(key, newItem(row.agent, row.leader));
+  });
+
+  const everyone = [...byAgent.values()].sort((a, b) => b.revenue - a.revenue || a.agent.localeCompare(b.agent));
+  const agents = everyone.filter(item => item.txn > 0);
   const totalRevenue = agents.reduce((sum, row) => sum + row.revenue, 0);
   const totalTarget = agents.reduce((sum, row) => sum + ctx.targetForAgent(row.agent), 0);
   const totalTxn = agents.reduce((sum, row) => sum + row.txn, 0);
@@ -5071,6 +5303,11 @@ function renderAgentLeaderboard() {
   el("agentLeaderboardTotalToTargetKpi").textContent = totalTarget ? percent(totalRevenue / totalTarget) : "0%";
   el("agentLeaderboardCount").textContent = `${agents.length} agent`;
   el("agentLeaderboardCaption").textContent = `${ctx.periodText} - ${multiText("agentLeaderboardCoach", "Semua coach")}`;
+
+  const wd = workingDaysFor(ctx.scopeWeeks);
+  const weekNums = ctx.mode === "weekly" ? ctx.effectiveWeeks.map(name => WEEK_PERIODS.find(week => week.name === name)?.weekNum).filter(Boolean) : [];
+  const weekLabel = weekNums.length === 0 ? "Bulan" : weekNums.length === 1 ? String(weekNums[0]) : `${weekNums[0]}-${weekNums[weekNums.length - 1]}`;
+  renderAlbTable(everyone.map(item => albModel(item, ctx, wd)), ctx, weekLabel);
 
   el("agentLeaderboardPodium").hidden = agents.length === 0;
   el("agentLeaderboardPodium").innerHTML = podiumHtml(agents.map(row => {
@@ -5959,6 +6196,15 @@ el("agentLeaderboardMonth").addEventListener("change", () => {
   renderAgentLeaderboard();
 });
 el("agentLeaderboardMode").addEventListener("change", renderAgentLeaderboard);
+document.querySelectorAll("[data-albview]").forEach(button => button.addEventListener("click", () => setAlbView(button.dataset.albview)));
+el("albHead").addEventListener("click", event => {
+  const cell = event.target.closest("th[data-sort]");
+  if (!cell) return;
+  const key = cell.dataset.sort;
+  const isText = key === "agent" || key === "leader";
+  albSort = albSort.key === key ? { key, dir: albSort.dir === "desc" ? "asc" : "desc" } : { key, dir: isText ? "asc" : "desc" };
+  renderAgentLeaderboard();
+});
 el("agentLeaderboardWeek").addEventListener("change", renderAgentLeaderboard);
 el("agentLeaderboardCoach").addEventListener("change", () => { syncAgentMulti("agentLeaderboardAgent", layerOneRows, "agentLeaderboardCoach"); renderAgentLeaderboard(); });
 el("agentLeaderboardAgent").addEventListener("change", renderAgentLeaderboard);
