@@ -1,0 +1,20 @@
+{
+  "as_of": "2026-10-19",
+  "updated_at": "2026-10-20 08:00",
+  "total_revenue": 72000000,
+  "total_closing": 48,
+  "agents": [
+    {
+      "name": "Agent 1",
+      "revenue": 6500000,
+      "closing": 5,
+      "target": 10000000
+    },
+    {
+      "name": "Agent 2",
+      "revenue": 8000000,
+      "closing": 7,
+      "target": 10000000
+    }
+  ]
+}
