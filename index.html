@@ -2216,6 +2216,18 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .alb-table tfoot td { position: static; background: #12315c; border-color: #2c4c7c; color: #fff; font-weight: 800; }
 .alb-table tfoot td.c-rank, .alb-table tfoot td.c-coach, .alb-table tfoot td.c-agent { position: sticky; background: #12315c; color: #fff; }
 
+.act-sub { padding: 2px 12px 6px; color: var(--muted); font-size: 10px; font-weight: 700; }
+.act-timeline { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 6px; }
+.tl-chip { flex: 1; min-width: 80px; padding: 6px 8px; border: 1px solid #e3ebf3; border-radius: 10px; background: #fff; text-align: center; }
+.tl-chip b { display: block; color: var(--muted); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+.tl-chip span { display: block; color: var(--ink); font-size: 14px; font-weight: 800; }
+.tl-chip small { color: var(--muted); font-size: 9.5px; font-weight: 700; }
+.tl-chip.bonus { border-style: dashed; background: #fbfcfd; }
+.tl-chip.bonus.off span { color: #98a2b3; font-size: 12px; }
+.data-note { display: block; margin-top: 6px; color: var(--muted); font-size: 10.5px; font-weight: 700; }
+.data-note b { color: var(--ink); }
+.data-note.stale { color: #b42318; }
+
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
   .divider { height: 1px; border-left: 0; border-top: 1px solid var(--line); }
@@ -2418,7 +2430,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
         <div>
           <p class="eyebrow">DAILY OPERATING VIEW</p>
           <h2 id="actionHeroTitle">Action Center Tim Arif Pambudi</h2>
-          <p>Halaman action harian untuk agent: lihat gap, transaksi yang dibutuhkan, dan fokus kerja hari ini.</p>
+          <p>Revenue di-update tiap pagi sampai kemarin (minggu Senin-Minggu). Rencana fokus ke hari kerja yang tersisa, Sabtu-Minggu jadi cadangan untuk menutup kekurangan atau menambah incentive.</p>
         </div>
         <div class="hero-number">
           <span>Total Gap</span>
@@ -2453,9 +2465,9 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       </div>
       <div id="actionStatusStrip" class="status-strip"></div>
       <div class="kpi-grid action-kpis">
-        <article class="kpi"><span>Need Push</span><strong id="actionNeedPushKpi">0</strong><small>TH di bawah minimum</small></article>
-        <article class="kpi"><span>Near Incentive</span><strong id="actionNearKpi">0</strong><small>Mendekati minimum TH</small></article>
-        <article class="kpi"><span>Daily Gap</span><strong id="actionDailyNeedKpi">Rp0</strong><small>Estimasi per hari</small></article>
+        <article class="kpi"><span>Need Push</span><strong id="actionNeedPushKpi">0</strong><small>Di bawah pace menuju minimum TH</small></article>
+        <article class="kpi"><span>Near Incentive</span><strong id="actionNearKpi">0</strong><small>Sesuai pace menuju minimum TH</small></article>
+        <article class="kpi"><span>Daily Gap</span><strong id="actionDailyNeedKpi">Rp0</strong><small id="actionDailyNeedNote">Estimasi per hari</small></article>
         <article class="kpi"><span>Next Action</span><strong id="actionTopCoachKpi">-</strong><small id="actionTopCoachGap">Rp0</small></article>
       </div>
       <div class="action-layout">
@@ -3004,7 +3016,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       <div id="trendViewDaily" class="trend-view" hidden>
         <div class="trend-howto">
           <strong>Cara baca:</strong>
-          1 kotak = 1 hari (Sen-Min), angka = jumlah transaksi masuk.
+          1 kotak = 1 hari (Sen-Min), angka = jumlah transaksi yang <b>dibayar</b> di hari itu (tanggal pembayaran).
           <span class="legend-cell h0-wd"></span> Sen-Jum kosong
           <span class="legend-cell h0-we"></span> Sab-Min kosong
           <span class="legend-cell h1">1</span><span class="legend-cell h2">2</span><span class="legend-cell h3">3-4</span><span class="legend-cell h5">5+</span> ada transaksi <span class="legend-cell hf"></span> belum berjalan
@@ -3485,10 +3497,29 @@ function parseAmount(value) {
 }
 
 function parseDate(value) {
-  if (value instanceof Date) return value;
+  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
   if (typeof value === "number") return new Date(Math.round((value - 25569) * 86400 * 1000));
-  const date = new Date(value);
+  const text = String(value ?? "").trim();
+  if (!text) return null;
+  const match = text.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+  if (match) {
+    let day = Number(match[1]);
+    let month = Number(match[2]);
+    if (month > 12 && day <= 12) [day, month] = [month, day];
+    const [hour, minute, second] = [Number(match[4] || 0), Number(match[5] || 0), Number(match[6] || 0)];
+    return new Date(Date.UTC(Number(match[3]), month - 1, day, hour - 7, minute, second));
+  }
+  const date = new Date(text);
   return Number.isNaN(date.getTime()) ? null : date;
+}
+
+let dateSource = { column: "Date", hasPayment: false, missingPayment: 0 };
+
+function findPaymentHeader(keys) {
+  const exact = ["payment date", "paid date", "payment_date", "paid_date", "paid at", "paid_at", "paymentdate", "payment time", "tanggal bayar", "tanggal pembayaran", "tgl bayar", "tgl pembayaran"];
+  for (const name of exact) if (keys[name]) return keys[name];
+  const fuzzy = Object.keys(keys).find(key => /(payment|paid|bayar|pembayaran).*(date|tanggal|tgl|time|at)|(date|tanggal|tgl).*(payment|paid|bayar|pembayaran)/.test(key));
+  return fuzzy ? keys[fuzzy] : null;
 }
 
 function formatAssignedDate(value) {
@@ -3610,8 +3641,16 @@ function normalizeRows(rows) {
   const keys = {};
   Object.keys(rows[0] || {}).forEach(key => { keys[key.trim().toLowerCase()] = key; });
   const read = (row, name) => row[keys[name.toLowerCase()]];
-  return rows.map(row => ({
-    date: parseDate(read(row, "Date")),
+  const payHeader = findPaymentHeader(keys);
+  const mapped = rows.map(row => {
+    const invoiceDate = parseDate(read(row, "Date"));
+    const payDate = payHeader ? parseDate(row[payHeader]) : null;
+    return { date: payDate || invoiceDate, invoiceDate, payDate };
+  });
+  const result = rows.map((row, index) => ({
+    date: mapped[index].date,
+    invoiceDate: mapped[index].invoiceDate,
+    payDate: mapped[index].payDate,
     weekName: normalizeWeekName(read(row, "Week name")),
     weekNum: Number(read(row, "WeekNum") || read(row, "Week")),
     invoice: String(read(row, "Invoice") || ""),
@@ -3626,6 +3665,8 @@ function normalizeRows(rows) {
     product_group: String(read(row, "Product Group") || "").trim(),
     revenue: parseAmount(read(row, "Amount")),
   })).filter(row => row.agent && weekFor(row.weekName, row.weekNum));
+  dateSource = { column: payHeader || "Date", hasPayment: Boolean(payHeader), missingPayment: payHeader ? result.filter(row => !row.payDate).length : 0 };
+  return result;
 }
 
 function buildDodolanRows(rows) {
@@ -3772,8 +3813,8 @@ function prepareDashboard(sheetName, rawCount) {
   syncWeekMulti("spvWeekFilter", "spvMonthFilter");
   syncWeekMulti("agentLeaderboardWeek", "agentLeaderboardMonth");
   syncWeekMulti("compareWeek", "compareMonth");
-  syncWeekOptions("actionWeekFilter", "all", false);
-  const startWeek = latestActiveWeek();
+  populateActionWeeks("all");
+  const startWeek = defaultActionWeek();
   if (startWeek && [...el("actionWeekFilter").options].some(option => option.value === startWeek)) el("actionWeekFilter").value = startWeek;
   const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   const allLeaders = [...new Set(allTransactionRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
@@ -4065,30 +4106,6 @@ function getISOWeekNumber(date) {
   return Math.ceil((((copy - yearStart) / 86400000) + 1) / 7);
 }
 
-function weekDaysLeft(weekName) {
-  const currentWeek = WEEK_PERIODS.find(week => week.weekNum === getISOWeekNumber(new Date()));
-  if (!currentWeek || currentWeek.name !== weekName) return 5;
-  const day = new Date().getDay() || 7;
-  const workdayWeights = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 0.5, 7: 0.5 };
-  let remaining = 0;
-  for (let currentDay = day; currentDay <= 7; currentDay += 1) {
-    remaining += workdayWeights[currentDay] || 0;
-  }
-  return Math.max(0.5, remaining);
-}
-
-function weekDaysPassed(weekName) {
-  const currentWeek = WEEK_PERIODS.find(week => week.weekNum === getISOWeekNumber(new Date()));
-  if (!currentWeek || currentWeek.name !== weekName) return 5;
-  const day = new Date().getDay() || 7;
-  const workdayWeights = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 0.5, 7: 0.5 };
-  let passed = 0;
-  for (let currentDay = 1; currentDay <= day; currentDay += 1) {
-    passed += workdayWeights[currentDay] || 0;
-  }
-  return Math.max(1, passed);
-}
-
 function historicalActionProfile(rows, agent, selectedWeek) {
   const currentWeek = WEEK_PERIODS.find(week => week.name === selectedWeek);
   const agentKey = String(agent || "").toLowerCase();
@@ -4133,54 +4150,109 @@ function estimateUpsideIncentive(row) {
   return arpu * rate;
 }
 
-function actionPlaybook(row, daysLeft) {
-  const dailyNeed = row.gap / Math.max(0.5, daysLeft);
-  const campaign = row.historyCampaign || row.topCampaign || "campaign yang punya revenue tertinggi";
-  const product = row.historyProduct || row.topProduct || "produk utama";
+const FULL_DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
+
+function actionTiming(weekMeta) {
+  const currentWeekNum = getISOWeekNumber(new Date());
+  const today = jktDay(new Date());
+  const t = today ? today.index : 0;
+  if (!weekMeta || weekMeta.weekNum < currentWeekNum) return { phase: "past", elapsed: 5, weekdaysLeft: 0, bonusLeft: 0, todayIndex: 6, dataThroughLabel: "" };
+  if (weekMeta.weekNum > currentWeekNum) return { phase: "future", elapsed: 0, weekdaysLeft: 5, bonusLeft: 2, todayIndex: -1, dataThroughLabel: "" };
+  return {
+    phase: "current",
+    todayIndex: t,
+    elapsed: Math.min(5, t),
+    weekdaysLeft: t <= 4 ? 5 - t : 0,
+    bonusLeft: t <= 5 ? 2 : 1,
+    dataThroughLabel: t === 0 ? dayDateLabel(weekMeta.weekNum - 1, 6) : dayDateLabel(weekMeta.weekNum, t - 1),
+  };
+}
+
+function planDays(timing) {
+  if (timing.phase === "future") return [0, 1, 2, 3, 4];
+  const t = timing.todayIndex;
+  if (t <= 4) return Array.from({ length: 5 - t }, (_, i) => t + i);
+  return t === 5 ? [5, 6] : [6];
+}
+
+function planRangeLabel(timing) {
+  const days = planDays(timing);
+  if (days[0] >= 5) return days.length === 2 ? "Sabtu - Minggu (bonus)" : "Minggu (bonus)";
+  return days.length === 1 ? FULL_DAYS[days[0]] : `${FULL_DAYS[days[0]]} - ${FULL_DAYS[days[days.length - 1]]}`;
+}
+
+function planRangeShort(timing) {
+  const days = planDays(timing);
+  return days.length === 1 ? DAY_NAMES[days[0]] : `${DAY_NAMES[days[0]]}-${DAY_NAMES[days[days.length - 1]]}`;
+}
+
+function actionStatusLive(th, minimum, timing) {
+  if (th >= 1) return { key: "done", label: "Over Target" };
+  if (th >= minimum) return { key: "track", label: "On Track" };
+  if (timing.elapsed > 0 && th >= minimum * Math.min(1, timing.elapsed / 5)) return { key: "near", label: "Near Incentive" };
+  return { key: "need", label: "Need Push" };
+}
+
+function nextTierInfo(row, weekMeta) {
+  if (!weekMeta) return null;
+  const product = row.topProduct && row.topProduct !== "-" ? row.topProduct : "Others";
+  const tiers = Object.keys(getRateTable(weekMeta.scheme, product, row.agent)).map(Number).filter(tier => tier > 0).sort((a, b) => a - b);
+  const next = tiers.find(tier => tier > row.th + 1e-9);
+  return next ? { tier: next, gap: Math.max(0, row.target * next - row.revenue) } : null;
+}
+
+function weekPlan(row, timing, weekMeta) {
+  const arpu = Math.max(1, row.historyArpu || row.aov || 1);
+  const days = planDays(timing);
+  const dailyNeed = row.gap > 0 ? row.gap / days.length : 0;
+  const weekendDays = timing.phase !== "past" && days[days.length - 1] <= 4 ? 2 : 0;
+  const timeline = row.gap > 0 ? days.map((day, index) => {
+    const cum = row.revenue + dailyNeed * (index + 1);
+    return { day: FULL_DAYS[day], bonus: day >= 5, cum, pct: row.target ? cum / row.target : 0 };
+  }) : [];
+  return {
+    arpu, days, dailyNeed, weekendDays, timeline,
+    perDayTxn: dailyNeed > 0 ? Math.max(1, Math.ceil(dailyNeed / arpu)) : 0,
+    totalTxn: row.gap > 0 ? Math.max(1, Math.ceil(row.gap / arpu)) : 0,
+    withWeekendNeed: row.gap > 0 && weekendDays ? row.gap / (days.length + weekendDays) : 0,
+    tier: nextTierInfo(row, weekMeta),
+  };
+}
+
+function planSteps(row, plan, timing, minimum) {
+  const campaign = escapeHtml(row.historyCampaign);
+  const product = escapeHtml(row.historyProduct);
+  const steps = [];
   if (row.th >= 1) {
-    return `Sudah 100%+. Kalau closing lagi sebelum Minggu, estimasi tambahan incentive sekitar ${rupiah(row.upsideIncentive)} per transaksi dengan acuan ARPU histori ${rupiah(row.historyArpu || row.aov)}. Fokus upsell dari ${campaign} dan jaga closing ${product}.`;
+    steps.push(`Target week sudah tercapai. Lanjut kejar tier berikutnya${plan.tier ? ` (${percent(plan.tier.tier)} TH, kurang ${rupiah(plan.tier.gap)})` : " - tier tertinggi sudah tercapai"}.`);
+    steps.push(`Tiap transaksi baru menambah incentive sekitar <b>${rupiah(row.upsideIncentive)}</b> (ARPU acuan ${rupiah(plan.arpu)}). Fokus upsell/renewal dari campaign <b>${campaign}</b>.`);
+    steps.push("Pastikan invoice yang menggantung segera dibayar - yang dihitung adalah tanggal pembayaran.");
+    return steps;
   }
-  if (row.status.key === "near") {
-    return `Dekat cair. Kejar ${row.neededTxn || 1} transaksi dengan ARPU minimal ${rupiah(row.requiredArpu)}. Mulai dari unpaid invoice, lalu leads panas dari ${campaign}; produk yang paling masuk akal: ${product}.`;
+  const first = plan.days[0];
+  const firstName = timing.phase === "future" ? "Senin" : FULL_DAYS[first];
+  const bonus = first >= 5;
+  steps.push(`<b>${firstName}${timing.phase === "current" ? " (hari ini)" : ""}${bonus ? " - bonus" : ""}</b>: kejar <b>${rupiah(plan.dailyNeed)}</b> (sekitar ${plan.perDayTxn} TXN). Mulai dari invoice yang belum dibayar - yang dihitung tanggal pembayaran, jadi reminder bayar paling cepat menambah angka.`);
+  if (row.th < minimum) {
+    steps.push(`Prioritas utama: capai minimum <b>${percent(minimum)} TH</b> dulu (kurang ${rupiah(Math.max(0, row.target * minimum - row.revenue))}) supaya incentive cair, baru kejar 100%.`);
+  } else if (plan.timeline[0]) {
+    steps.push(`Checkpoint akhir ${firstName}: minimal <b>${percent(plan.timeline[0].pct)} TH</b>. Cek posisi tiap sore.`);
   }
-  if (row.status.key === "track") {
-    return `Sudah masuk minimum, sekarang dorong ke 100%. Butuh run rate ${rupiah(dailyNeed)}/hari. Pakai pola histori: campaign ${campaign}, produk ${product}, ARPU acuan ${rupiah(row.historyArpu || row.aov)}.`;
-  }
-  return `Prioritas hari ini: tambah pipeline sampai minimal ${rupiah(dailyNeed)} revenue/hari. Butuh sekitar ${row.neededTxn || 1} transaksi dengan ARPU ${rupiah(row.requiredArpu)}. Kerjakan ulang campaign ${campaign}, lalu follow-up hot leads dan unpaid invoice.`;
+  steps.push(`Fokus kerja: follow-up leads panas dari campaign <b>${campaign}</b> dan closing produk <b>${product}</b> (ARPU acuan ${rupiah(plan.arpu)}).`);
+  if (plan.weekendDays) steps.push(`Sabtu-Minggu libur secara default. Kalau Jumat masih kurang, weekend bisa dipakai kejar - kebutuhan turun jadi <b>${rupiah(plan.withWeekendNeed)}/hari</b> kalau ikut closing.`);
+  if (row.status.key === "need" && timing.elapsed > 0) steps.push("Pace masih di bawah ideal: tambah volume kontak baru hari ini, jangan hanya mengandalkan leads lama.");
+  return steps.slice(0, 5);
 }
 
-function tomorrowPlan(row, daysLeft) {
-  const arpu = row.historyArpu || row.aov || 0;
-  const dailyNeed = row.gap > 0 ? row.gap / Math.max(0.5, daysLeft) : 0;
-  const neededTxn = dailyNeed > 0 ? Math.max(1, Math.round(dailyNeed / Math.max(1, arpu))) : 0;
-  const requiredArpuTomorrow = neededTxn > 0 ? dailyNeed / neededTxn : arpu;
-  const projectedRevenue = row.revenue + dailyNeed;
-  const projectedTh = row.target ? projectedRevenue / row.target : 0;
-  const checklist = [];
-  if (row.th >= 1) {
-    checklist.push(`Push upsell/renewal ke leads existing dari campaign <b>${escapeHtml(row.historyCampaign)}</b> untuk tambahan tier incentive.`);
-    checklist.push(`Jaga closing produk <b>${escapeHtml(row.historyProduct)}</b> yang selama ini paling konsisten mendatangkan revenue.`);
-    checklist.push(`Bantu 1 rekan satu tim yang masih di bawah minimum TH supaya total tim ikut naik.`);
-  } else {
-    checklist.push(`Follow-up leads panas dari campaign <b>${escapeHtml(row.historyCampaign)}</b> - campaign ini historinya paling banyak closing.`);
-    checklist.push(`Fokus closing produk <b>${escapeHtml(row.historyProduct)}</b> dengan ARPU acuan ${rupiah(arpu)}.`);
-    checklist.push(`Cek ulang unpaid invoice & kirim reminder pembayaran sebelum jam 5 sore.`);
-    if (row.status.key === "need") {
-      checklist.push(`Tambah volume kontak baru hari ini - jangan hanya andalkan leads lama.`);
-    }
-  }
-  return { dailyNeed, arpu, neededTxn, requiredArpuTomorrow, projectedRevenue, projectedTh, checklist };
+function paceInfo(row, elapsed) {
+  if (!row.target || elapsed <= 0) return null;
+  const expectedByNow = row.target * Math.min(1, elapsed / 5);
+  if (row.revenue >= expectedByNow * 1.02) return { key: "ahead", label: `Di atas pace menuju 100% - ideal sampai kemarin ${rupiah(expectedByNow)}` };
+  if (row.revenue >= expectedByNow * 0.92) return { key: "onpace", label: `Sesuai pace menuju 100% - ideal sampai kemarin ${rupiah(expectedByNow)}` };
+  return { key: "behind", label: `Di bawah pace menuju 100% - seharusnya sudah ${rupiah(expectedByNow)} sampai kemarin` };
 }
 
-function paceInfo(row, daysPassed) {
-  if (!row.target) return null;
-  const expectedByNow = row.target * Math.min(1, daysPassed / 6);
-  if (row.revenue >= expectedByNow * 1.02) return { key: "ahead", label: `Di atas pace hari ini (target sampai hari ini ${rupiah(expectedByNow)})` };
-  if (row.revenue >= expectedByNow * 0.92) return { key: "onpace", label: `Sesuai pace (target sampai hari ini ${rupiah(expectedByNow)})` };
-  return { key: "behind", label: `Di bawah pace - seharusnya sudah ${rupiah(expectedByNow)} sampai hari ini` };
-}
-
-function aggregateActionAgents(rows, selectedWeek, roster = []) {
+function aggregateActionAgents(rows, selectedWeek, roster = [], timing = null) {
   const byAgent = new Map();
   const selectedWeekMeta = WEEK_PERIODS.find(week => week.name === selectedWeek);
   rows.forEach(row => {
@@ -4215,7 +4287,7 @@ function aggregateActionAgents(rows, selectedWeek, roster = []) {
     row.historyProduct = profile.topProduct;
     row.neededTxn = row.gap > 0 ? Math.max(1, Math.ceil(row.gap / Math.max(1, row.historyArpu))) : 0;
     row.requiredArpu = row.gap > 0 ? row.gap / Math.max(1, row.neededTxn) : row.historyArpu;
-    row.status = actionStatus(row.th, selectedWeekMeta?.minimum || .5);
+    row.status = timing && timing.phase !== "past" ? actionStatusLive(row.th, selectedWeekMeta?.minimum || .5, timing) : actionStatus(row.th, selectedWeekMeta?.minimum || .5);
     row.topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
     row.topCampaign = Object.entries(row.campaigns).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
     row.upsideIncentive = estimateUpsideIncentive(row);
@@ -4299,19 +4371,38 @@ function renderMiniAggregate(elementId, rows, keyFn, limit, colorFn) {
   `).join("") || `<div class="detail-empty">Tidak ada data.</div>`;
 }
 
+function populateActionWeeks(month) {
+  const select = el("actionWeekFilter");
+  const current = select.value;
+  const names = new Set(availableWeeks(month));
+  const currentMeta = WEEK_PERIODS.find(week => week.weekNum === getISOWeekNumber(new Date()));
+  if (currentMeta && (month === "all" || currentMeta.month === month)) names.add(currentMeta.name);
+  const weeks = WEEK_PERIODS.map(week => week.name).filter(name => names.has(name));
+  select.innerHTML = weeks.map(week => `<option value="${week}">${week}</option>`).join("");
+  if (weeks.includes(current)) select.value = current;
+}
+
+function defaultActionWeek(month = "all") {
+  const currentMeta = WEEK_PERIODS.find(week => week.weekNum === getISOWeekNumber(new Date()));
+  if (currentMeta && (month === "all" || currentMeta.month === month)) return currentMeta.name;
+  return latestActiveWeek(month === "all" ? new Set() : new Set([month]));
+}
+
 function actionCardHtml(row, ctx) {
-  const { daysLeft, daysPassed, isPast, minimum } = ctx;
+  const { timing, minimum, weekMeta } = ctx;
+  const isPast = timing.phase === "past";
   const tone = row.th >= 1 ? "hi" : row.status.key === "track" ? "ok" : row.status.key === "near" ? "mid" : "low";
-  const runRate = row.revenue / Math.max(1, daysPassed);
-  const projected = runRate * 6;
-  const expectedPct = isPast ? 0 : Math.min(1, daysPassed / 6);
-  const plan = tomorrowPlan(row, daysLeft);
-  const pace = isPast ? null : paceInfo(row, daysPassed);
+  const elapsed = timing.elapsed;
+  const runRate = elapsed > 0 ? row.revenue / elapsed : 0;
+  const projected = runRate * 5;
+  const expectedPct = isPast ? 0 : Math.min(1, elapsed / 5);
   const eligible = row.th >= minimum;
   const barWidth = Math.min(100, Math.max(2, row.th * 100));
+  const pace = isPast ? null : paceInfo(row, elapsed);
   let planHtml;
   if (isPast) {
     const need = Math.max(0, row.target * minimum - row.revenue);
+    const profile = weekPlan(row, timing, weekMeta);
     planHtml = `
       <div class="act-plan ${eligible ? "plan-done" : "plan-need"}">
         <div class="act-plan-head"><b>Hasil akhir ${escapeHtml(row.week)}</b><span>Week sudah selesai</span></div>
@@ -4323,18 +4414,27 @@ function actionCardHtml(row, ctx) {
         </div>
         <ul class="act-steps">
           <li>Campaign yang paling sering closing: <b>${escapeHtml(row.historyCampaign)}</b></li>
-          <li>Produk andalan: <b>${escapeHtml(row.historyProduct)}</b> dengan ARPU acuan ${rupiah(plan.arpu)}</li>
+          <li>Produk andalan: <b>${escapeHtml(row.historyProduct)}</b> dengan ARPU acuan ${rupiah(profile.arpu)}</li>
         </ul>
       </div>`;
   } else {
-    const goals = row.th >= 1
-      ? [["Status", "Target tercapai"], ["Est. incentive / TXN baru", rupiah(row.upsideIncentive)], ["ARPU acuan", rupiah(plan.arpu)], ["TH saat ini", percent(row.th)]]
-      : [["Target revenue besok", rupiah(plan.dailyNeed)], ["Transaksi dibutuhkan", plan.neededTxn ? `${plan.neededTxn} TXN` : "-"], ["ARPU acuan", rupiah(plan.arpu)], ["Jika tercapai, TH jadi", percent(plan.projectedTh)]];
+    const plan = weekPlan(row, timing, weekMeta);
+    const isDone = row.th >= 1;
+    const goals = isDone
+      ? [["Status", "Target tercapai"], ["Tier berikutnya", plan.tier ? `${percent(plan.tier.tier)} (kurang ${compactRupiah(plan.tier.gap)})` : "Tier tertinggi"], ["Est. incentive / TXN baru", rupiah(row.upsideIncentive)], ["ARPU acuan", rupiah(plan.arpu)]]
+      : [[`Target / hari (${planRangeShort(timing)})`, rupiah(plan.dailyNeed)], ["Transaksi / hari", `${plan.perDayTxn} TXN`], ["ARPU acuan", rupiah(plan.arpu)], plan.weekendDays ? ["Jika Sab-Min ikut", `${rupiah(plan.withWeekendNeed)}/hari`] : ["Total TXN tersisa", `${plan.totalTxn} TXN`]];
+    const timeline = plan.timeline.length ? `
+      <div class="act-sub">Target kumulatif di akhir tiap hari (% TH)</div>
+      <div class="act-timeline">
+        ${plan.timeline.map(item => `<div class="tl-chip${item.bonus ? " bonus" : ""}"><b>${item.day.slice(0, 3)}</b><span>${percent(item.pct)}</span><small>${compactRupiah(item.cum)}</small></div>`).join("")}
+        ${plan.weekendDays ? `<div class="tl-chip bonus off"><b>Sab-Min</b><span>bonus</span><small>cadangan</small></div>` : ""}
+      </div>` : "";
     planHtml = `
       <div class="act-plan plan-${row.status.key}">
-        <div class="act-plan-head"><b>${row.th >= 1 ? "Jaga momentum" : "Rencana Besok"}</b><span>${daysLeft <= 1 ? "Hari terakhir week ini" : `${Math.max(1, Math.round(daysLeft - 1))} hari kerja setelah ini`}</span></div>
+        <div class="act-plan-head"><b>${isDone ? "Jaga momentum" : `Rencana ${planRangeLabel(timing)}`}</b><span>${timing.phase === "current" ? `Data per kemarin: ${timing.dataThroughLabel}` : "Week belum berjalan"}</span></div>
         <div class="act-goal">${goals.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</div>
-        <ol class="act-steps">${plan.checklist.map(item => `<li>${item}</li>`).join("")}</ol>
+        ${timeline}
+        <ol class="act-steps">${planSteps(row, plan, timing, minimum).map(item => `<li>${item}</li>`).join("")}</ol>
       </div>`;
   }
   return `
@@ -4348,11 +4448,11 @@ function actionCardHtml(row, ctx) {
         ${ringHtml(row.th, TONE_COLORS[tone], 70)}
         <div class="act-nums">
           <div class="act-main"><strong>${rupiah(row.revenue)}</strong><small>dari target ${rupiah(row.target)}</small></div>
-          <div class="meter"><i style="width:${barWidth}%"></i>${isPast ? "" : `<u style="left:calc(${(expectedPct * 100).toFixed(1)}% - 1px)" title="Posisi ideal hari ini"></u>`}</div>
+          <div class="meter"><i style="width:${barWidth}%"></i>${isPast ? "" : `<u style="left:calc(${(expectedPct * 100).toFixed(1)}% - 1px)" title="Posisi ideal sampai kemarin"></u>`}</div>
           <div class="act-trio">
             <div><span>${isPast ? "Selisih ke target" : "Sisa gap"}</span><b>${rupiah(row.gap)}</b></div>
-            <div><span>${isPast ? "Rata-rata / hari" : "Run rate"}</span><b>${rupiah(runRate)}/hari</b></div>
-            <div><span>${isPast ? "TXN" : "Proyeksi akhir week"}</span><b>${isPast ? row.txn.toLocaleString("id-ID") : rupiah(projected)}</b></div>
+            <div><span>${isPast ? "Rata-rata / hari" : "Run rate (hari kerja)"}</span><b>${isPast ? rupiah(row.revenue / 5) : elapsed > 0 ? rupiah(runRate) : "-"}${isPast || elapsed > 0 ? "/hari" : ""}</b></div>
+            <div><span>${isPast ? "TXN" : "Proyeksi Jumat"}</span><b>${isPast ? row.txn.toLocaleString("id-ID") : elapsed > 0 ? rupiah(projected) : "-"}</b></div>
           </div>
         </div>
       </div>
@@ -4368,42 +4468,59 @@ function renderActionCenter() {
   const agentSet = getMultiSet("actionAgentFilter");
   const statusSet = getMultiSet("actionStatusFilter");
   const weekMeta = WEEK_PERIODS.find(week => week.name === selectedWeek);
-  const isPast = weekMeta ? weekMeta.weekNum < getISOWeekNumber(new Date()) : false;
+  const timing = actionTiming(weekMeta);
+  const isPast = timing.phase === "past";
   const minimum = weekMeta?.minimum || 0.5;
-  const daysLeft = weekDaysLeft(selectedWeek);
-  const daysPassed = weekDaysPassed(selectedWeek);
   const coachLabel = multiText("actionCoachFilter", "Semua coach");
   const scopeRows = layerOneRows.filter(row => matchMulti(coachSet, row.leader || "-"));
-  const roster = targetRows
+  let roster = targetRows
     .filter(row => row.team === "Layer 1" && row.week === selectedWeek && matchMulti(coachSet, row.leader || "-"))
     .map(row => ({ agent: row.agent, leader: row.leader }));
-  const everyone = aggregateActionAgents(scopeRows, selectedWeek, roster).filter(row =>
+  if (!roster.length && weekMeta) {
+    const index = WEEK_PERIODS.findIndex(week => week.name === selectedWeek);
+    const previous = new Set(WEEK_PERIODS.slice(Math.max(0, index - 2), index).map(week => week.name));
+    roster = scopeRows.filter(row => previous.has(row.week)).map(row => ({ agent: row.agent, leader: row.leader }));
+  }
+  const everyone = aggregateActionAgents(scopeRows, selectedWeek, roster, timing).filter(row =>
     matchMulti(agentSet, row.agent) && (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
   );
   const agents = everyone.filter(row => statusSet.size === 0 || statusSet.has(row.status.key));
-  const openAgents = agents.filter(row => row.gap > 0);
   const totalGap = everyone.filter(row => row.gap > 0).reduce((sum, row) => sum + row.gap, 0);
   const totalRevenue = everyone.reduce((sum, row) => sum + row.revenue, 0);
   const target = everyone.reduce((sum, row) => sum + row.target, 0);
   const nextAction = everyone.find(row => row.gap > 0);
-  const projectedRevenue = totalRevenue / Math.max(1, daysPassed) * 6;
-  const teamRunRate = totalRevenue / Math.max(1, daysPassed);
+  const elapsed = timing.elapsed;
+  const teamRunRate = elapsed > 0 ? totalRevenue / elapsed : 0;
   const teamPct = target ? totalRevenue / target : 0;
   const counts = { need: 0, near: 0, track: 0, done: 0 };
   everyone.forEach(row => { counts[row.status.key] += 1; });
+  const planLabel = planRangeLabel(timing);
 
   el("actionHeroTitle").textContent = `Action Center Tim ${coachLabel}`;
   el("actionTotalGap").textContent = rupiah(totalGap);
   el("actionNeedPushKpi").textContent = counts.need.toLocaleString("id-ID");
   el("actionNearKpi").textContent = counts.near.toLocaleString("id-ID");
-  el("actionDailyNeedKpi").textContent = isPast ? "-" : rupiah(totalGap / daysLeft);
+  el("actionDailyNeedKpi").textContent = isPast ? "-" : rupiah(totalGap / Math.max(1, planDays(timing).length));
+  el("actionDailyNeedNote").textContent = isPast ? "Week sudah selesai" : `Per hari, ${planLabel}`;
   el("actionTopCoachKpi").textContent = nextAction ? nextAction.agent : "Semua aman";
   el("actionTopCoachGap").textContent = nextAction ? `Next action - ${rupiah(nextAction.gap)} gap` : "Tidak ada gap";
   el("actionAgentCount").textContent = `${agents.length} agent`;
   el("actionAgentCaption").textContent = isPast
     ? `${coachLabel} - ${selectedWeek} - week sudah selesai (hasil akhir)`
-    : `${coachLabel} - ${selectedWeek} - ${daysLeft} hari kerja tersisa`;
+    : `${coachLabel} - ${selectedWeek} - rencana ${planLabel}${timing.phase === "current" ? ` - data per kemarin (${timing.dataThroughLabel})` : ""}`;
 
+  let notice = "";
+  const allDates = scopeRows.map(row => row.date).filter(date => date instanceof Date);
+  if (!isPast) {
+    if (!allDates.length) notice = "Belum ada data pembayaran.";
+    else {
+      const latest = allDates.reduce((max, date) => (date > max ? date : max));
+      const latestKey = jktDay(latest)?.key || "";
+      const yesterdayKey = jktDay(new Date(Date.now() - 86400000))?.key || "";
+      const stale = timing.phase === "current" && latestKey && latestKey < yesterdayKey;
+      notice = `<span class="data-note${stale ? " stale" : ""}">Pembayaran terakhir masuk: <b>${shortDate(latest)}</b>${stale ? " - belum update sampai kemarin?" : ""}</span>`;
+    }
+  }
   el("actionStatusStrip").innerHTML = `
     <span class="status-chip need"><b>${counts.need}</b> Need Push</span>
     <span class="status-chip near"><b>${counts.near}</b> Near Incentive</span>
@@ -4411,10 +4528,11 @@ function renderActionCenter() {
     <span class="status-chip done"><b>${counts.done}</b> Over Target</span>
     <div class="team-meter">
       <div class="team-meter-head"><span>Pencapaian tim ${percent(teamPct)}</span><span>${rupiah(totalRevenue)} / ${rupiah(target)}</span></div>
-      <div class="meter"><i style="width:${Math.min(100, Math.max(1, teamPct * 100))}%"></i>${isPast ? "" : `<u style="left:calc(${(Math.min(1, daysPassed / 6) * 100).toFixed(1)}% - 1px)" title="Posisi ideal hari ini"></u>`}</div>
+      <div class="meter"><i style="width:${Math.min(100, Math.max(1, teamPct * 100))}%"></i>${isPast ? "" : `<u style="left:calc(${(Math.min(1, elapsed / 5) * 100).toFixed(1)}% - 1px)" title="Posisi ideal sampai kemarin"></u>`}</div>
+      ${notice}
     </div>`;
 
-  const ctx = { daysLeft, daysPassed, isPast, minimum };
+  const ctx = { timing, minimum, weekMeta };
   el("actionAgentList").innerHTML = agents.map(row => actionCardHtml(row, ctx)).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`;
 
   const weekRows = scopeRows.filter(row => row.week === selectedWeek && matchMulti(agentSet, row.agent));
@@ -4422,7 +4540,7 @@ function renderActionCenter() {
   el("actionCoachList").innerHTML = `
     <div class="snap-top">${ringHtml(teamPct, TONE_COLORS[snapTone], 64)}<div><strong>Pencapaian tim</strong><span>${rupiah(totalRevenue)} dari ${rupiah(target)}</span><span>${everyone.length.toLocaleString("id-ID")} agent aktif</span></div></div>
     <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(target / Math.max(1, everyone.length))} avg per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
-    <div class="mini-row"><div><strong>Run rate tim</strong><span>Proyeksi ${rupiah(projectedRevenue)}</span></div><div class="mini-value">${rupiah(teamRunRate)}/hari</div></div>
+    <div class="mini-row"><div><strong>Run rate tim</strong><span>${elapsed > 0 ? `Proyeksi Jumat ${rupiah(teamRunRate * 5)}` : "Belum ada data hari kerja"}</span></div><div class="mini-value">${elapsed > 0 ? `${rupiah(teamRunRate)}/hari` : "-"}</div></div>
   `;
   renderMiniAggregate("actionCampaignList", weekRows, row => row.campaign || "No Campaign", 5, name => CAMPAIGN_KINDS[campaignClass(name)].color);
   renderMiniAggregate("actionProductList", weekRows, row => productBucket(row), 5, name => productColor(name));
@@ -4631,7 +4749,7 @@ function renderDodolan() {
             <thead>
               <tr>
                 <th>Week</th>
-                <th>Tgl</th>
+                <th>${dateSource.hasPayment ? "Tgl Bayar" : "Tgl"}</th>
                 <th>Package / Campaign</th>
                 <th>Agent</th>
                 <th>Revenue</th>
@@ -5727,7 +5845,9 @@ function renderTrendDaily(data) {
   if (weeks.some(week => week.inProgress)) notes.push("Minggu berjalan ditampilkan (garis putus-putus) tapi tidak dihitung di ringkasan dan temuan.");
   if (data.undated) notes.push(`${data.undated.toLocaleString("id-ID")} transaksi tidak punya tanggal yang terbaca sehingga tidak muncul di kotak harian.`);
   if (data.outside) notes.push(`${data.outside.toLocaleString("id-ID")} transaksi tanggalnya di luar rentang Senin-Minggu week-nya; tetap ditaruh di hari yang sesuai tanggalnya.`);
-  notes.push("Hari dihitung memakai zona waktu WIB (Asia/Jakarta).");
+  notes.push(dateSource.hasPayment
+    ? `Hari memakai tanggal pembayaran (kolom "${dateSource.column}"), zona waktu WIB.${dateSource.missingPayment ? ` ${dateSource.missingPayment.toLocaleString("id-ID")} transaksi belum punya tanggal bayar, sementara memakai tanggal invoice.` : ""}`
+    : "PERHATIAN: kolom tanggal pembayaran (mis. 'Payment Date') tidak ditemukan di RAW_COMBINED, jadi hari sementara memakai kolom 'Date' (tanggal invoice). Tambahkan kolom 'Payment Date' supaya hari valid.");
   el("dailyNote").textContent = notes.join(" ");
 }
 
@@ -6129,8 +6249,8 @@ el("searchFilter").addEventListener("input", render);
 el("statusFilter").addEventListener("change", render);
 el("actionMonthFilter").addEventListener("change", () => {
   const month = el("actionMonthFilter").value;
-  syncWeekOptions("actionWeekFilter", month, false);
-  const pick = latestActiveWeek(month === "all" ? new Set() : new Set([month]));
+  populateActionWeeks(month);
+  const pick = defaultActionWeek(month);
   if (pick && [...el("actionWeekFilter").options].some(option => option.value === pick)) el("actionWeekFilter").value = pick;
   renderActionCenter();
 });
