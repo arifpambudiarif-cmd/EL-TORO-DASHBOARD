@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>OEC Performance - Support EL TORO</title>
+  <meta name="author" content="EL TORO Team - OEC Performance">
+  <meta name="copyright" content="Dashboard ini dibuat dan dikelola oleh tim EL TORO">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -2275,6 +2277,26 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
   .tomorrow-plan-grid { grid-template-columns: 1fr 1fr; }
 }
 
+/* Persistent ownership attribution: visible in the dashboard and print view. */
+.brand-watermark {
+  position: fixed;
+  right: 14px;
+  bottom: 12px;
+  z-index: 1000;
+  padding: 7px 11px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(7, 31, 58, .88);
+  box-shadow: 0 4px 14px rgba(6,34,58,.2);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  pointer-events: none;
+}
+@media print {
+  .brand-watermark { position: fixed; right: 8mm; bottom: 8mm; color: #06223a; background: #fff; border: 1px solid #06223a; box-shadow: none; }
+}
 </style>
 </head>
 <body>
@@ -2294,6 +2316,8 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
     </div>
   </header>
 
+  <!-- Ownership / attribution: OEC PERFORMANCE - Support EL TORO | EL TORO Team -->
+  <div class="brand-watermark" aria-label="OEC Performance - EL TORO Team">OEC PERFORMANCE&nbsp; · &nbsp;EL TORO TEAM</div>
   <main>
     <nav class="tabs" aria-label="Dashboard sections">
       <button class="tab-button active" type="button" data-tab="incentivePanel">DS INCENTIVE ALL</button>
@@ -6358,3 +6382,5 @@ loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
+
