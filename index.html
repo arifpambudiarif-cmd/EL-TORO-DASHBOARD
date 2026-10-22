@@ -2294,6 +2294,17 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
   letter-spacing: .08em;
   pointer-events: none;
 }
+.dedicated-rgp-note {
+  margin: 10px 0 14px;
+  padding: 12px 14px;
+  border: 1px solid #c7d8e8;
+  border-left: 4px solid #ff9f2f;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #fffaf0, #fff);
+}
+.dedicated-rgp-note strong { color: #06223a; }
+.dedicated-rgp-note p { margin: 4px 0 0; color: #4e7190; line-height: 1.5; }
+.dedicated-rgp-note b { color: #b36a00; }
 @media print {
   .brand-watermark { position: fixed; right: 8mm; bottom: 8mm; color: #06223a; background: #fff; border: 1px solid #06223a; box-shadow: none; }
 }
@@ -2350,6 +2361,10 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       <div><span>Target default / agent</span><strong id="incRuleTarget">-</strong></div>
       <div><span>Minimum TH</span><strong id="incRuleMin">-</strong></div>
       <div><span>Skema incentive</span><strong id="incRuleScheme">-</strong></div>
+    </section>
+    <section class="dedicated-rgp-note" aria-label="Skema RGP Online">
+      <strong>RGP Online — Dedicated RGP</strong>
+      <p id="dedicatedRgpRule">Week 3 Oktober: 0% (0% TH), 0,90% (50% TH), 1,50% (75% TH), 3,00% (100% TH), 3,50% (125% TH). Berlaku untuk: Rizqi Nafiah, Triana Novita Antari, dan Ayu Apriliani Pramuningtyas.</p>
     </section>
 
     <section id="emptyState" class="empty-state">
@@ -4043,6 +4058,10 @@ function render() {
   el("incRuleMin").textContent = !minimums.length ? "-" : minimums.length === 1 ? percent(minimums[0]) : `${percent(minimums[0])} - ${percent(minimums[minimums.length - 1])}`;
   el("incRuleScheme").textContent = !schemes.length ? "-" : schemes.length === 1 ? schemes[0] : `${schemes.length} skema berbeda`;
   el("incRuleScheme").title = schemes.join(", ");
+  const hasOctoberScheme = scope.metas.some(week => week.scheme === "OCT1");
+  el("dedicatedRgpRule").innerHTML = hasOctoberScheme
+    ? "Week 3 Oktober: <b>0% (0% TH), 0,90% (50% TH), 1,50% (75% TH), 3,00% (100% TH), 3,50% (125% TH)</b>. Berlaku untuk: Rizqi Nafiah, Triana Novita Antari, dan Ayu Apriliani Pramuningtyas."
+    : "Skema khusus RGP Online Dedicated aktif untuk periode Oktober. Berlaku untuk: Rizqi Nafiah, Triana Novita Antari, dan Ayu Apriliani Pramuningtyas.";
 
   el("incHeroTotal").textContent = rupiah(totalIncentive);
   el("incHeroSubtitle").textContent = `${scopeLabel} - ${rows.length} agent - ${eligible} agent cair`;
