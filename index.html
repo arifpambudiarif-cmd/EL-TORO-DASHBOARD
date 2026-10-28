@@ -1,19 +1,11 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <!--
-    OEC PERFORMANCE | Support EL TORO
-    Dikembangkan oleh Tim EL TORO. Hak cipta (c) 2026 Tim EL TORO. Build ET-20261021-01.
-    Boleh dipakai dan dibagikan selama identitas "OEC PERFORMANCE - Support EL TORO" tetap utuh.
-    Dilarang menghapus, menyembunyikan, atau mengganti identitas tersebut.
-  -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="application-name" content="OEC PERFORMANCE - Support EL TORO">
-  <meta name="author" content="Tim EL TORO">
-  <meta name="copyright" content="Tim EL TORO">
-  <meta name="generator" content="OEC PERFORMANCE Support EL TORO ET-20261021-01">
   <title>OEC Performance - Support EL TORO</title>
+  <meta name="author" content="EL TORO Team - OEC Performance">
+  <meta name="copyright" content="Dashboard ini dibuat dan dikelola oleh tim EL TORO">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -2150,9 +2142,27 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .camp-title .pill { margin: 0; }
 .camp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 7px 0 9px; }
 .camp-chips span { padding: 2px 9px; border-radius: 999px; background: #f1f5f9; color: #475467; font-size: 10px; font-weight: 800; }
+.camp-assignment { margin-top: 6px; color: var(--muted); font-size: 10px; font-weight: 700; }
+.camp-assignment b { color: var(--ink); font-weight: 800; }
 .camp-value { text-align: right; }
 .camp-value strong { display: block; font-size: 15px; font-variant-numeric: tabular-nums; }
 .camp-value span { color: var(--muted); font-size: 10px; font-weight: 700; }
+.assignment-date-panel { margin-top: 10px; }
+.assignment-date-controls { display: flex; align-items: center; gap: 8px; }
+.assignment-date-controls label { color: var(--muted); font-size: 10px; font-weight: 800; }
+.assignment-date-controls select { max-width: min(520px, 58vw); padding: 7px 28px 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); font: inherit; font-size: 11px; font-weight: 700; }
+.assignment-date-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+.assignment-date-kpi { padding: 9px 11px; border: 1px solid #e3e8ef; border-radius: 10px; background: #fbfcfd; }
+.assignment-date-kpi span, .assignment-date-kpi small { display: block; color: var(--muted); font-size: 9.5px; font-weight: 700; }
+.assignment-date-kpi strong { display: block; margin: 3px 0; color: var(--ink); font-size: 14px; }
+.assignment-date-table-wrap { overflow-x: auto; }
+.assignment-date-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.assignment-date-table th { padding: 8px 10px; background: #f6f8fb; color: var(--muted); font-size: 9.5px; font-weight: 800; text-align: left; text-transform: uppercase; letter-spacing: .03em; }
+.assignment-date-table td { padding: 8px 10px; border-top: 1px solid #edf0f4; color: var(--ink); }
+.assignment-date-table th:not(:first-child), .assignment-date-table td:not(:first-child) { text-align: right; }
+.assignment-date-table tr:first-child td { background: #fff9e6; font-weight: 800; }
+.assignment-date-table .date-rank { width: 34px; color: var(--muted); }
+.assignment-date-table .date-label { text-align: left !important; white-space: nowrap; }
 
 /* ---- spv ---- */
 .spv-who { display: flex; align-items: center; gap: 12px; }
@@ -2238,53 +2248,6 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .data-note b { color: var(--ink); }
 .data-note.stale { color: #b42318; }
 
-/* ---- identitas & kepemilikan ---- */
-:root { --et-brand: "OEC PERFORMANCE | Support EL TORO"; --et-build: "ET-20261021-01"; }
-.brand-footer {
-  width: min(1680px, calc(100% - 20px));
-  margin: 18px auto 58px;
-  padding: 16px 18px;
-  border-radius: 16px;
-  background: linear-gradient(110deg, #0b1f3a, #123a6b 55%, #1d4ed8);
-  color: #cfe3f7;
-  font-size: 11px;
-  line-height: 1.7;
-  text-align: center;
-  box-shadow: 0 16px 30px -22px rgba(11, 31, 58, .9);
-}
-.brand-footer strong { color: #fff; letter-spacing: .1em; }
-.brand-footer em { color: #7dd3fc; font-style: normal; font-weight: 800; }
-.brand-footer small { display: block; margin-top: 2px; color: #9db7d6; font-size: 10px; }
-@media print { #brandWatermark, #brandBadge, .brand-footer { display: block !important; } }
-
-/* ---- top campaign: assignment ---- */
-.camp-assign { display: grid; grid-template-columns: minmax(300px, 1fr) minmax(0, 2fr); gap: 10px; }
-.assign-list { display: grid; gap: 8px; padding: 12px; }
-.assign-row { display: grid; gap: 5px; padding: 9px 12px; border: 1px solid #e3e8ef; border-radius: 12px; background: #fff; }
-.assign-row.best { border-color: #c4b5fd; background: linear-gradient(135deg, #f5f0ff, #fff); }
-.assign-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
-.assign-top strong { font-size: 12.5px; color: var(--ink); }
-.assign-top b { font-size: 12px; font-variant-numeric: tabular-nums; }
-.assign-meta { display: flex; flex-wrap: wrap; gap: 4px 10px; color: var(--muted); font-size: 10px; font-weight: 700; }
-.assign-meta .pill { margin: 0; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.camp-heat-wrap { overflow: auto; padding: 10px; }
-.camp-heat { width: max-content; min-width: 100%; border-collapse: separate; border-spacing: 3px; }
-.camp-heat th { position: static; padding: 2px 4px; border: 0; background: transparent; color: #475467; font-size: 10px; font-weight: 800; letter-spacing: 0; line-height: 1.25; text-align: center; text-transform: none; }
-.camp-heat th.rowh { min-width: 170px; max-width: 210px; overflow: hidden; text-overflow: ellipsis; color: var(--ink); font-size: 11px; text-align: left; white-space: nowrap; }
-.camp-heat td { min-width: 44px; height: 30px; padding: 0; border: 0; border-radius: 7px; background: #f3f5f8; color: #98a2b3; font-size: 11px; font-weight: 800; text-align: center; }
-.camp-heat td.best { outline: 2px solid #f59e0b; outline-offset: 1px; }
-.camp-heat td.tot { background: #eef2f7; color: var(--ink); }
-.camp-heat th.none-col { color: #98a2b3; }
-.camp-toggle { height: 28px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--accent-dark); font-size: 10.5px; font-weight: 800; }
-.camp-toggle:hover { border-color: var(--accent); background: var(--accent-soft); }
-.camp-detail { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #d5dde8; overflow-x: auto; }
-.camp-detail table { width: 100%; border-collapse: collapse; }
-.camp-detail th { position: static; padding: 6px 8px; border: 1px solid #e3e8ef; background: #f8fafb; color: #475467; font-size: 10px; letter-spacing: 0; text-align: center; text-transform: none; }
-.camp-detail td { padding: 6px 8px; border: 1px solid #e3e8ef; font-size: 11px; text-align: center; white-space: nowrap; }
-.camp-detail td:first-child { font-weight: 800; text-align: left; }
-.camp-detail tr.row-none td { color: #98a2b3; }
-.camp-lead { color: #4338ca; }
-
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
   .divider { height: 1px; border-left: 0; border-top: 1px solid var(--line); }
@@ -2306,7 +2269,6 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
   .trend-plan-list { grid-template-columns: 1fr; }
   .inc-podium { grid-template-columns: 1fr; }
   .camp-top { grid-template-columns: 1fr; }
-  .camp-assign { grid-template-columns: 1fr; }
   .camp-row { grid-template-columns: 38px minmax(0, 1fr); }
   .camp-value { grid-column: 2; text-align: left; }
   .act-goal { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -2333,15 +2295,46 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
   .tomorrow-plan-grid { grid-template-columns: 1fr 1fr; }
 }
 
+/* Persistent ownership attribution: visible in the dashboard and print view. */
+.brand-watermark {
+  position: fixed;
+  right: 14px;
+  bottom: 12px;
+  z-index: 1000;
+  padding: 7px 11px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(7, 31, 58, .88);
+  box-shadow: 0 4px 14px rgba(6,34,58,.2);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  pointer-events: none;
+}
+.dedicated-rgp-note {
+  margin: 10px 0 14px;
+  padding: 12px 14px;
+  border: 1px solid #c7d8e8;
+  border-left: 4px solid #ff9f2f;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #fffaf0, #fff);
+}
+.dedicated-rgp-note strong { color: #06223a; }
+.dedicated-rgp-note p { margin: 4px 0 0; color: #4e7190; line-height: 1.5; }
+.dedicated-rgp-note b { color: #b36a00; }
+@media print {
+  .brand-watermark { position: fixed; right: 8mm; bottom: 8mm; color: #06223a; background: #fff; border: 1px solid #06223a; box-shadow: none; }
+}
 </style>
 </head>
-<body data-brand="OEC PERFORMANCE | Support EL TORO" data-build="ET-20261021-01">
+<body>
   <header class="topbar">
     <div class="brand">
       <span class="brand-mark">ET</span>
       <div>
-        <p class="eyebrow" id="etEyebrow">OEC PERFORMANCE</p>
-        <h1 id="etTitle">Support EL TORO</h1>
+        <p class="eyebrow">OEC PERFORMANCE</p>
+        <h1>Support EL TORO</h1>
       </div>
     </div>
     <div class="top-actions">
@@ -2352,6 +2345,8 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
     </div>
   </header>
 
+  <!-- Ownership / attribution: OEC PERFORMANCE - Support EL TORO | EL TORO Team -->
+  <div class="brand-watermark" aria-label="OEC Performance - EL TORO Team">OEC PERFORMANCE&nbsp; · &nbsp;EL TORO TEAM</div>
   <main>
     <nav class="tabs" aria-label="Dashboard sections">
       <button class="tab-button active" type="button" data-tab="incentivePanel">DS INCENTIVE ALL</button>
@@ -2384,6 +2379,10 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       <div><span>Target default / agent</span><strong id="incRuleTarget">-</strong></div>
       <div><span>Minimum TH</span><strong id="incRuleMin">-</strong></div>
       <div><span>Skema incentive</span><strong id="incRuleScheme">-</strong></div>
+    </section>
+    <section class="dedicated-rgp-note" aria-label="Skema RGP Online">
+      <strong>RGP Online — Dedicated RGP</strong>
+      <p id="dedicatedRgpRule">Week 3 Oktober: 0% (0% TH), 0,90% (50% TH), 1,50% (75% TH), 3,00% (100% TH), 3,50% (125% TH). Berlaku untuk: Rizqi Nafiah, Triana Novita Antari, dan Ayu Apriliani Pramuningtyas.</p>
     </section>
 
     <section id="emptyState" class="empty-state">
@@ -2576,7 +2575,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
         <div>
           <p class="eyebrow">WEEKLY CAMPAIGN SIGNAL</p>
           <h2>Top Campaign</h2>
-          <p>Campaign terbaik per produk, lengkap dengan tanggal assignment leads-nya, supaya agent tahu campaign dan leads mana yang paling menjanjikan.</p>
+          <p>Campaign terbaik berdasarkan revenue dan transaksi, supaya agent tahu fokus kerja yang paling menjanjikan.</p>
         </div>
         <div class="hero-number">
           <span>Total Revenue</span>
@@ -2593,14 +2592,6 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
           <div id="topCampaignWeek"></div>
         </div>
         <div class="field">
-          <label>Kelompok Produk</label>
-          <div id="topCampaignGroup"></div>
-        </div>
-        <div class="field">
-          <label>Produk</label>
-          <div id="topCampaignProduct"></div>
-        </div>
-        <div class="field">
           <label>Layer</label>
           <div id="topCampaignLayer"></div>
         </div>
@@ -2613,8 +2604,12 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
           <div id="topCampaignAgent"></div>
         </div>
         <div class="field">
-          <label>Tgl Assignment</label>
-          <div id="topCampaignAssign"></div>
+          <label>Product family</label>
+          <div id="topCampaignFamily"></div>
+        </div>
+        <div class="field">
+          <label>Paket / produk</label>
+          <div id="topCampaignProduct"></div>
         </div>
         <div class="field">
           <label for="topCampaignSort">Urutkan</label>
@@ -2624,15 +2619,15 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
           </select>
         </div>
         <div class="field grow">
-          <label for="topCampaignSearch">Cari campaign atau package</label>
-          <input id="topCampaignSearch" type="search" placeholder="Ketik campaign...">
+          <label for="topCampaignSearch">Cari campaign atau produk</label>
+          <input id="topCampaignSearch" type="search" placeholder="Ketik campaign / produk...">
         </div>
       </div>
       <div class="kpi-grid leaderboard-kpis">
         <article class="kpi"><span>Campaign aktif</span><strong id="topCampaignCountKpi">0</strong><small id="topCampaignWeekNote">Weekly</small></article>
         <article class="kpi"><span>Total transaksi</span><strong id="topCampaignTxnKpi">0</strong><small>Sesuai filter aktif</small></article>
         <article class="kpi"><span>Top campaign</span><strong id="topCampaignNameKpi">-</strong><small id="topCampaignRevenueKpi">Rp0</small></article>
-        <article class="kpi"><span>Tgl assignment terbaik</span><strong id="topCampaignAssignKpi">-</strong><small id="topCampaignAssignNote">-</small></article>
+        <article class="kpi"><span>Txn top campaign</span><strong id="topCampaignAovKpi">0</strong><small>Jumlah transaksi campaign #1</small></article>
       </div>
       <div id="campInsight" class="insight-strip"></div>
       <div class="camp-top">
@@ -2655,26 +2650,20 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
           <div id="campMix" class="camp-mix"></div>
         </section>
       </div>
-      <div class="camp-assign">
-        <section class="table-panel">
-          <div class="panel-heading">
-            <div>
-              <h2>Tanggal Assignment Terbaik</h2>
-              <p>Leads yang di-assign tanggal ini paling banyak closing</p>
-            </div>
+      <section class="table-panel assignment-date-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Paid berdasarkan tanggal assignment</h2>
+            <p>Tanggal assignment dengan transaksi paid terbanyak untuk campaign yang dipilih.</p>
           </div>
-          <div id="campAssignBest" class="assign-list"></div>
-        </section>
-        <section class="table-panel">
-          <div class="panel-heading">
-            <div>
-              <h2>Peta Campaign x Tanggal Assignment</h2>
-              <p>Angka = jumlah transaksi, warna makin pekat = revenue makin besar</p>
-            </div>
+          <div class="assignment-date-controls">
+            <label for="topCampaignAssignmentCampaign">Campaign</label>
+            <select id="topCampaignAssignmentCampaign"></select>
           </div>
-          <div id="campHeatmap" class="camp-heat-wrap"></div>
-        </section>
-      </div>
+        </div>
+        <div id="assignmentDateKpis" class="assignment-date-kpis"></div>
+        <div id="assignmentDateTable" class="assignment-date-table-wrap"></div>
+      </section>
       <section class="table-panel leaderboard-panel">
         <div class="panel-heading">
           <div>
@@ -3203,16 +3192,11 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
     </section>
   </main>
 
-  <footer id="brandFooter" class="brand-footer">
-    <div><strong>OEC PERFORMANCE</strong> &middot; <em>Support EL TORO</em></div>
-    <div>Dikembangkan oleh Tim EL TORO &middot; Build ET-20261021-01</div>
-    <small>Dashboard ini adalah karya Tim EL TORO. Dilarang menghapus atau mengganti identitas ini.</small>
-  </footer>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
 const WEEKLY_TARGET = 23400000;
-const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000, SEP: 9000000, SEP3: 9000000, SEP4: 9000000, OCT1: 8800000, OCT3: 8800000 };
+const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000, SEP: 9000000, SEP3: 9000000, SEP4: 9000000, OCT1: 8800000 };
 const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
 const SOURCE_TAB_NAME = "RAW_COMBINED";
 const SOURCE_GID = "0";
@@ -3254,7 +3238,7 @@ const WEEK_PERIODS = [
   { name: "W 5 SEP", weekNum: 40, minimum: 0.50, scheme: "SEP", month: "September" },
   { name: "W 1 OCT", weekNum: 41, minimum: 0.50, scheme: "OCT1", month: "Oktober" },
   { name: "W 2 OCT", weekNum: 42, minimum: 0.50, scheme: "OCT1", month: "Oktober" },
-  { name: "W 3 OCT", weekNum: 43, minimum: 0.50, scheme: "OCT3", month: "Oktober" },
+  { name: "W 3 OCT", weekNum: 43, minimum: 0.50, scheme: "OCT1", month: "Oktober" },
   { name: "W 4 OCT", weekNum: 44, minimum: 0.50, scheme: "OCT1", month: "Oktober" },
 ];
 
@@ -3384,19 +3368,6 @@ const RATES = {
     "RGP Offline": { 0: 0, .5: .0030, .75: .0050, 1: .0100, 1.25: .0100 },
     "Math Champs Online": { 0: 0, .5: .0100, .75: .0100, 1: .0100, 1.25: .0100 },
     "Skill Academy": { 0: 0, .5: .0200, .75: .0200, 1: .0200, 1.25: .0200 },
-  },
-  OCT3: {
-    "BAC & Mathchamps Offline": { 0: 0, .5: .0140, .75: .0170, 1: .0320, 1.25: .0370 },
-    "BAON Elite": { 0: 0, .5: .0160, .75: .0175, 1: .0300, 1.25: .0340 },
-    "BAON Prem": { 0: 0, .5: .0280, .75: .0330, 1: .0645, 1.25: .0775 },
-    "BAON Reg": { 0: 0, .5: .0243, .75: .0285, 1: .0558, 1.25: .0693 },
-    "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
-    "RB": { 0: 0, .5: .0250, .75: .0300, 1: .0580, 1.25: .0730 },
-    "RGP Online - Non Dedicated": { 0: 0, .5: .0090, .75: .0300, 1: .0450, 1.25: .0500 },
-    "RGP Online - Dedicated": { 0: 0, .5: .0090, .75: .0150, 1: .0300, 1.25: .0350 },
-    "RGP Offline": { 0: 0, .5: .0030, .75: .0050, 1: .0100, 1.25: .0100 },
-    "Math Champs Online": { 0: 0, .5: .0100, .75: .0100, 1: .0100, 1.25: .0100 },
-    "Skill Academy": { 0: 0, .5: .0200, .75: .0200, 1: .0200, 1.25: .0200 },
   }
 };
 
@@ -3421,9 +3392,17 @@ let leaderboardRows = [];
 let layerOneRows = [];
 let allTransactionRows = [];
 let targetRows = [];
+let topCampaignGroups = [];
 let selectedKey = "";
 const SPV_ORDER = ["Deti Laharwati", "Yulfan Prihartanto", "Mark Johannes Hilman"];
 const PRODUCT_FAMILY_ORDER = ["BAON", "Ruangguru Private", "Ruangbelajar", "Brain Academy", "Others"];
+const PRODUCT_FAMILY_LABELS = {
+  "BAON": "Brain Academy Online",
+  "Ruangguru Private": "Ruangguru Privat",
+  "Ruangbelajar": "Ruangbelajar",
+  "Brain Academy": "Brain Academy Offline",
+  "Others": "Lainnya",
+};
 
 const el = id => document.getElementById(id);
 const rupiah = value => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value || 0);
@@ -3627,8 +3606,10 @@ function findPaymentHeader(keys) {
 }
 
 function formatAssignedDate(value) {
+  const raw = String(value ?? "").trim();
+  if (!raw || ["null", "undefined", "nat", "n/a", "na"].includes(raw.toLowerCase())) return "";
   const date = parseDate(value);
-  if (!date) return String(value || "").trim();
+  if (!date) return raw;
   return new Intl.DateTimeFormat("id-ID", {
     day: "2-digit",
     month: "short",
@@ -3692,6 +3673,27 @@ function productFamily(rowOrProduct) {
   return "Others";
 }
 
+function productFamilyLabel(value) {
+  return PRODUCT_FAMILY_LABELS[value] || value;
+}
+
+function multiLabelText(id, allText) {
+  const state = MULTI[id];
+  const labels = state.options.filter(option => state.selected.has(option.value)).map(option => option.label);
+  return labels.length ? labels.join(", ") : allText;
+}
+
+function assignmentDatesSummary(rows) {
+  const dates = new Map();
+  rows.forEach(row => {
+    if (Number.isFinite(row.assignedDateValue) && row.assignedDate) dates.set(row.assignedDateValue, row.assignedDate);
+  });
+  const ordered = [...dates.entries()].sort((a, b) => a[0] - b[0]).map(([, label]) => label);
+  if (!ordered.length) return "Tgl assignment: tidak tersedia";
+  if (ordered.length === 1) return `Tgl assignment: ${ordered[0]}`;
+  return `Tgl assignment: ${ordered[0]} - ${ordered[ordered.length - 1]} (${ordered.length} tanggal)`;
+}
+
 function weeklyTargetForWeek(week) {
   return WEEKLY_TARGET_BY_SCHEME[week?.scheme] || WEEKLY_TARGET;
 }
@@ -3746,6 +3748,7 @@ function normalizeRows(rows) {
   Object.keys(rows[0] || {}).forEach(key => { keys[key.trim().toLowerCase()] = key; });
   const read = (row, name) => row[keys[name.toLowerCase()]];
   const payHeader = findPaymentHeader(keys);
+  const assignedDates = rows.map(row => parseDate(read(row, "Assigned Date") || read(row, "assigned_date")));
   const mapped = rows.map(row => {
     const invoiceDate = parseDate(read(row, "Date"));
     const payDate = payHeader ? parseDate(row[payHeader]) : null;
@@ -3762,8 +3765,8 @@ function normalizeRows(rows) {
     leader: String(read(row, "Leader Name") || "").trim(),
     packageName: String(read(row, "Package Name") || "").trim(),
     campaign: String(read(row, "Campaign") || "").trim(),
-    assignedDate: formatAssignedDate(read(row, "Assigned Date") || read(row, "assigned_date")),
-    assignedAt: parseDate(read(row, "Assigned Date") || read(row, "assigned_date")),
+    assignedDate: formatAssignedDate(assignedDates[index]),
+    assignedDateValue: assignedDates[index]?.getTime?.() ?? null,
     assignedAgent: String(read(row, "Assigned Agent") || read(row, "assigned_agent") || "").trim(),
     team: normalizeTeam(read(row, "Kategori Team") || read(row, "category team")),
     product_type: String(read(row, "Product Type") || "").trim(),
@@ -3885,9 +3888,7 @@ function loadRows(rows, sheetName, targetSheetRows = []) {
     row.week = week.name;
     row.month = week.month;
     row.product = productBucket(row);
-    row.pgroup = albGroupLabel(row.product);
-    row.assignKey = row.assignedAt ? (jktDay(row.assignedAt)?.key || "none") : "none";
-    row.payKey = row.date ? (jktDay(row.date)?.key || null) : null;
+    row.productFamily = productFamily(row);
   });
   allTransactionRows = normalized;
   layerOneRows = normalized.filter(row => row.team.toLowerCase() === "layer 1");
@@ -3899,7 +3900,6 @@ function loadRows(rows, sheetName, targetSheetRows = []) {
 }
 
 function prepareDashboard(sheetName, rawCount) {
-  if (!_ET.verify()) throw new Error(`Identitas dashboard (${_ET.brand.a} - ${_ET.brand.b}) telah diubah, data tidak dimuat. Gunakan salinan resmi dari ${_ET.brand.c}.`);
   el("emptyState").hidden = true;
   el("dashboard").hidden = false;
   el("exportButton").disabled = false;
@@ -3949,12 +3949,15 @@ function prepareDashboard(sheetName, rawCount) {
   syncAgentMulti("actionAgentFilter", layerOneRows, "actionCoachFilter");
   setMultiOptions("actionStatusFilter", ACTION_STATUS_OPTIONS);
   setMultiOptions("topCampaignLayer", [...new Set(allTransactionRows.map(row => row.team).filter(Boolean))].sort(byName));
-  setMultiOptions("topCampaignGroup", ALB_GROUPS.map(group => group.label));
+  const productFamilies = PRODUCT_FAMILY_ORDER.filter(family => allTransactionRows.some(row => row.productFamily === family))
+    .concat([...new Set(allTransactionRows.map(row => row.productFamily))].filter(family => !PRODUCT_FAMILY_ORDER.includes(family)).sort(byName));
+  setMultiOptions("topCampaignFamily", productFamilies.map(value => ({ value, label: productFamilyLabel(value) })));
+  setMultiOptions("topCampaignProduct", [...new Set(allTransactionRows.map(row => row.product))].sort(byName));
   setMultiOptions("leaderboardLayerFilter", Object.keys(LEADERBOARD_WEEKLY_TARGETS));
   setMultiOptions("leaderboardCoachFilter", [...new Set(leaderboardRows.filter(row => LEADERBOARD_WEEKLY_TARGETS[row.team]).map(row => row.leader || "-"))].sort(byName));
   setMultiOptions("spvSpvFilter", SPV_ORDER);
   syncSpvFilters();
-  updateTopCampaignOptions();
+  updateTopCampaignAgentOptions();
   showToast(`Data dari ${sheetName} berhasil dihitung.`);
   render();
   renderActionCenter();
@@ -4061,7 +4064,7 @@ function aggregateAllWeeks(rows) {
 
 const SCHEME_LABELS = {
   W1: "Skema Juli W1", W2: "Skema Juli W2-W3", W4: "Skema Juli W4-W5", AUG1: "Skema Agustus W1-W2", AUG3: "Skema Agustus W3-W4",
-  SEP: "Skema September W1 & W5", SEP2: "Skema September W2", SEP3: "Skema September W3", SEP4: "Skema September W4", OCT1: "Skema Oktober (W1, W2, W4)", OCT3: "Skema Oktober W3",
+  SEP: "Skema September W1 & W5", SEP2: "Skema September W2", SEP3: "Skema September W3", SEP4: "Skema September W4", OCT1: "Skema Oktober",
 };
 const PRODUCT_COLORS = {
   "BAON Reg": "#18bfe8", "BAON Prem": "#ff2aa1", "BAON Elite": "#9650dc", RB: "#16c995", "BAC & Mathchamps Offline": "#ff9f2f",
@@ -4128,6 +4131,10 @@ function render() {
   el("incRuleMin").textContent = !minimums.length ? "-" : minimums.length === 1 ? percent(minimums[0]) : `${percent(minimums[0])} - ${percent(minimums[minimums.length - 1])}`;
   el("incRuleScheme").textContent = !schemes.length ? "-" : schemes.length === 1 ? schemes[0] : `${schemes.length} skema berbeda`;
   el("incRuleScheme").title = schemes.join(", ");
+  const hasOctoberScheme = scope.metas.some(week => week.scheme === "OCT1");
+  el("dedicatedRgpRule").innerHTML = hasOctoberScheme
+    ? "Week 3 Oktober: <b>0% (0% TH), 0,90% (50% TH), 1,50% (75% TH), 3,00% (100% TH), 3,50% (125% TH)</b>. Berlaku untuk: Rizqi Nafiah, Triana Novita Antari, dan Ayu Apriliani Pramuningtyas."
+    : "Skema khusus RGP Online Dedicated aktif untuk periode Oktober. Berlaku untuk: Rizqi Nafiah, Triana Novita Antari, dan Ayu Apriliani Pramuningtyas.";
 
   el("incHeroTotal").textContent = rupiah(totalIncentive);
   el("incHeroSubtitle").textContent = `${scopeLabel} - ${rows.length} agent - ${eligible} agent cair`;
@@ -4672,184 +4679,145 @@ function campaignCode(value) {
 
 
 
-const campExpanded = new Set();
-
-function dayKeyLabel(key, withWeekday = true) {
-  if (!key || key === "none") return "Tanpa assignment";
-  const [year, month, day] = key.split("-").map(Number);
-  const weekday = (new Date(Date.UTC(year, month - 1, day)).getUTCDay() + 6) % 7;
-  return `${withWeekday ? `${DAY_NAMES[weekday]}, ` : ""}${day} ${MONTH_ABBR[month - 1]}`;
-}
-
-function dayKeyMs(key) {
-  const [year, month, day] = key.split("-").map(Number);
-  return Date.UTC(year, month - 1, day);
-}
-
-function topCampaignRows(skip = []) {
-  const skipSet = new Set(skip);
+function updateTopCampaignAgentOptions() {
   const monthSet = getMultiSet("topCampaignMonth");
   const weekSet = getMultiSet("topCampaignWeek");
   const layerSet = getMultiSet("topCampaignLayer");
-  const groupSet = getMultiSet("topCampaignGroup");
-  const productSet = getMultiSet("topCampaignProduct");
   const coachSet = getMultiSet("topCampaignCoach");
-  const agentSet = getMultiSet("topCampaignAgent");
-  const assignSet = getMultiSet("topCampaignAssign");
-  const query = el("topCampaignSearch").value.trim().toLowerCase();
-  return allTransactionRows.filter(row =>
+  const familySet = getMultiSet("topCampaignFamily");
+  const productSet = getMultiSet("topCampaignProduct");
+  const agents = [...new Set(allTransactionRows.filter(row =>
     matchMulti(monthSet, row.month) && matchMulti(weekSet, row.week) && matchMulti(layerSet, row.team) &&
-    matchMulti(groupSet, row.pgroup) &&
-    (skipSet.has("product") || matchMulti(productSet, row.product)) &&
-    matchMulti(coachSet, row.leader || "-") &&
-    (skipSet.has("agent") || matchMulti(agentSet, row.agent)) &&
-    (skipSet.has("assign") || matchMulti(assignSet, row.assignKey)) &&
-    (!query || `${row.campaign || "No Campaign"} ${row.product} ${row.packageName || row.product_type || "-"}`.toLowerCase().includes(query))
-  );
+    matchMulti(coachSet, row.leader || "-") && matchMulti(familySet, row.productFamily) && matchMulti(productSet, row.product)
+  ).map(row => row.agent))].sort((a, b) => a.localeCompare(b));
+  setMultiOptions("topCampaignAgent", agents);
 }
 
-function updateTopCampaignOptions(except = "") {
-  const apply = (id, options) => { if (id !== except) setMultiOptions(id, options); };
-  const byName = (a, b) => a.localeCompare(b);
-  apply("topCampaignAgent", [...new Set(topCampaignRows(["agent"]).map(row => row.agent))].sort(byName));
-  apply("topCampaignProduct", [...new Set(topCampaignRows(["product"]).map(row => row.product))].sort(byName));
-  const counts = new Map();
-  topCampaignRows(["assign"]).forEach(row => counts.set(row.assignKey, (counts.get(row.assignKey) || 0) + 1));
-  apply("topCampaignAssign", [...counts.entries()]
-    .sort((a, b) => (a[0] === "none") - (b[0] === "none") || b[0].localeCompare(a[0]))
-    .map(([key, count]) => ({ value: key, label: `${dayKeyLabel(key)} - ${count} TXN` })));
-}
+function renderAssignmentDateDetail(campaigns, fallbackCampaign = "") {
+  const select = el("topCampaignAssignmentCampaign");
+  const previous = select.value;
+  select.innerHTML = "";
+  campaigns.forEach(row => {
+    const option = document.createElement("option");
+    option.value = row.campaign;
+    option.textContent = row.campaign;
+    select.appendChild(option);
+  });
+  const selectedCampaign = campaigns.some(row => row.campaign === previous) ? previous : fallbackCampaign;
+  select.value = selectedCampaign || "";
+  const selected = campaigns.find(row => row.campaign === select.value);
+  if (!selected) {
+    el("assignmentDateKpis").innerHTML = "";
+    el("assignmentDateTable").innerHTML = `<div class="detail-empty">Belum ada campaign pada filter ini.</div>`;
+    return;
+  }
 
-function updateTopCampaignAgentOptions() { updateTopCampaignOptions(); }
-
-function topOf(map, scoreKey = "rev") {
-  return [...map.entries()].sort((a, b) => b[1][scoreKey] - a[1][scoreKey] || b[1].txn - a[1].txn)[0];
-}
-
-function campaignRowHtml(row, rank, totalRevenue, sortBy) {
-  const share = totalRevenue ? row.revenue / totalRevenue : 0;
-  const parts = Object.entries(row.products).sort((a, b) => b[1] - a[1]).map(([key, value]) => ({ key, value, color: productColor(key) }));
-  const assignList = [...row.assign.values()].sort((a, b) => (sortBy === "txn" ? b.txn - a.txn || b.revenue - a.revenue : b.revenue - a.revenue || b.txn - a.txn));
-  const dated = assignList.filter(item => item.key !== "none");
-  const topAssign = dated[0];
-  const keys = dated.map(item => item.key).sort();
-  const expanded = campExpanded.has(row.campaign);
-  const chips = [
-    `<span>${row.txn.toLocaleString("id-ID")} TXN</span>`,
-    `<span>AOV ${compactRupiah(row.revenue / row.txn)}</span>`,
-    `<span>${row.agents.size} agent</span>`,
-    topAssign ? `<span>Assign terbanyak: ${dayKeyLabel(topAssign.key)} (${topAssign.txn} TXN)</span>` : `<span>Tanpa data assignment</span>`,
-    keys.length > 1 ? `<span>Rentang assign: ${dayKeyLabel(keys[0], false)} - ${dayKeyLabel(keys[keys.length - 1], false)}</span>` : "",
-    row.leadN ? `<span class="camp-lead">Closing rata-rata ${fmt1(row.leadSum / row.leadN)} hari setelah assign</span>` : "",
-  ].join("");
-  const detail = expanded ? `
-    <div class="camp-detail">
-      <table>
-        <thead><tr><th>Tgl assignment</th><th>TXN</th><th>Revenue</th><th>Share</th><th>Closing rata-rata</th><th>Agent teratas</th><th>Package teratas</th></tr></thead>
-        <tbody>${assignList.slice(0, 12).map(item => {
-          const agent = topOf(item.agentStats);
-          const pkg = topOf(item.pkgStats);
-          return `<tr class="${item.key === "none" ? "row-none" : ""}"><td>${dayKeyLabel(item.key)}</td><td>${item.txn}</td><td>${rupiah(item.revenue)}</td><td>${percent(row.revenue ? item.revenue / row.revenue : 0)}</td><td>${item.leadN ? `${fmt1(item.leadSum / item.leadN)} hari` : "-"}</td><td>${agent ? `${escapeHtml(agent[0])} (${agent[1].txn})` : "-"}</td><td>${pkg ? `${escapeHtml(pkg[0])} (${pkg[1].txn})` : "-"}</td></tr>`;
-        }).join("")}</tbody>
-      </table>
-      ${assignList.length > 12 ? `<div class="detail-empty">+${assignList.length - 12} tanggal assignment lain tidak ditampilkan.</div>` : ""}
-    </div>` : "";
-  return `
-    <article class="camp-row">
-      <div class="camp-rank">${rank}</div>
-      <div class="camp-main">
-        <div class="camp-title"><strong>${escapeHtml(row.campaign)}</strong><span class="pill ${row.kind}">${CAMPAIGN_KINDS[row.kind].label}</span><button type="button" class="camp-toggle" data-campaign="${escapeHtml(row.campaign)}">${expanded ? "Tutup detail" : "Lihat tanggal assignment"}</button></div>
-        <div class="camp-chips">${chips}</div>
-        ${stackBar(parts)}${stackLegend(parts, 3)}
-        ${detail}
-      </div>
-      <div class="camp-value"><strong>${rupiah(row.revenue)}</strong><span>Share ${percent(share)}</span><div class="share-bar"><i style="width:${Math.max(3, share * 100)}%"></i></div></div>
-    </article>`;
+  const byDate = new Map();
+  selected.assignmentRows.forEach(row => {
+    const key = Number.isFinite(row.assignedDateValue) ? String(row.assignedDateValue) : "missing";
+    if (!byDate.has(key)) byDate.set(key, {
+      key,
+      label: row.assignedDate || "Tanggal assignment tidak tersedia",
+      txn: 0,
+      revenue: 0,
+    });
+    const item = byDate.get(key);
+    item.txn += 1;
+    item.revenue += row.revenue;
+  });
+  const details = [...byDate.values()].sort((a, b) => {
+    if (a.key === "missing") return 1;
+    if (b.key === "missing") return -1;
+    return b.txn - a.txn || b.revenue - a.revenue || a.label.localeCompare(b.label);
+  });
+  const best = details[0];
+  const visible = details.slice(0, 30);
+  el("assignmentDateKpis").innerHTML = `
+    <div class="assignment-date-kpi"><span>Campaign detail</span><strong>${escapeHtml(selected.campaign)}</strong><small>${selected.txn.toLocaleString("id-ID")} paid TXN</small></div>
+    <div class="assignment-date-kpi"><span>Tanggal paling banyak paid</span><strong>${escapeHtml(best?.label || "-")}</strong><small>${best ? `${best.txn.toLocaleString("id-ID")} paid TXN` : "-"}</small></div>
+    <div class="assignment-date-kpi"><span>Revenue tanggal tersebut</span><strong>${best ? rupiah(best.revenue) : "Rp0"}</strong><small>${details.length.toLocaleString("id-ID")} tanggal assignment terdata</small></div>
+  `;
+  el("assignmentDateTable").innerHTML = visible.length ? `
+    <table class="assignment-date-table">
+      <thead><tr><th>#</th><th>Tanggal assignment</th><th>Paid TXN</th><th>Revenue</th><th>Share paid</th></tr></thead>
+      <tbody>${visible.map((row, index) => `
+        <tr><td class="date-rank">${index + 1}</td><td class="date-label">${escapeHtml(row.label)}</td><td>${row.txn.toLocaleString("id-ID")}</td><td>${rupiah(row.revenue)}</td><td>${percent(selected.txn ? row.txn / selected.txn : 0)}</td></tr>
+      `).join("")}</tbody>
+    </table>
+    ${details.length > visible.length ? `<div class="table-note">Menampilkan ${visible.length} tanggal dengan paid terbanyak dari ${details.length} tanggal assignment.</div>` : ""}
+  ` : `<div class="detail-empty">Belum ada tanggal assignment untuk campaign ini.</div>`;
 }
 
 function renderTopCampaign() {
+  const monthSet = getMultiSet("topCampaignMonth");
+  const weekSet = getMultiSet("topCampaignWeek");
+  const layerSet = getMultiSet("topCampaignLayer");
+  const coachSet = getMultiSet("topCampaignCoach");
+  const agentSet = getMultiSet("topCampaignAgent");
+  const familySet = getMultiSet("topCampaignFamily");
+  const productSet = getMultiSet("topCampaignProduct");
   const sortBy = el("topCampaignSort").value;
-  const rows = topCampaignRows();
+  const query = el("topCampaignSearch").value.trim().toLowerCase();
+
+  const rows = allTransactionRows.filter(row =>
+    matchMulti(monthSet, row.month) && matchMulti(weekSet, row.week) && matchMulti(layerSet, row.team) &&
+    matchMulti(coachSet, row.leader || "-") && matchMulti(agentSet, row.agent) && matchMulti(familySet, row.productFamily) &&
+    matchMulti(productSet, row.product) &&
+    (!query || `${row.campaign || "No Campaign"} ${row.product} ${row.packageName || row.product_type || "-"}`.toLowerCase().includes(query))
+  );
 
   const groups = new Map();
   rows.forEach(row => {
     const key = row.campaign || "No Campaign";
-    if (!groups.has(key)) groups.set(key, { campaign: key, revenue: 0, txn: 0, products: {}, agents: new Set(), weeks: new Set(), assign: new Map(), leadSum: 0, leadN: 0 });
+    if (!groups.has(key)) groups.set(key, { campaign: key, revenue: 0, txn: 0, products: {}, agents: new Set(), weeks: new Set(), assignmentRows: [] });
     const item = groups.get(key);
     item.revenue += row.revenue;
     item.txn += 1;
     item.products[row.product] = (item.products[row.product] || 0) + row.revenue;
     item.agents.add(row.agent);
     item.weeks.add(row.week);
-    if (!item.assign.has(row.assignKey)) item.assign.set(row.assignKey, { key: row.assignKey, txn: 0, revenue: 0, leadSum: 0, leadN: 0, agentStats: new Map(), pkgStats: new Map() });
-    const slot = item.assign.get(row.assignKey);
-    slot.txn += 1;
-    slot.revenue += row.revenue;
-    const agentStat = slot.agentStats.get(row.agent) || { txn: 0, rev: 0 };
-    agentStat.txn += 1; agentStat.rev += row.revenue;
-    slot.agentStats.set(row.agent, agentStat);
-    const pkgName = row.packageName || row.product_type || "-";
-    const pkgStat = slot.pkgStats.get(pkgName) || { txn: 0, rev: 0 };
-    pkgStat.txn += 1; pkgStat.rev += row.revenue;
-    slot.pkgStats.set(pkgName, pkgStat);
-    if (row.assignKey !== "none" && row.payKey) {
-      const diff = Math.round((dayKeyMs(row.payKey) - dayKeyMs(row.assignKey)) / 86400000);
-      if (diff >= 0) { slot.leadSum += diff; slot.leadN += 1; item.leadSum += diff; item.leadN += 1; }
-    }
+    item.assignmentRows.push(row);
   });
   const campaigns = [...groups.values()].map(row => {
     row.topProduct = Object.entries(row.products).sort((a, b) => b[1] - a[1])[0]?.[0] || "-";
     row.kind = campaignClass(row.campaign);
+    row.assignmentSummary = assignmentDatesSummary(row.assignmentRows);
     return row;
   }).sort((a, b) => sortBy === "txn" ? b.txn - a.txn || b.revenue - a.revenue : b.revenue - a.revenue || b.txn - a.txn);
-
-  const dates = new Map();
-  campaigns.forEach(campaign => campaign.assign.forEach(slot => {
-    if (!dates.has(slot.key)) dates.set(slot.key, { key: slot.key, txn: 0, revenue: 0, leadSum: 0, leadN: 0, campaigns: [] });
-    const item = dates.get(slot.key);
-    item.txn += slot.txn; item.revenue += slot.revenue; item.leadSum += slot.leadSum; item.leadN += slot.leadN;
-    item.campaigns.push({ name: campaign.campaign, revenue: slot.revenue, txn: slot.txn });
-  }));
-  const dateList = [...dates.values()].sort((a, b) => (sortBy === "txn" ? b.txn - a.txn || b.revenue - a.revenue : b.revenue - a.revenue || b.txn - a.txn));
-  const datedList = dateList.filter(item => item.key !== "none");
-  const bestDate = datedList[0];
+  topCampaignGroups = campaigns;
 
   const totalRevenue = campaigns.reduce((sum, row) => sum + row.revenue, 0);
   const totalTxn = campaigns.reduce((sum, row) => sum + row.txn, 0);
   const top = campaigns[0];
   const byTxn = [...campaigns].sort((a, b) => b.txn - a.txn)[0];
   const periodText = periodLabel("topCampaignMonth", "topCampaignWeek");
-  const productText = getMulti("topCampaignProduct").length ? multiText("topCampaignProduct", "") : getMulti("topCampaignGroup").length ? multiText("topCampaignGroup", "") : "semua produk";
+  const familyText = multiLabelText("topCampaignFamily", "Semua product family");
+  const productText = multiText("topCampaignProduct", "Semua paket / produk");
+  renderAssignmentDateDetail(campaigns, top?.campaign || "");
 
   el("topCampaignTotalRevenue").textContent = rupiah(totalRevenue);
   el("topCampaignCountKpi").textContent = campaigns.length.toLocaleString("id-ID");
-  el("topCampaignWeekNote").textContent = `${periodText} - ${productText}`;
+  el("topCampaignWeekNote").textContent = periodText;
   el("topCampaignTxnKpi").textContent = totalTxn.toLocaleString("id-ID");
   el("topCampaignNameKpi").textContent = top ? top.campaign : "-";
-  el("topCampaignRevenueKpi").textContent = top ? `${rupiah(top.revenue)} - ${top.txn.toLocaleString("id-ID")} TXN` : "Rp0";
-  el("topCampaignAssignKpi").textContent = bestDate ? dayKeyLabel(bestDate.key) : "-";
-  el("topCampaignAssignNote").textContent = bestDate ? `${bestDate.txn.toLocaleString("id-ID")} TXN - ${rupiah(bestDate.revenue)}` : "Belum ada data assignment";
+  el("topCampaignRevenueKpi").textContent = top ? rupiah(top.revenue) : "Rp0";
+  el("topCampaignAovKpi").textContent = top ? top.txn.toLocaleString("id-ID") : "0";
   el("topCampaignCount").textContent = `${campaigns.length} campaign`;
-  el("topCampaignCaption").textContent = `${periodText} - ${productText} - ${multiText("topCampaignLayer", "Semua layer")} - ${multiText("topCampaignCoach", "Semua coach / leader")} - urut ${sortBy === "txn" ? "jumlah transaksi" : "revenue"}`;
+  el("topCampaignCaption").textContent = `${periodText} - ${familyText} - ${productText} - ${multiText("topCampaignLayer", "Semua layer")} - ${multiText("topCampaignCoach", "Semua coach / leader")} - urut ${sortBy === "txn" ? "jumlah transaksi" : "revenue"}`;
 
-  const topAssignOfTop = top ? [...top.assign.values()].filter(item => item.key !== "none").sort((a, b) => b.revenue - a.revenue)[0] : null;
-  const avgLead = (() => { const n = campaigns.reduce((sum, row) => sum + row.leadN, 0); return n ? campaigns.reduce((sum, row) => sum + row.leadSum, 0) / n : null; })();
   el("campInsight").innerHTML = top
-    ? `Untuk <b>${escapeHtml(productText)}</b> pada <b>${escapeHtml(periodText)}</b>, campaign terbesar adalah <b>${escapeHtml(top.campaign)}</b>: <b>${rupiah(top.revenue)}</b> (${percent(totalRevenue ? top.revenue / totalRevenue : 0)} dari total) lewat ${top.txn.toLocaleString("id-ID")} transaksi.${topAssignOfTop ? ` Closing campaign ini paling banyak berasal dari leads yang di-assign <b>${dayKeyLabel(topAssignOfTop.key)}</b> (${topAssignOfTop.txn} TXN, ${rupiah(topAssignOfTop.revenue)}).` : " Data tanggal assignment campaign ini belum tersedia."}${bestDate ? ` Secara keseluruhan tanggal assignment paling produktif: <b>${dayKeyLabel(bestDate.key)}</b> (${bestDate.txn} TXN).` : ""}${avgLead !== null ? ` Rata-rata closing ${fmt1(avgLead)} hari setelah assignment.` : ""} Campaign dengan transaksi terbanyak: <b>${escapeHtml(byTxn.campaign)}</b> (${byTxn.txn.toLocaleString("id-ID")} TXN).`
+    ? `<b>${escapeHtml(top.campaign)}</b> adalah campaign dengan revenue tertinggi: <b>${rupiah(top.revenue)}</b> (${percent(totalRevenue ? top.revenue / totalRevenue : 0)} dari total) lewat ${top.txn.toLocaleString("id-ID")} transaksi, produk andalan <b>${escapeHtml(top.topProduct)}</b>. ${escapeHtml(top.assignmentSummary)}. Campaign dengan transaksi terbanyak: <b>${escapeHtml(byTxn.campaign)}</b> (${byTxn.txn.toLocaleString("id-ID")} TXN). Prioritaskan follow-up leads dari campaign ini lebih dulu.`
     : "Belum ada transaksi pada filter ini.";
 
   const podium = campaigns.slice(0, 3);
   el("topCampaignPodium").hidden = podium.length === 0;
-  el("topCampaignPodium").innerHTML = podiumHtml(podium.map(row => {
-    const bestSlot = [...row.assign.values()].filter(item => item.key !== "none").sort((a, b) => b.revenue - a.revenue)[0];
-    return {
-      name: row.campaign,
-      sub: `${row.txn.toLocaleString("id-ID")} TXN - ${row.topProduct}${bestSlot ? ` - assign ${dayKeyLabel(bestSlot.key, false)}` : ""}`,
-      value: rupiah(row.revenue),
-      valueSub: `Share ${percent(totalRevenue ? row.revenue / totalRevenue : 0)}`,
-      pct: top && top.revenue ? row.revenue / top.revenue : 0,
-    };
-  }));
+  el("topCampaignPodium").innerHTML = podiumHtml(podium.map(row => ({
+    name: row.campaign,
+    sub: `${row.txn.toLocaleString("id-ID")} TXN - ${row.topProduct} - ${row.assignmentSummary}`,
+    value: rupiah(row.revenue),
+    valueSub: `Share ${percent(totalRevenue ? row.revenue / totalRevenue : 0)}`,
+    pct: top && top.revenue ? row.revenue / top.revenue : 0,
+  })));
 
   const kinds = new Map();
   campaigns.forEach(row => {
@@ -4871,55 +4839,22 @@ function renderTopCampaign() {
       <div class="mix-item"><i style="background:${item.color}"></i><div><b>${item.label}</b><small>${item.txn.toLocaleString("id-ID")} TXN - ${compactRupiah(item.revenue)}</small></div><em>${percent(totalRevenue ? item.revenue / totalRevenue : 0)}</em></div>
     `).join("")}</div>` : `<div class="detail-empty">Belum ada data.</div>`;
 
-  const noneDate = dateList.find(item => item.key === "none");
-  const bestShown = [...datedList.slice(0, 8), ...(noneDate ? [noneDate] : [])];
-  const maxDateRevenue = Math.max(...bestShown.map(item => item.revenue), 1);
-  el("campAssignBest").innerHTML = bestShown.map((item, index) => {
-    const lead = [...item.campaigns].sort((a, b) => b.revenue - a.revenue)[0];
+  const rest = campaigns.slice(3, 20);
+  el("topCampaignList").innerHTML = rest.map((row, offset) => {
+    const share = totalRevenue ? row.revenue / totalRevenue : 0;
+    const parts = Object.entries(row.products).sort((a, b) => b[1] - a[1]).map(([key, value]) => ({ key, value, color: productColor(key) }));
     return `
-      <div class="assign-row${index === 0 && item.key !== "none" ? " best" : ""}">
-        <div class="assign-top"><strong>${item.key === "none" ? "Tanpa tanggal assignment" : `${index + 1}. ${dayKeyLabel(item.key)}`}</strong><b>${rupiah(item.revenue)}</b></div>
-        <div class="share-bar"><i style="width:${Math.max(4, item.revenue / maxDateRevenue * 100)}%"></i></div>
-        <div class="assign-meta"><span>${item.txn.toLocaleString("id-ID")} TXN</span>${item.leadN ? `<span class="camp-lead">closing rata-rata ${fmt1(item.leadSum / item.leadN)} hari</span>` : ""}${lead ? `<span class="pill ${campaignClass(lead.name)}" title="${escapeHtml(lead.name)}">${escapeHtml(lead.name)}</span>` : ""}</div>
-      </div>`;
-  }).join("") || `<div class="detail-empty">Belum ada data assignment pada filter ini.</div>`;
-
-  const heatCampaigns = campaigns.slice(0, 8);
-  const dateTotals = new Map();
-  campaigns.forEach(campaign => campaign.assign.forEach(slot => { if (slot.key !== "none") dateTotals.set(slot.key, (dateTotals.get(slot.key) || 0) + slot.revenue); }));
-  const columns = [...dateTotals.entries()].sort((a, b) => b[1] - a[1]).slice(0, 14).map(entry => entry[0]).sort();
-  const hasNone = heatCampaigns.some(campaign => campaign.assign.has("none"));
-  const allKeys = hasNone ? [...columns, "none"] : columns;
-  let maxCell = 1;
-  let bestCell = "";
-  heatCampaigns.forEach(campaign => allKeys.forEach(key => {
-    const slot = campaign.assign.get(key);
-    if (slot && slot.revenue > maxCell) maxCell = slot.revenue;
-  }));
-  let bestRevenue = 0;
-  heatCampaigns.forEach(campaign => columns.forEach(key => {
-    const slot = campaign.assign.get(key);
-    if (slot && slot.revenue > bestRevenue) { bestRevenue = slot.revenue; bestCell = `${campaign.campaign}|${key}`; }
-  }));
-  el("campHeatmap").innerHTML = allKeys.length && heatCampaigns.length ? `
-    <table class="camp-heat">
-      <thead><tr><th class="rowh">Campaign</th>${allKeys.map(key => `<th class="${key === "none" ? "none-col" : ""}">${key === "none" ? "Tanpa<br>assign" : dayKeyLabel(key).replace(", ", "<br>")}</th>`).join("")}<th>Total</th></tr></thead>
-      <tbody>${heatCampaigns.map(campaign => `
-        <tr>
-          <th class="rowh" title="${escapeHtml(campaign.campaign)}">${escapeHtml(campaign.campaign)}</th>
-          ${allKeys.map(key => {
-            const slot = campaign.assign.get(key);
-            if (!slot) return "<td></td>";
-            const intensity = slot.revenue / maxCell;
-            const isBest = bestCell === `${campaign.campaign}|${key}`;
-            return `<td class="${isBest ? "best" : ""}" style="background:rgba(139,92,246,${(0.14 + 0.78 * intensity).toFixed(2)});color:${intensity > 0.45 ? "#fff" : "#3b1d8a"}" title="${escapeHtml(campaign.campaign)} - assign ${dayKeyLabel(key)}: ${slot.txn} TXN - ${rupiah(slot.revenue)}">${slot.txn}</td>`;
-          }).join("")}
-          <td class="tot">${campaign.txn}</td>
-        </tr>`).join("")}</tbody>
-    </table>` : `<div class="detail-empty">Belum ada data assignment pada filter ini.</div>`;
-
-  el("topCampaignList").innerHTML = campaigns.slice(0, 20).map((row, index) => campaignRowHtml(row, index + 1, totalRevenue, sortBy)).join("")
-    || `<div class="detail-empty">Tidak ada campaign pada filter ini.</div>`;
+      <article class="camp-row">
+        <div class="camp-rank">${offset + 4}</div>
+        <div class="camp-main">
+          <div class="camp-title"><strong>${escapeHtml(row.campaign)}</strong><span class="pill ${row.kind}">${CAMPAIGN_KINDS[row.kind].label}</span></div>
+          <div class="camp-chips"><span>${row.txn.toLocaleString("id-ID")} TXN</span><span>AOV ${compactRupiah(row.revenue / row.txn)}</span><span>${row.agents.size} agent</span><span>${row.weeks.size} week</span></div>
+          <div class="camp-assignment"><b>${escapeHtml(row.assignmentSummary)}</b></div>
+          ${stackBar(parts)}${stackLegend(parts, 3)}
+        </div>
+        <div class="camp-value"><strong>${rupiah(row.revenue)}</strong><span>Share ${percent(share)}</span><div class="share-bar"><i style="width:${Math.max(3, share * 100)}%"></i></div></div>
+      </article>`;
+  }).join("") || (campaigns.length ? `<div class="detail-empty">Semua campaign sudah tampil di Top 3.</div>` : `<div class="detail-empty">Tidak ada campaign pada filter ini.</div>`);
 }
 
 function renderDodolan() {
@@ -5477,7 +5412,6 @@ let albView = "table";
 let albSort = { key: "allRev", dir: "desc" };
 
 function isNewBusiness(row) { return !RENEWAL_PATTERN.test(row.campaign || ""); }
-function albGroupLabel(product) { return ALB_GROUPS.find(group => group.key === albGroupOf(product))?.label || "Others"; }
 function albGroupOf(product) {
   if (String(product).startsWith("BAON")) return "baon";
   if (product === "RB") return "rb";
@@ -6463,17 +6397,9 @@ function exportResults() {
     "Incentive": product.incentive,
   })));
   const workbook = XLSX.utils.book_new();
-  const info = [
-    [`${_ET.brand.a} - ${_ET.brand.b}`],
-    [`Dibuat oleh ${_ET.brand.c}`],
-    [`Diekspor ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })} WIB`],
-    [`Build ${_ET.build}`],
-  ];
-  XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(info), "Info");
-  workbook.Props = { Title: `${_ET.brand.a} - ${_ET.brand.b}`, Author: _ET.brand.c, Company: _ET.brand.c, Comments: `Build ${_ET.build}` };
   XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(rows), "Summary Agent Week");
   XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(detailRows), "Detail Product");
-  XLSX.writeFile(workbook, `OEC-Performance_EL-TORO_incentive_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  XLSX.writeFile(workbook, `oec_layer1_incentive_${new Date().toISOString().slice(0, 10)}.xlsx`);
 }
 
 function switchTab(tabId) {
@@ -6490,8 +6416,7 @@ function switchTab(tabId) {
   ["agentLeaderboardCoach", "Semua coach"], ["agentLeaderboardAgent", "Semua agent"],
   ["compareCoach", "Pilih coach"], ["trendCoachFilter", "Semua coach"], ["trendAgentFilter", "Semua agent"],
   ["actionCoachFilter", "Semua coach"], ["actionStatusFilter", "Semua status"],
-  ["topCampaignMonth", "Semua bulan"], ["topCampaignWeek", "Semua week"], ["topCampaignLayer", "Semua layer"], ["topCampaignProduct", "Semua produk"],
-  ["topCampaignGroup", "Semua kelompok produk"], ["topCampaignAssign", "Semua tgl assignment"],
+  ["topCampaignMonth", "Semua bulan"], ["topCampaignWeek", "Semua week"], ["topCampaignLayer", "Semua layer"], ["topCampaignFamily", "Semua product family"], ["topCampaignProduct", "Semua paket / produk"],
   ["leaderboardMonthFilter", "Semua bulan"], ["leaderboardWeekFilter", "Semua week"], ["leaderboardLayerFilter", "Semua layer"], ["leaderboardCoachFilter", "Semua coach"],
   ["spvMonthFilter", "Semua bulan"], ["spvWeekFilter", "Semua week"], ["spvSpvFilter", "Semua SPV"], ["spvCoachFilter", "Semua coach"], ["spvAgentFilter", "Semua agent"],
   ["agentLeaderboardMonth", "Semua bulan"], ["agentLeaderboardWeek", "Semua week"], ["compareMonth", "Semua bulan"], ["compareWeek", "Semua week"],
@@ -6516,20 +6441,16 @@ el("actionCoachFilter").addEventListener("change", () => { syncAgentMulti("actio
 el("actionStatusFilter").addEventListener("change", renderActionCenter);
 el("topCampaignMonth").addEventListener("change", () => {
   syncWeekMulti("topCampaignWeek", "topCampaignMonth");
-  updateTopCampaignOptions();
+  updateTopCampaignAgentOptions();
   renderTopCampaign();
 });
-["topCampaignWeek", "topCampaignLayer", "topCampaignCoach", "topCampaignGroup", "topCampaignProduct", "topCampaignAgent", "topCampaignAssign"].forEach(id =>
-  el(id).addEventListener("change", () => { updateTopCampaignOptions(id); renderTopCampaign(); }));
+["topCampaignWeek", "topCampaignLayer", "topCampaignCoach", "topCampaignFamily", "topCampaignProduct"].forEach(id => el(id).addEventListener("change", () => { updateTopCampaignAgentOptions(); renderTopCampaign(); }));
+el("topCampaignAgent").addEventListener("change", renderTopCampaign);
+el("topCampaignAssignmentCampaign").addEventListener("change", () => {
+  renderAssignmentDateDetail(topCampaignGroups, el("topCampaignAssignmentCampaign").value);
+});
 el("topCampaignSort").addEventListener("change", renderTopCampaign);
-el("topCampaignSearch").addEventListener("input", () => { updateTopCampaignOptions(); renderTopCampaign(); });
-el("topCampaignList").addEventListener("click", event => {
-  const button = event.target.closest(".camp-toggle");
-  if (!button) return;
-  const name = button.dataset.campaign;
-  if (campExpanded.has(name)) campExpanded.delete(name); else campExpanded.add(name);
-  renderTopCampaign();
-});
+el("topCampaignSearch").addEventListener("input", renderTopCampaign);
 el("dodolanMonthFilter").addEventListener("change", () => {
   syncWeekMulti("dodolanWeekFilter", "dodolanMonthFilter");
   renderDodolan();
@@ -6618,127 +6539,9 @@ el("actionAgentFilter").addEventListener("change", renderActionCenter);
 el("trendSearchFilter").addEventListener("input", renderTrendPanel);
 el("compareSearch").exportResults;
 el("exportButton").addEventListener("click", exportResults);
-/* ===== identitas & kepemilikan: OEC PERFORMANCE | Support EL TORO ===== */
-const _ET = (() => {
-  const brand = { a: atob("T0VDIFBFUkZPUk1BTkNF"), b: atob("U3VwcG9ydCBFTCBUT1JP"), c: atob("VGltIEVMIFRPUk8=") };
-  const build = atob("RVQtMjAyNjEwMjEtMDE=");
-  const SEAL = 641712961;
-  const hash = text => {
-    let h = 0x811c9dc5;
-    for (let i = 0; i < text.length; i += 1) { h ^= text.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
-    return h >>> 0;
-  };
-  let busy = false;
-  let timer = 0;
-  let watched = null;
-  const queue = () => { clearTimeout(timer); timer = setTimeout(enforce, 150); };
-  const force = (node, rules) => Object.entries(rules).forEach(([key, value]) => node.style.setProperty(key, value, "important"));
-  const hiddenNow = node => {
-    const cs = getComputedStyle(node);
-    return node.hidden || cs.display === "none" || cs.visibility === "hidden" || Number(cs.opacity) < 0.6;
-  };
-  const show = (node, display) => { if (hiddenNow(node)) { node.hidden = false; force(node, { display, visibility: "visible", opacity: "1" }); } };
-  const footerHtml = () => `<div><strong>${brand.a}</strong> &middot; <em>${brand.b}</em></div><div>Dikembangkan oleh ${brand.c} &middot; Build ${build}</div><small>Dashboard ini adalah karya ${brand.c}. Dilarang menghapus atau mengganti identitas ini.</small>`;
-  const tileUrl = () => {
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="230"><text x="14" y="130" transform="rotate(-24 180 115)" font-family="Inter,Arial,sans-serif" font-size="15" font-weight="700" letter-spacing="1.6" fill="#0b1f3a" fill-opacity="0.06">${brand.a} &#183; ${brand.b}</text></svg>`;
-    return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
-  };
-
-  function enforce() {
-    if (busy) return true;
-    busy = true;
-    try {
-      const wantTitle = `OEC Performance - ${brand.b}`;
-      if (document.title !== wantTitle) document.title = wantTitle;
-      document.body.dataset.brand = `${brand.a} | ${brand.b}`;
-      document.body.dataset.build = build;
-
-      let header = document.querySelector("header.topbar");
-      if (!header) {
-        header = document.createElement("header");
-        header.className = "topbar";
-        header.innerHTML = '<div class="top-actions"></div>';
-        document.body.prepend(header);
-      }
-      let eyebrow = document.getElementById("etEyebrow");
-      let title = document.getElementById("etTitle");
-      if (!eyebrow || !title || !header.contains(eyebrow) || !header.contains(title) || eyebrow.parentElement !== title.parentElement) {
-        let box = header.querySelector(".brand");
-        if (!box) { box = document.createElement("div"); box.className = "brand"; header.prepend(box); }
-        box.innerHTML = '<span class="brand-mark">ET</span><div><p class="eyebrow" id="etEyebrow"></p><h1 id="etTitle"></h1></div>';
-        eyebrow = document.getElementById("etEyebrow");
-        title = document.getElementById("etTitle");
-      }
-      if (eyebrow.textContent !== brand.a) eyebrow.textContent = brand.a;
-      if (title.textContent !== brand.b) title.textContent = brand.b;
-      show(header, "flex");
-      const box = eyebrow.closest(".brand");
-      if (box) show(box, "flex");
-      show(eyebrow.parentElement, "block");
-      show(eyebrow, "block");
-      show(title, "block");
-      if (watched !== header) {
-        watched = header;
-        new MutationObserver(queue).observe(header, { subtree: true, childList: true, characterData: true, attributes: true });
-      }
-
-      let footer = document.getElementById("brandFooter");
-      if (!footer || !document.body.contains(footer)) {
-        footer = document.createElement("footer");
-        footer.id = "brandFooter";
-        footer.className = "brand-footer";
-        document.body.append(footer);
-      }
-      const footerText = footer.textContent || "";
-      if (![brand.a, brand.b, brand.c, build].every(part => footerText.includes(part))) footer.innerHTML = footerHtml();
-      show(footer, "block");
-
-      let badge = document.getElementById("brandBadge");
-      if (!badge || !document.body.contains(badge)) {
-        badge = document.createElement("div");
-        badge.id = "brandBadge";
-        document.body.append(badge);
-      }
-      const badgeText = `${brand.a} \u00B7 ${brand.b}`;
-      if (badge.textContent !== badgeText) badge.textContent = badgeText;
-      force(badge, {
-        position: "fixed", left: "10px", bottom: "10px", "z-index": "9991", padding: "5px 12px", "border-radius": "999px",
-        background: "rgba(11,31,58,.88)", color: "#fff", font: "700 10px Inter, Arial, sans-serif", "letter-spacing": ".06em",
-        "pointer-events": "none", display: "block", visibility: "visible", opacity: "1",
-      });
-
-      let mark = document.getElementById("brandWatermark");
-      if (!mark || !document.body.contains(mark)) {
-        mark = document.createElement("div");
-        mark.id = "brandWatermark";
-        mark.setAttribute("aria-hidden", "true");
-        document.body.append(mark);
-      }
-      force(mark, {
-        position: "fixed", top: "0", left: "0", width: "100%", height: "100%", "z-index": "9990", "pointer-events": "none",
-        display: "block", visibility: "visible", opacity: "1", "background-image": tileUrl(), "background-repeat": "repeat",
-      });
-    } finally {
-      busy = false;
-    }
-    return true;
-  }
-
-  const sealed = () => hash(`${brand.a}|${brand.b}|${brand.c}`) === SEAL;
-  function verify() { enforce(); return sealed(); }
-  function start() {
-    enforce();
-    new MutationObserver(queue).observe(document.body, { childList: true });
-    new MutationObserver(queue).observe(document.head, { childList: true, subtree: true, characterData: true });
-    setInterval(enforce, 3000);
-    console.log(`%c${brand.a}%c ${brand.b}`, "background:#0b1f3a;color:#fff;padding:3px 8px;border-radius:4px;font-weight:700", "color:#ec4899;font-weight:700");
-    console.log(`Dikembangkan oleh ${brand.c} - Build ${build}. Mohon identitas ini tidak dihapus atau diganti.`);
-  }
-  return { brand, build, enforce, verify, start };
-})();
-
-_ET.start();
 loadFromGoogleSheet();
 </script>
 </body>
 </html>
+
+
