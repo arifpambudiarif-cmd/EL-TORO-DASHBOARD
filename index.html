@@ -418,4 +418,1452 @@ tbody tr:hover, tbody tr.selected { background: #f0f8f8; }
   gap: 12px;
   align-items: center;
   padding: 11px 12px;
-  border: 1px solid #e
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  background: #fff;
+}
+.campaign-rank-card.rank-1 { background: #fff9e6; border-color: #e4bd31; }
+.campaign-rank-card.rank-2 { background: #f7f9fb; border-color: #b8c2cc; }
+.campaign-rank-card.rank-3 { background: #fff4ea; border-color: #d49a59; }
+.campaign-rank-main { min-width: 0; }
+.campaign-rank-main strong, .campaign-rank-main span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.campaign-rank-main span { margin: 3px 0 7px; color: var(--muted); font-size: 10px; font-weight: 700; }
+.campaign-rank-value { text-align: right; font-variant-numeric: tabular-nums; }
+.campaign-rank-value strong { display: block; font-size: 14px; }
+.campaign-rank-value span { color: var(--muted); font-size: 10px; font-weight: 700; }
+
+.leaderboard-hero {
+  min-height: 120px;
+  margin-bottom: 8px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(8,127,140,.12), rgba(20,125,100,.06)), #fff;
+}
+.agent-hero {
+  background: linear-gradient(135deg, rgba(20,125,100,.14), rgba(246,214,107,.14)), #fff;
+}
+.leaderboard-hero h2 { margin: 0; font-size: 25px; }
+.leaderboard-hero p { margin: 6px 0 0; color: var(--muted); }
+.hero-number {
+  min-width: 260px;
+  padding: 14px 16px;
+  border: 1px solid rgba(8,127,140,.22);
+  border-radius: 8px;
+  background: #fff;
+  text-align: right;
+}
+.hero-number span { display: block; color: var(--muted); font-size: 11px; font-weight: 700; }
+.hero-number strong { display: block; margin-top: 6px; font-size: 24px; }
+
+.leaderboard-panel { overflow: hidden; }
+.leaderboard-list { display: grid; gap: 8px; padding: 10px; }
+.leaderboard-list.compare-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+.compare-column { border: 1px solid #e3e8ef; border-radius: 8px; overflow: hidden; background: #fff; }
+.compare-column-head {
+  min-height: 58px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e3e8ef;
+}
+.compare-column-head h3 { margin: 0 0 3px; font-size: 15px; }
+.compare-column-head span { color: var(--muted); font-size: 10px; font-weight: 700; }
+.compare-column-head strong { font-size: 14px; white-space: nowrap; }
+.compare-agent-list { display: grid; gap: 7px; padding: 8px; }
+.compare-agent-card {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 128px;
+  gap: 9px;
+  align-items: center;
+  padding: 9px;
+  border: 1px solid #e3e8ef;
+  border-radius: 7px;
+  background: #fff;
+}
+.compare-agent-card.rank-1 { background: #fff9e6; border-color: #e4bd31; }
+.compare-agent-card.rank-2 { background: #f7f9fb; border-color: #b8c2cc; }
+.compare-agent-card.rank-3 { background: #fff4ea; border-color: #d49a59; }
+.compare-agent-main { min-width: 0; }
+.compare-agent-main strong, .compare-agent-main span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.compare-agent-main span { margin: 2px 0 6px; color: var(--muted); font-size: 10px; font-weight: 700; }
+.compare-agent-value { text-align: right; font-variant-numeric: tabular-nums; }
+.compare-agent-value strong { display: block; font-size: 12px; }
+.compare-agent-value span { color: var(--muted); font-size: 10px; font-weight: 700; }
+
+.compare-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid var(--line);
+  background: #f8fcff;
+}
+.compare-breakdown > div { min-width: 0; }
+.compare-breakdown strong { display: block; margin-bottom: 6px; color: var(--teal-dark); font-size: 11px; }
+.mini-bars { display: grid; gap: 5px; }
+.mini-bar-row {
+  display: grid;
+  grid-template-columns: 92px minmax(80px, 1fr) 88px;
+  gap: 6px;
+  align-items: center;
+  font-size: 10px;
+}
+.mini-bar-row > span { overflow: hidden; color: #36739a; text-overflow: ellipsis; white-space: nowrap; }
+.mini-bar-row div { height: 13px; overflow: hidden; border-radius: 4px; background: #e8f0f7; }
+.mini-bar-row i { display: block; height: 100%; border-radius: 4px; }
+.mini-bar-row b { color: #06304d; font-size: 9px; text-align: right; }
+.bar-color-1 { background: var(--teal); }
+.bar-color-2 { background: var(--pink); }
+.bar-color-3 { background: var(--green); }
+.bar-color-4 { background: #ffc447; }
+.bar-color-5 { background: var(--purple); }
+.bar-color-6 { background: var(--blue); }
+
+.rank-card {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 170px;
+  gap: 12px;
+  align-items: center;
+  padding: 11px 12px;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  background: #fff;
+}
+.rank-card.rank-1 { border-color: #e4bd31; background: #fff9e6; }
+.rank-card.rank-2 { border-color: #b8c2cc; background: #f7f9fb; }
+.rank-card.rank-3 { border-color: #d49a59; background: #fff4ea; }
+.rank-number {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--teal);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+}
+.rank-1 .rank-number { background: #c99600; }
+.rank-2 .rank-number { background: #667085; }
+.rank-3 .rank-number { background: #b66b1f; }
+.rank-title { display: flex; justify-content: space-between; gap: 12px; }
+.rank-title strong { font-size: 14px; }
+.rank-title span, .rank-meta { color: var(--muted); font-size: 10px; }
+.leader-drilldown-trigger {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.leader-drilldown-trigger strong { display: block; color: var(--ink); }
+.leader-drilldown-trigger span { display: block; margin-top: 2px; color: var(--teal-dark); font-size: 10px; font-weight: 700; }
+.leader-drilldown-trigger:hover strong { text-decoration: underline; }
+.rank-bar { height: 8px; margin: 8px 0 6px; overflow: hidden; border-radius: 4px; background: #edf1f4; }
+.rank-bar span { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--teal), var(--pink)); }
+.rank-1 .rank-bar span { background: #c99600; }
+.rank-meta { display: flex; justify-content: space-between; gap: 12px; }
+
+.leader-product-breakdown {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #d9e4ee;
+  border-radius: 7px;
+  background: #f8fbfd;
+}
+.leader-product-head, .leader-product-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(120px, 2fr) 140px;
+  gap: 10px;
+  align-items: center;
+}
+.leader-product-head { padding-bottom: 8px; border-bottom: 1px solid #e5edf3; color: var(--muted); font-size: 10px; }
+.leader-product-head strong { color: var(--ink); font-size: 12px; }
+.leader-product-head span { grid-column: 2 / span 2; text-align: right; }
+.leader-product-row { padding: 8px 0; border-bottom: 1px solid #eaf0f5; }
+.leader-product-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.leader-product-row strong { display: block; font-size: 11px; }
+.leader-product-row span { color: var(--muted); font-size: 10px; }
+.leader-product-row b { font-size: 12px; text-align: right; }
+.leader-product-bar { height: 7px; overflow: hidden; border-radius: 4px; background: #e7edf3; }
+.leader-product-bar span { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--teal), var(--pink)); }
+
+.spv-board { display: grid; gap: 10px; padding: 10px; }
+.spv-card {
+  overflow: hidden;
+  border: 1px solid #c8d8e6;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(22, 45, 61, .06);
+}
+.spv-card.spv-1 { border-color: #e0b52f; }
+.spv-card.spv-2 { border-color: #64a7bb; }
+.spv-card.spv-3 { border-color: #8dc486; }
+.spv-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 9px 12px;
+  background: linear-gradient(135deg, #ecf7fa, #f8fbfd);
+  border-bottom: 1px solid #e3ebf2;
+}
+.spv-card.spv-1 .spv-card-head { background: linear-gradient(135deg, #fff4c2, #fffaf0); }
+.spv-card.spv-2 .spv-card-head { background: linear-gradient(135deg, #dff3f8, #f4fbfd); }
+.spv-card.spv-3 .spv-card-head { background: linear-gradient(135deg, #e5f6e1, #f8fcf7); }
+.spv-card-head strong { display: block; font-size: 14px; }
+.spv-card-head span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+.spv-card-head > div:last-child { text-align: right; }
+
+.spv-product-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(130px, 1fr));
+  gap: 7px;
+  padding: 9px 12px;
+  background: #fbfcfd;
+  border-bottom: 1px solid #e7edf3;
+}
+.spv-product-cell {
+  min-height: 60px;
+  padding: 8px;
+  border: 1px solid #dfe7ef;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #ffffff, #f8fbfd);
+}
+.spv-product-cell:nth-child(1) { border-color: #d6c07a; background: #fff9e8; }
+.spv-product-cell:nth-child(2) { border-color: #9bc6d5; background: #eef9fc; }
+.spv-product-cell:nth-child(3) { border-color: #a9d3a3; background: #f1faef; }
+.spv-product-cell:nth-child(4) { border-color: #d7b0ca; background: #fcf1f8; }
+.spv-product-cell:nth-child(5) { border-color: #c2cbd6; background: #f6f8fb; }
+.spv-product-cell > span { display: block; color: var(--muted); font-size: 10px; font-weight: 700; }
+.spv-product-cell > strong { display: block; margin-top: 4px; font-size: 13px; }
+.spv-product-cell > small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+.spv-child-products { display: grid; gap: 4px; margin-top: 6px; padding-top: 6px; border-top: 1px solid #edf1f5; }
+.spv-child-products div { display: flex; justify-content: space-between; gap: 8px; font-size: 10px; }
+.spv-child-products span { color: var(--muted); }
+
+.spv-agent-table-wrap { max-height: 260px; overflow: auto; }
+.spv-agent-table { table-layout: fixed; min-width: 1080px; }
+.spv-agent-table th, .spv-agent-table td { padding: 6px 7px; font-size: 10px; }
+.spv-agent-table th:nth-child(1), .spv-agent-table td:nth-child(1) { width: 42px; }
+.spv-agent-table th:nth-child(2), .spv-agent-table td:nth-child(2) { width: 160px; }
+.spv-agent-table th:nth-child(3), .spv-agent-table td:nth-child(3) { width: 58px; }
+
+.action-note { margin-top: 7px; padding: 7px 8px; border-radius: 6px; font-size: 10px; line-height: 1.35; }
+.action-win { background: var(--green-soft); color: var(--green); }
+.action-close { background: var(--teal-soft); color: var(--teal-dark); }
+.action-mid { background: #eef2f6; color: #344054; }
+.action-risk { background: var(--amber-soft); color: var(--amber); }
+.action-alert { background: var(--red-soft); color: var(--red); }
+
+.action-layout { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 10px; }
+.action-hero { background: linear-gradient(135deg, rgba(8, 127, 140, .10), rgba(20, 125, 100, .08)), #fff; }
+.action-list, .mini-list { display: grid; gap: 8px; padding: 10px; }
+.action-agent-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  background: #fff;
+}
+.action-agent-head { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+.action-agent-head strong { display: block; font-size: 13px; }
+.action-agent-head span, .mini-row span { color: var(--muted); font-size: 10px; font-weight: 700; }
+.action-status {
+  display: inline-flex;
+  min-width: 92px;
+  justify-content: center;
+  padding: 4px 7px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.action-status.need { background: var(--red-soft); color: var(--red); }
+.action-status.near { background: var(--amber-soft); color: var(--amber); }
+.action-status.track { background: var(--teal-soft); color: var(--teal-dark); }
+.action-status.done { background: var(--green-soft); color: var(--green); }
+.action-money { text-align: right; font-variant-numeric: tabular-nums; }
+.action-money strong { display: block; font-size: 14px; }
+.action-money span { color: var(--muted); font-size: 10px; font-weight: 700; }
+.simple-action-card { grid-template-columns: minmax(0, 1fr) 210px; }
+.action-readout { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 7px; margin: 10px 0 8px; }
+.action-readout div { padding: 8px; border: 1px solid #e3e8ef; border-radius: 7px; background: #f8fafc; }
+.action-readout span { display: block; color: var(--muted); font-size: 10px; font-weight: 700; }
+.action-readout strong { display: block; margin-top: 3px; font-size: 13px; }
+.action-next-step { margin-top: 9px; padding: 10px; border-radius: 7px; background: #eef7f7; color: #0f4f59; }
+.action-next-step strong { display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; }
+.action-next-step p { margin: 0; line-height: 1.45; color: #0f4f59; }
+.action-signal-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; margin-top: 8px; }
+.action-signal-grid div { min-width: 0; padding: 8px; border-radius: 7px; background: #fff8e7; border: 1px solid #f2d98f; }
+.action-signal-grid span { display: block; color: #8a5a00; font-size: 10px; font-weight: 800; }
+.action-signal-grid strong {
+  display: block;
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #2f2100;
+  font-size: 12px;
+}
+.mini-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 10px;
+  border: 1px solid #e3e8ef;
+  border-radius: 7px;
+  background: #fff;
+}
+.mini-row strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mini-value { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+.rank-revenue { text-align: right; font-size: 15px; font-weight: 800; }
+.rank-revenue strong, .rank-revenue span { display: block; }
+.rank-revenue span { margin-top: 4px; color: var(--muted); font-size: 10px; font-weight: 700; }
+
+@media (max-width: 980px) {
+  .control-band { grid-template-columns: 1fr; }
+  .rules-strip, .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .rules-strip div:nth-child(2) { border-right: 0; }
+  .rules-strip div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .content-grid { grid-template-columns: 1fr; }
+  .leader-summary { grid-template-columns: 24px minmax(140px, 1fr) 70px 120px; }
+  .action-layout { grid-template-columns: 1fr; }
+  .action-agent-card { grid-template-columns: 1fr; }
+  .action-readout { grid-template-columns: repeat(3, 1fr); }
+  .action-signal-grid { grid-template-columns: repeat(2, 1fr); }
+  .action-money { text-align: left; }
+  .leaderboard-list.compare-grid { grid-template-columns: 1fr; }
+  .compare-agent-card { grid-template-columns: 34px minmax(0, 1fr); }
+  .compare-agent-value { grid-column: 2; text-align: left; }
+  .spv-product-grid { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
+}
+
+@media (max-width: 620px) {
+  .topbar { padding: 13px 16px; }
+  h1 { font-size: 20px; }
+  main { width: min(100% - 20px, 1480px); margin-top: 10px; }
+  .input-row, .filters { flex-direction: column; align-items: stretch; }
+  .primary-button { width: 100%; }
+  .field { min-width: 0; width: 100%; }
+  .rules-strip, .kpi-grid { grid-template-columns: 1fr; }
+  .rules-strip div { border-right: 0; border-bottom: 1px solid var(--line); }
+  .rules-strip div:last-child { border-bottom: 0; }
+  .kpi { min-height: 94px; }
+  .action-readout, .action-signal-grid { grid-template-columns: 1fr; }
+  .top-actions .status-dot { display: none; }
+  .spv-card-head { align-items: flex-start; flex-direction: column; }
+  .spv-card-head > div:last-child { text-align: left; }
+  .spv-product-grid { grid-template-columns: 1fr; }
+}
+  </style>
+</head>
+<body>
+  <section id="accessGate" aria-label="Akses dashboard">
+    <h1 class="access-title">EL TORO</h1>
+    <div class="access-card">
+      <div class="bull-logo" aria-hidden="true">🐂</div>
+      <form id="accessForm">
+        <label for="accessPassword">Password</label>
+        <input id="accessPassword" type="password" autocomplete="current-password" placeholder="Masukkan password" required autofocus>
+        <button type="submit" aria-label="Masuk ke dashboard">🐂</button>
+        <p id="accessError" class="access-error" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+  <script>
+    (() => {
+      const ACCESS_HASH = "6d0d820bebfc612b07d2059341278774b2d245c141e3ad5b4c7ecd86080df1f0";
+      const ACCESS_KEY = "el_toro_dashboard_access";
+      const gate = document.getElementById("accessGate");
+      const form = document.getElementById("accessForm");
+      const input = document.getElementById("accessPassword");
+      const error = document.getElementById("accessError");
+      document.body.classList.add("access-locked");
+
+      async function digest(value) {
+        const bytes = new TextEncoder().encode(value);
+        const hash = await crypto.subtle.digest("SHA-256", bytes);
+        return [...new Uint8Array(hash)].map(byte => byte.toString(16).padStart(2, "0")).join("");
+      }
+
+      function unlock() {
+        document.body.classList.remove("access-locked");
+        gate.hidden = true;
+      }
+
+      if (sessionStorage.getItem(ACCESS_KEY) === ACCESS_HASH) unlock();
+      form.addEventListener("submit", async event => {
+        event.preventDefault();
+        if (await digest(input.value) === ACCESS_HASH) {
+          sessionStorage.setItem(ACCESS_KEY, ACCESS_HASH);
+          error.textContent = "";
+          unlock();
+        } else {
+          error.textContent = "Password salah. Silakan coba lagi.";
+          input.select();
+        }
+      });
+    })();
+  </script>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">OEC PERFORMANCE</p>
+      <h1>Support EL TORO</h1>
+    </div>
+    <div class="top-actions">
+      <span id="dataStatus" class="status-dot">Belum ada data</span>
+      <button id="exportButton" class="icon-button" type="button" title="Export hasil ke Excel" disabled>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <nav class="tabs" aria-label="Dashboard sections">
+      <button class="tab-button active" type="button" data-tab="incentivePanel">DS INCENTIVE ALL</button>
+      <button class="tab-button" type="button" data-tab="actionPanel">ACTION CENTER</button>
+      <button class="tab-button" type="button" data-tab="topCampaignPanel">TOP CAMPAIGN</button>
+      <button class="tab-button" type="button" data-tab="dodolanPanel">DODOLAN</button>
+      <button class="tab-button" type="button" data-tab="leaderboardPanel">LEADERBOARD COACH</button>
+      <button class="tab-button" type="button" data-tab="spvPanel">SPV PRODUCT</button>
+      <button class="tab-button" type="button" data-tab="agentLeaderboardPanel">LEADERBOARD AGENT</button>
+      <button class="tab-button" type="button" data-tab="compareTeamPanel">COMPARE TEAM</button>
+    </nav>
+
+    <section id="incentivePanel" class="tab-panel active">
+    <section class="rules-strip">
+      <div><span>Scope</span><strong>Layer 1 (Nov)</strong></div>
+      <div><span>Target Nov (W45-W48)</span><strong>Rp9.200.000</strong></div>
+      <div><span>Min TH</span><strong>50%</strong></div>
+      <div><span>Skema</span><strong>November New Index</strong></div>
+    </section>
+
+    <section id="emptyState" class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg>
+      </div>
+      <h2>Muat raw transaksi untuk mulai</h2>
+      <p>Dashboard akan menghitung revenue, pencapaian target, tier TH, dan incentive setiap agent Layer 1.</p>
+    </section>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="filters">
+        <div class="field">
+          <label for="monthFilter">Bulan</label>
+          <select id="monthFilter"></select>
+        </div>
+        <div class="field">
+          <label for="weekFilter">Week</label>
+          <select id="weekFilter"></select>
+        </div>
+        <div class="field grow">
+          <label for="searchFilter">Cari agent atau leader</label>
+          <input id="searchFilter" type="search" placeholder="Ketik nama...">
+        </div>
+        <div class="field">
+          <label for="statusFilter">Status</label>
+          <select id="statusFilter">
+            <option value="all">Semua</option>
+            <option value="eligible">Cair</option>
+            <option value="not-eligible">Belum cair</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <article class="kpi"><span>Total revenue</span><strong id="revenueKpi">Rp0</strong><small id="revenueNote">0 agent</small></article>
+        <article class="kpi"><span>Estimasi incentive</span><strong id="incentiveKpi">Rp0</strong><small id="incentiveNote">Berdasarkan rate produk</small></article>
+        <article class="kpi"><span>Agent mencapai minimum</span><strong id="eligibleKpi">0</strong><small id="eligibleNote">TH mengikuti skema week</small></article>
+        <article class="kpi"><span>Median TH</span><strong id="medianKpi">0%</strong><small>Target mengikuti week</small></article>
+      </div>
+
+      <div class="content-grid">
+        <section class="table-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Incentive per agent</h2>
+              <p id="tableCaption">Ringkasan per minggu</p>
+            </div>
+            <span id="rowCount" class="count-chip">0 agent</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th>Leader</th>
+                  <th>Revenue</th>
+                  <th>TH</th>
+                  <th>Tier</th>
+                  <th>Incentive</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="summaryBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <aside class="detail-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Detail agent</h2>
+              <p>Klik baris agent untuk melihat produk</p>
+            </div>
+          </div>
+          <div id="detailEmpty" class="detail-empty">Belum ada agent dipilih.</div>
+          <div id="detailContent" hidden>
+            <div class="agent-head">
+              <div><strong id="detailName"></strong><span id="detailLeader"></span></div>
+              <span id="detailStatus" class="badge"></span>
+            </div>
+            <div class="progress-block">
+              <div><span>Pencapaian target</span><strong id="detailTh"></strong></div>
+              <div class="progress-track"><span id="detailProgress"></span></div>
+              <small id="detailRevenue"></small>
+            </div>
+            <div class="product-list" id="productList"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+    </section>
+
+    <section id="actionPanel" class="tab-panel">
+      <div class="leaderboard-hero action-hero">
+        <div>
+          <p class="eyebrow">DAILY OPERATING VIEW</p>
+          <h2>Action Center Tim Arif Pambudi</h2>
+          <p>Halaman action harian untuk agent: lihat gap, transaksi yang dibutuhkan, dan fokus kerja hari ini.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Gap</span>
+          <strong id="actionTotalGap">Rp0</strong>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="actionMonthFilter">Bulan</label>
+          <select id="actionMonthFilter"></select>
+        </div>
+        <div class="field">
+          <label for="actionWeekFilter">Week</label>
+          <select id="actionWeekFilter"></select>
+        </div>
+        <div class="field grow">
+          <label for="actionSearchFilter">Cari agent</label>
+          <input id="actionSearchFilter" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+      <div class="kpi-grid action-kpis">
+        <article class="kpi"><span>Need Push</span><strong id="actionNeedPushKpi">0</strong><small>TH di bawah minimum</small></article>
+        <article class="kpi"><span>Near Incentive</span><strong id="actionNearKpi">0</strong><small>Mendekati minimum TH</small></article>
+        <article class="kpi"><span>Daily Gap</span><strong id="actionDailyNeedKpi">Rp0</strong><small>Estimasi per hari</small></article>
+        <article class="kpi"><span>Next Action</span><strong id="actionTopCoachKpi">-</strong><small id="actionTopCoachGap">Rp0</small></article>
+      </div>
+      <div class="action-layout">
+        <section class="table-panel action-priority-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Action List Agent</h2>
+              <p id="actionAgentCaption">Urutan kerja agent tim Arif Pambudi.</p>
+            </div>
+            <span id="actionAgentCount" class="count-chip">0 agent</span>
+          </div>
+          <div id="actionAgentList" class="action-list"></div>
+        </section>
+        <aside class="action-side">
+          <section class="table-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Team Snapshot</h2>
+                <p>Ringkasan performa tim minggu ini.</p>
+              </div>
+            </div>
+            <div id="actionCoachList" class="mini-list"></div>
+          </section>
+          <section class="table-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Campaign Signal</h2>
+                <p>Campaign dengan revenue/txn paling kuat.</p>
+              </div>
+            </div>
+            <div id="actionCampaignList" class="mini-list"></div>
+          </section>
+          <section class="table-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Product Focus</h2>
+                <p>Mix produk yang paling berkontribusi.</p>
+              </div>
+            </div>
+            <div id="actionProductList" class="mini-list"></div>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <section id="topCampaignPanel" class="tab-panel">
+      <div class="leaderboard-hero campaign-hero">
+        <div>
+          <p class="eyebrow">WEEKLY CAMPAIGN SIGNAL</p>
+          <h2>Top Campaign</h2>
+          <p>Campaign terbaik per minggu berdasarkan revenue dan transaksi supaya agent tahu fokus kerja yang paling menjanjikan.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="topCampaignTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="topCampaignMonth">Bulan</label>
+          <select id="topCampaignMonth"></select>
+        </div>
+        <div class="field">
+          <label for="topCampaignWeek">Week</label>
+          <select id="topCampaignWeek"></select>
+        </div>
+        <div class="field">
+          <label for="topCampaignCoach">Coach</label>
+          <select id="topCampaignCoach"></select>
+        </div>
+        <div class="field">
+          <label for="topCampaignAgent">Agent</label>
+          <select id="topCampaignAgent"></select>
+        </div>
+        <div class="field">
+          <label for="topCampaignSort">Sort by</label>
+          <select id="topCampaignSort">
+            <option value="revenue">Revenue</option>
+            <option value="txn">Txn</option>
+          </select>
+        </div>
+        <div class="field grow">
+          <label for="topCampaignSearch">Cari campaign atau produk</label>
+          <input id="topCampaignSearch" type="search" placeholder="Ketik campaign...">
+        </div>
+      </div>
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Campaign aktif</span><strong id="topCampaignCountKpi">0</strong><small id="topCampaignWeekNote">Weekly</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="topCampaignTxnKpi">0</strong><small>Layer 1</small></article>
+        <article class="kpi"><span>Top campaign</span><strong id="topCampaignNameKpi">-</strong><small id="topCampaignRevenueKpi">Rp0</small></article>
+        <article class="kpi"><span>Txn top campaign</span><strong id="topCampaignAovKpi">0</strong><small>Jumlah transaksi campaign #1</small></article>
+      </div>
+      <section class="table-panel leaderboard-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Ranking Campaign</h2>
+            <p id="topCampaignCaption">Campaign terbaik minggu ini.</p>
+          </div>
+          <span id="topCampaignCount" class="count-chip">0 campaign</span>
+        </div>
+        <div id="topCampaignList" class="campaign-rank-list"></div>
+      </section>
+    </section>
+
+    <section id="dodolanPanel" class="tab-panel">
+      <div class="filters dodolan-filters">
+        <div class="field">
+          <label for="dodolanMonthFilter">Bulan</label>
+          <select id="dodolanMonthFilter"></select>
+        </div>
+        <div class="field">
+          <label for="dodolanWeekFilter">Week</label>
+          <select id="dodolanWeekFilter"></select>
+        </div>
+        <div class="field">
+          <label for="dodolanLeaderFilter">Leader</label>
+          <select id="dodolanLeaderFilter"></select>
+        </div>
+        <div class="field grow">
+          <label for="dodolanSearchFilter">Cari package, campaign, agent</label>
+          <input id="dodolanSearchFilter" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <article class="kpi"><span>Total revenue</span><strong id="dodolanRevenueKpi">Rp0</strong><small id="dodolanRevenueNote">0 transaksi</small></article>
+        <article class="kpi"><span>Total package</span><strong id="dodolanPackageKpi">0</strong><small>Package terjual</small></article>
+        <article class="kpi"><span>Leader aktif</span><strong id="dodolanLeaderKpi">0</strong><small>Dalam filter aktif</small></article>
+        <article class="kpi"><span>Agent aktif</span><strong id="dodolanAgentKpi">0</strong><small>Dalam filter aktif</small></article>
+      </div>
+
+      <section class="table-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>DODOLAN</h2>
+            <p id="dodolanCaption">Penjualan paket per leader dan agent</p>
+          </div>
+          <span id="dodolanRowCount" class="count-chip">0 rows</span>
+        </div>
+        <div id="dodolanBoard" class="dodolan-board"></div>
+      </section>
+    </section>
+
+    <section id="leaderboardPanel" class="tab-panel">
+      <div class="leaderboard-hero">
+        <div>
+          <p class="eyebrow">MONTHLY RACE</p>
+          <h2>Revenue Leaderboard</h2>
+          <p>Total revenue coach per bulan, bisa difilter per layer termasuk S2S.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="leaderboardTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="field">
+          <label for="leaderboardMonthFilter">Bulan</label>
+          <select id="leaderboardMonthFilter"></select>
+        </div>
+        <div class="field">
+          <label for="leaderboardWeekFilter">Week</label>
+          <select id="leaderboardWeekFilter"></select>
+        </div>
+        <div class="field">
+          <label for="leaderboardLayerFilter">Layer</label>
+          <select id="leaderboardLayerFilter">
+            <option value="all">Semua layer</option>
+            <option value="S2S">S2S</option>
+            <option value="Layer 1">Layer 1</option>
+            <option value="Layer 2">Layer 2</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Coach aktif</span><strong id="leaderboardLeaderKpi">0</strong><small id="leaderboardLayerNote">All layer termasuk S2S</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="leaderboardTxnKpi">0</strong><small id="leaderboardTxnNote">Semua bulan</small></article>
+        <article class="kpi"><span>Top leader</span><strong id="leaderboardTopLeaderKpi">-</strong><small id="leaderboardTopRevenueKpi">Rp0</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="leaderboardTotalToTargetKpi">0%</strong><small id="leaderboardTargetNote">Target bulan terpilih</small></article>
+      </div>
+
+      <section class="table-panel leaderboard-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Ranking Coach</h2>
+            <p>Revenue tertinggi menjadi posisi teratas</p>
+          </div>
+          <span id="leaderboardCount" class="count-chip">0 coach</span>
+        </div>
+        <div id="leaderboardList" class="leaderboard-list"></div>
+      </section>
+    </section>
+
+    <section id="agentLeaderboardPanel" class="tab-panel">
+      <div class="leaderboard-hero agent-hero">
+        <div>
+          <p class="eyebrow">LAYER 1 RACE</p>
+          <h2>Agent Leaderboard</h2>
+          <p>Ranking agent Layer 1 berdasarkan revenue, tersedia weekly dan monthly.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="agentLeaderboardTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="field">
+          <label for="agentLeaderboardMonth">Bulan</label>
+          <select id="agentLeaderboardMonth"></select>
+        </div>
+        <div class="field">
+          <label for="agentLeaderboardMode">Mode</label>
+          <select id="agentLeaderboardMode">
+            <option value="monthly">Monthly</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="agentLeaderboardWeek">Week</label>
+          <select id="agentLeaderboardWeek"></select>
+        </div>
+        <div class="field">
+          <label for="agentLeaderboardCoach">Coach</label>
+          <select id="agentLeaderboardCoach"></select>
+        </div>
+        <div class="field grow">
+          <label for="agentLeaderboardSearch">Cari agent atau leader</label>
+          <input id="agentLeaderboardSearch" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Agent aktif</span><strong id="agentLeaderboardAgentKpi">0</strong><small>Layer 1</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="agentLeaderboardTxnKpi">0</strong><small id="agentLeaderboardTxnNote">Monthly</small></article>
+        <article class="kpi"><span>Top agent</span><strong id="agentLeaderboardTopAgentKpi">-</strong><small id="agentLeaderboardTopRevenueKpi">Rp0</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="agentLeaderboardTotalToTargetKpi">0%</strong><small>Target Layer 1</small></article>
+      </div>
+
+      <section class="table-panel leaderboard-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Ranking Agent Layer 1</h2>
+            <p id="agentLeaderboardCaption">Monthly</p>
+          </div>
+          <span id="agentLeaderboardCount" class="count-chip">0 agent</span>
+        </div>
+        <div id="agentLeaderboardList" class="leaderboard-list"></div>
+      </section>
+    </section>
+
+    <section id="spvPanel" class="tab-panel">
+      <div class="leaderboard-hero agent-hero">
+        <div>
+          <p class="eyebrow">SPV PRODUCT VIEW</p>
+          <h2>Pembagian Revenue 3 SPV</h2>
+          <p>Deti Laharwati, Yulfan Prihartanto, dan Mark Johannes. Ringkas per leader dengan breakdown product.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="spvTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="spvMonthFilter">Bulan</label>
+          <select id="spvMonthFilter"></select>
+        </div>
+        <div class="field">
+          <label for="spvWeekFilter">Week</label>
+          <select id="spvWeekFilter"></select>
+        </div>
+      </div>
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Total revenue</span><strong id="spvRevenueKpi">Rp0</strong><small id="spvRevenueNote">Semua bulan</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="spvTxnKpi">0</strong><small id="spvTxnNote">0 SPV</small></article>
+        <article class="kpi"><span>Agent target</span><strong id="spvAgentKpi">0</strong><small id="spvAgentNote">Dari sheet Target Agent</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="spvToTargetKpi">0%</strong><small id="spvTargetNote">Target filter aktif</small></article>
+      </div>
+      <section class="table-panel spv-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>SPV Product Split</h2>
+            <p>Hanya 3 SPV utama. BAON dibuka menjadi Regular, Premium, dan Elite.</p>
+          </div>
+          <span id="spvCount" class="count-chip">0 SPV</span>
+        </div>
+        <div id="spvBoard" class="spv-board"></div>
+      </section>
+    </section>
+
+    <section id="compareTeamPanel" class="tab-panel">
+      <div class="leaderboard-hero agent-hero">
+        <div>
+          <p class="eyebrow">TEAM COMPARISON</p>
+          <h2>Arif Pambudi vs Coach Pembanding</h2>
+          <p>Bandingkan ranking 1-12 agent tim Arif Pambudi dengan tim coach lain.</p>
+        </div>
+        <div class="hero-number">
+          <span>Total Revenue</span>
+          <strong id="compareTotalRevenue">Rp0</strong>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="compareMonth">Bulan</label>
+          <select id="compareMonth"></select>
+        </div>
+        <div class="field">
+          <label for="compareMode">Mode</label>
+          <select id="compareMode">
+            <option value="monthly">Monthly</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="compareWeek">Week</label>
+          <select id="compareWeek"></select>
+        </div>
+        <div class="field">
+          <label for="compareCoach">Compare dengan</label>
+          <select id="compareCoach"></select>
+        </div>
+        <div class="field grow">
+          <label for="compareSearch">Cari agent</label>
+          <input id="compareSearch" type="search" placeholder="Ketik nama...">
+        </div>
+      </div>
+      <div class="kpi-grid leaderboard-kpis">
+        <article class="kpi"><span>Agent dibandingkan</span><strong id="compareAgentKpi">0</strong><small>Top 12 per tim</small></article>
+        <article class="kpi"><span>Total transaksi</span><strong id="compareTxnKpi">0</strong><small id="compareTxnNote">Monthly</small></article>
+        <article class="kpi"><span>Top agent</span><strong id="compareTopAgentKpi">-</strong><small id="compareTopRevenueKpi">Rp0</small></article>
+        <article class="kpi"><span>Total to target</span><strong id="compareTotalToTargetKpi">0%</strong><small>Target Layer 1</small></article>
+      </div>
+      <section class="table-panel leaderboard-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Comparison Ranking</h2>
+            <p id="compareCaption">Monthly</p>
+          </div>
+          <span id="compareCount" class="count-chip">0 agent</span>
+        </div>
+        <div id="compareList" class="leaderboard-list compare-grid"></div>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+const WEEKLY_TARGET = 9200000;
+const WEEKLY_TARGET_BY_SCHEME = { NOV: 9200000 };
+const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
+const SOURCE_TAB_NAME = "RAW_COMBINED";
+const LEADERBOARD_WEEKLY_TARGETS = {
+  S2S: 110000000,
+  "Layer 1": 9200000,
+  "Layer 2": 10400000,
+};
+const LEADERBOARD_AGENT_COUNTS = {
+  S2S: 11,
+  "Layer 1": 12,
+  "Layer 2": 10,
+};
+const LEADERBOARD_TARGET_LABELS = {
+  S2S: "Prompter Inbound (S2S)",
+  "Layer 1": "Layer 1",
+  "Layer 2": "Layer 2",
+};
+
+// Update Week Periods untuk Bulan November (W45, W46, W47, W48)
+const WEEK_PERIODS = [
+  { name: "W 45", weekNum: 45, minimum: 0.50, scheme: "NOV", month: "November" },
+  { name: "W 46", weekNum: 46, minimum: 0.50, scheme: "NOV", month: "November" },
+  { name: "W 47", weekNum: 47, minimum: 0.50, scheme: "NOV", month: "November" },
+  { name: "W 48", weekNum: 48, minimum: 0.50, scheme: "NOV", month: "November" },
+];
+
+// Update Index / Rates Berdasarkan Tabel Baru (Layer 1 & All Team)
+const RATES = {
+  NOV: {
+    "BAC & Mathchamps Offline": { 0: 0, .5: .0140, .75: .0180, 1: .0335, 1.25: .0390 },
+    "BAON Elite": { 0: 0, .5: .0160, .75: .0185, 1: .0315, 1.25: .0350 },
+    "BAON Prem": { 0: 0, .5: .0280, .75: .0348, 1: .0678, 1.25: .0815 },
+    "BAON Reg": { 0: 0, .5: .0243, .75: .0300, 1: .0585, 1.25: .0725 },
+    "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
+    "RB": { 0: 0, .5: .0250, .75: .0315, 1: .0610, 1.25: .0765 },
+    "RGP Online": { 0: 0, .5: .0090, .75: .0150, 1: .0300, 1.25: .0350 },
+    "RGP Offline": { 0: 0, .5: .0030, .75: .0050, 1: .0100, 1.25: .0100 },
+    "Math Champs Online": { 0: 0, .5: .0100, .75: .0100, 1: .0100, 1.25: .0100 },
+    "Skill Academy": { 0: 0, .5: .0200, .75: .0200, 1: .0200, 1.25: .0200 },
+  }
+};
+
+let summary = [];
+let dodolanRows = [];
+let leaderboardRows = [];
+let layerOneRows = [];
+let targetRows = [];
+let selectedKey = "";
+const SPV_ORDER = ["Deti Laharwati", "Yulfan Prihartanto", "Mark Johannes Hilman"];
+const PRODUCT_FAMILY_ORDER = ["BAON", "Ruangguru Private", "Ruangbelajar", "Brain Academy", "Others"];
+
+const el = id => document.getElementById(id);
+const rupiah = value => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value || 0);
+const percent = value => `${new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format((value || 0) * 100)}%`;
+const formatUpdateTime = date => new Intl.DateTimeFormat("id-ID", {
+  dateStyle: "medium",
+  timeStyle: "short",
+  timeZone: "Asia/Jakarta",
+}).format(date);
+
+function parseAmount(value) {
+  if (typeof value === "number") return Number.isFinite(value) ? Math.round(value) : 0;
+  const raw = String(value ?? "").trim();
+  if (!raw) return 0;
+  const normalized = raw.replace(/[^\d,.-]/g, "");
+  const hasComma = normalized.includes(",");
+  const dotCount = (normalized.match(/\./g) || []).length;
+  if (hasComma) {
+    const parsed = Number(normalized.replace(/\./g, "").replace(",", "."));
+    return Number.isFinite(parsed) ? Math.round(parsed) : 0;
+  }
+  if (dotCount === 1) {
+    const [, fraction = ""] = normalized.split(".");
+    if (fraction.length !== 3) {
+      const parsed = Number(normalized);
+      return Number.isFinite(parsed) ? Math.round(parsed) : 0;
+    }
+  }
+  const parsed = Number(normalized.replace(/\./g, ""));
+  return Number.isFinite(parsed) ? Math.round(parsed) : 0;
+}
+
+function parseDate(value) {
+  if (value instanceof Date) return value;
+  if (typeof value === "number") return new Date(Math.round((value - 25569) * 86400 * 1000));
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatAssignedDate(value) {
+  const date = parseDate(value);
+  if (!date) return String(value || "").trim();
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    timeZone: "Asia/Jakarta",
+  }).format(date);
+}
+
+function normalizeWeekName(value) {
+  return String(value || "").trim().replace(/\s+/g, " ").toUpperCase();
+}
+
+function weekFor(weekName, weekNum) {
+  const normalizedName = normalizeWeekName(weekName);
+  const normalizedNum = Number(weekNum);
+  return WEEK_PERIODS.find(week =>
+    (normalizedName && (week.name.toUpperCase() === normalizedName || normalizedName.includes(String(week.weekNum)))) ||
+    (Number.isFinite(normalizedNum) && week.weekNum === normalizedNum)
+  ) || null;
+}
+
+function normalizeTeam(value) {
+  const team = String(value || "").trim().replace(/\s+/g, " ");
+  const upper = team.toUpperCase();
+  if (upper === "LAYER 1") return "Layer 1";
+  if (upper === "LAYER 2") return "Layer 2";
+  if (upper === "PROMPTER INBOUND" || upper === "S2S") return "S2S";
+  return team;
+}
+
+function productBucket(row) {
+  const type = String(row.product_type || "").trim();
+  const group = String(row.product_group || "").trim().toUpperCase();
+  const packageName = String(row.packageName || "").trim();
+  const lower = type.toLowerCase();
+  const packageLower = packageName.toLowerCase();
+  if (lower.includes("elite")) return "BAON Elite";
+  if (lower.includes("premium")) return "BAON Prem";
+  if (lower.includes("regular")) return "BAON Reg";
+  if (lower === "brain academy" || lower === "math champs") return "BAC & Mathchamps Offline";
+  if (lower === "math champs online") return "Math Champs Online";
+  if (lower === "ruangbelajar" || group === "RB") return "RB";
+  if (
+    lower.includes("ruangguru privat") &&
+    (lower.includes("online") || packageLower.includes("rgp [online]") || packageLower.includes("rgp online"))
+  ) return "RGP Online";
+  if (
+    lower.includes("ruangguru privat") &&
+    (lower.includes("offline") || packageLower.includes("rgp [offline]") || packageLower.includes("rgp offline"))
+  ) return "RGP Offline";
+  if (lower === "ruangguru privat" || group === "RGP") return "RGP Offline";
+  if (lower === "skill academy") return "Skill Academy";
+  return "Others";
+}
+
+function productFamily(rowOrProduct) {
+  const bucket = typeof rowOrProduct === "string" ? rowOrProduct : productBucket(rowOrProduct);
+  if (bucket === "BAON Elite" || bucket === "BAON Prem" || bucket === "BAON Reg") return "BAON";
+  if (bucket === "RGP Online" || bucket === "RGP Offline") return "Ruangguru Private";
+  if (bucket === "RB") return "Ruangbelajar";
+  if (bucket === "BAC & Mathchamps Offline" || bucket === "Math Champs Online") return "Brain Academy";
+  return "Others";
+}
+
+function weeklyTargetForWeek(week) {
+  return WEEKLY_TARGET_BY_SCHEME[week?.scheme] || WEEKLY_TARGET;
+}
+
+function leaderboardTargetForTeam(team, weekName = null) {
+  return LEADERBOARD_WEEKLY_TARGETS[team] || 0;
+}
+
+function totalLeaderboardTarget(team, activeWeeks) {
+  return activeWeeks.reduce((sum, weekName) => sum + leaderboardTargetForTeam(team, weekName), 0);
+}
+
+function normalizeTargetRows(rows) {
+  if (!rows.length) return [];
+  const keys = {};
+  Object.keys(rows[0] || {}).forEach(key => { keys[key.trim().toLowerCase()] = key; });
+  const read = (row, name) => row[keys[name.toLowerCase()]];
+  return rows.map(row => {
+    const weekNum = Number(read(row, "WEEK"));
+    const week = weekFor("", weekNum);
+    return {
+      agent: String(read(row, "Agent") || "").trim(),
+      leader: String(read(row, "Coach") || "").trim(),
+      spv: String(read(row, "SPV") || "").trim(),
+      team: normalizeTeam(read(row, "KATEGORI")),
+      week: week?.name || "",
+      weekNum,
+      target: parseAmount(read(row, "Target")),
+    };
+  }).filter(row => row.agent && row.week && row.target >= 0);
+}
+
+function targetForAgentWeek(agent, week) {
+  const key = String(agent || "").trim().toLowerCase();
+  const found = targetRows.find(row => row.agent.toLowerCase() === key && row.week === week?.name);
+  if (!found) return weeklyTargetForWeek(week);
+  return found.target;
+}
+
+function targetForLeaderTeamWeeks(leader, team, weeks) {
+  const leaderKey = String(leader || "").trim().toLowerCase();
+  const selectedWeeks = new Set(weeks);
+  const total = targetRows
+    .filter(row => row.leader.toLowerCase() === leaderKey && row.team === team && selectedWeeks.has(row.week))
+    .reduce((sum, row) => sum + row.target, 0);
+  return total || totalLeaderboardTarget(team, weeks) * (LEADERBOARD_AGENT_COUNTS[team] || 1);
+}
+
+function normalizeRows(rows) {
+  const keys = {};
+  Object.keys(rows[0] || {}).forEach(key => { keys[key.trim().toLowerCase()] = key; });
+  const read = (row, name) => row[keys[name.toLowerCase()]];
+  return rows.map(row => ({
+    date: parseDate(read(row, "Date")),
+    weekName: normalizeWeekName(read(row, "Week name")),
+    weekNum: Number(read(row, "WeekNum") || read(row, "Week")),
+    invoice: String(read(row, "Invoice") || ""),
+    agent: String(read(row, "Agent Name") || "").trim(),
+    leader: String(read(row, "Leader Name") || "").trim(),
+    packageName: String(read(row, "Package Name") || "").trim(),
+    campaign: String(read(row, "Campaign") || "").trim(),
+    assignedDate: formatAssignedDate(read(row, "Assigned Date") || read(row, "assigned_date")),
+    team: normalizeTeam(read(row, "Kategori Team") || read(row, "category team")),
+    product_type: String(read(row, "Product Type") || "").trim(),
+    product_group: String(read(row, "Product Group") || "").trim(),
+    revenue: parseAmount(read(row, "Amount")),
+  })).filter(row => row.agent && weekFor(row.weekName, row.weekNum));
+}
+
+function buildDodolanRows(rows) {
+  return rows.map(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    return {
+      ...row,
+      week: week.name,
+      month: week.month,
+      packageName: row.packageName || row.product_type || "-",
+      campaign: row.campaign || "No Campaign",
+      assignedDate: row.assignedDate || "-",
+      product: productBucket(row),
+      txn: 1,
+    };
+  }).sort((a, b) =>
+    a.week.localeCompare(b.week) ||
+    a.leader.localeCompare(b.leader) ||
+    a.packageName.localeCompare(b.packageName) ||
+    b.revenue - a.revenue
+  );
+}
+
+function chooseTier(th, week, product) {
+  if (th < week.minimum) return 0;
+  const schemeRates = RATES[week.scheme] || RATES.NOV;
+  const tiers = Object.keys(schemeRates[product] || { 0: 0 }).map(Number).sort((a, b) => a - b);
+  return tiers.reduce((chosen, tier) => tier <= th ? tier : chosen, 0);
+}
+
+function calculate(rows) {
+  const agents = new Map();
+  rows.forEach(row => {
+    const week = weekFor(row.weekName, row.weekNum);
+    const key = `${week.name}|${row.agent.toLowerCase()}`;
+    if (!agents.has(key)) {
+      agents.set(key, { key, week: week.name, month: week.month, weekMeta: week, agent: row.agent, leader: row.leader, revenue: 0, transactions: 0, products: {} });
+    }
+    const item = agents.get(key);
+    const product = productBucket(row);
+    item.revenue += row.revenue;
+    item.transactions += row.invoice ? 1 : 0;
+    if (!item.products[product]) item.products[product] = { revenue: 0, txn: 0 };
+    item.products[product].revenue += row.revenue;
+    item.products[product].txn += 1;
+  });
+
+  return [...agents.values()].map(item => {
+    item.target = targetForAgentWeek(item.agent, item.weekMeta);
+    item.th = item.target ? item.revenue / item.target : 0;
+    item.eligible = item.th >= item.weekMeta.minimum;
+    item.tier = chooseTier(item.th, item.weekMeta, Object.keys(item.products)[0] || "Others");
+    item.productDetails = Object.entries(item.products).map(([product, detail]) => {
+      const tier = chooseTier(item.th, item.weekMeta, product);
+      const schemeRates = RATES[item.weekMeta.scheme] || RATES.NOV;
+      const rate = schemeRates[product]?.[tier] || 0;
+      const incentive = detail.revenue * rate;
+      return { product, revenue: detail.revenue, txn: detail.txn, tier, rate, incentive, incentivePerTxn: detail.txn ? incentive / detail.txn : 0 };
+    }).sort((a, b) => b.revenue - a.revenue);
+    item.incentive = item.productDetails.reduce((total, product) => total + product.incentive, 0);
+    return item;
+  }).sort((a, b) => a.week.localeCompare(b.week) || b.incentive - a.incentive || b.revenue - a.revenue);
+}
+
+async function loadWorkbook(buffer) {
+  const workbook = XLSX.read(buffer, { type: "array", cellDates: true });
+  const sheetName = workbook.SheetNames.find(name => name.trim().toUpperCase() === SOURCE_TAB_NAME) || workbook.SheetNames[0];
+  const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+  const targetSheetName = workbook.SheetNames.find(name => name.trim().toUpperCase() === "TARGET AGENT");
+  const targetSheetRows = targetSheetName ? XLSX.utils.sheet_to_json(workbook.Sheets[targetSheetName], { defval: "" }) : [];
+  if (!rows.length) throw new Error("Sheet tidak memiliki data.");
+  loadRows(rows, sheetName, targetSheetRows);
+}
+
+function loadRows(rows, sheetName, targetSheetRows = []) {
+  targetRows = normalizeTargetRows(targetSheetRows);
+  const normalized = normalizeRows(rows);
+  layerOneRows = normalized.filter(row => row.team.toLowerCase() === "layer 1");
+  summary = calculate(layerOneRows);
+  dodolanRows = buildDodolanRows(layerOneRows);
+  leaderboardRows = buildDodolanRows(normalized);
+  if (!summary.length) throw new Error("Tidak ada transaksi Layer 1 pada periode yang tersedia.");
+  prepareDashboard(sheetName, rows.length);
+}
+
+function prepareDashboard(sheetName, rawCount) {
+  el("emptyState").hidden = true;
+  el("dashboard").hidden = false;
+  el("exportButton").disabled = false;
+  el("dataStatus").textContent = `Update ${formatUpdateTime(new Date())}`;
+  el("dataStatus").classList.add("ready");
+  const months = availableMonths();
+  ["monthFilter", "actionMonthFilter", "topCampaignMonth", "dodolanMonthFilter", "leaderboardMonthFilter", "agentLeaderboardMonth", "compareMonth"].forEach(id => {
+    el(id).innerHTML = monthOptions(months);
+  });
+  el("spvMonthFilter").innerHTML = monthOptions(months);
+  syncWeekOptions("weekFilter", "all", true);
+  syncWeekOptions("dodolanWeekFilter", "all", true);
+  syncWeekOptions("leaderboardWeekFilter", "all", true);
+  syncWeekOptions("topCampaignWeek", "all", true);
+  syncWeekOptions("spvWeekFilter", "all", true);
+  syncWeekOptions("agentLeaderboardWeek", "all", false);
+  syncWeekOptions("compareWeek", "all", false);
+  syncWeekOptions("actionWeekFilter", "all", false);
+  const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
+  el("dodolanLeaderFilter").innerHTML = `<option value="all">Semua leader</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
+  el("agentLeaderboardCoach").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
+  el("topCampaignCoach").innerHTML = `<option value="all">Semua coach</option>${leaders.map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("")}`;
+  updateTopCampaignAgentOptions();
+  el("compareCoach").innerHTML = leaders.filter(leader => leader.toLowerCase() !== "arif pambudi").map(leader => `<option value="${escapeHtml(leader)}">${escapeHtml(leader)}</option>`).join("");
+  showToast(`Data dari ${sheetName} berhasil dihitung.`);
+  render();
+  renderActionCenter();
+  renderTopCampaign();
+  renderDodolan();
+  renderLeaderboard();
+  renderSpvDivision();
+  renderAgentLeaderboard();
+  renderCompareTeam();
+}
+
+function availableMonths() {
+  const months = new Set();
+  [...summary, ...dodolanRows, ...leaderboardRows].forEach(row => {
+    if (row.month) months.add(row.month);
+  });
+  return WEEK_PERIODS.map(week => week.month).filter((month, index, list) => list.indexOf(month) === index && months.has(month));
+}
+
+function monthOptions(months) {
+  return `<option value="all">Semua bulan</option>${months.map(month => `<option value="${month}">${month}</option>`).join("")}`;
+}
+
+function availableWeeks(month = "all") {
+  const weeks = new Set();
+  [...summary, ...dodolanRows, ...leaderboardRows].forEach(row => {
+    const week = row.week || weekFor(row.weekName, row.weekNum)?.name;
+    const rowMonth = row.month || WEEK_PERIODS.find(item => item.name === week)?.month;
+    if (week && (month === "all" || rowMonth === month)) weeks.add(week);
+  });
+  return WEEK_PERIODS.map(week => week.name).filter(week => weeks.has(week));
+}
+
+function targetWeeksForMonth(month = "all") {
+  return WEEK_PERIODS
+    .filter(week => month === "all" || week.month === month)
+    .map(week => week.name);
+}
+
+function syncWeekOptions(weekId, month, includeAll = true) {
+  const select = el(weekId);
+  const current = select.value;
+  const weeks = availableWeeks(month);
+  select.innerHTML = `${includeAll ? `<option value="all">Semua week</option>` : ""}${weeks.map(week => `<option value="${week}">${week}</option>`).join("")}`;
+  if ((includeAll && current === "all") || weeks.includes(current)) select.value = current;
+}
+
+function selectedMonthLabel(month) {
+  return month === "all" ? "Semua bulan" : month;
+}
+
+function aggregateAllWeeks(rows) {
+  const availableWeeks = [...new Set(rows.map(row => row.week))];
+  const agents = new Map();
+
+  rows.forEach(row => {
+    const key = row.agent.toLowerCase();
+    if (!agents.has(key)) {
+      agents.set(key, {
+        key: `all|${key}`,
+        week: "Semua Week",
+        month: "Multiple",
+        agent: row.agent,
+        leader: row.leader,
+        revenue: 0,
+        incentive: 0,
+        transactions: 0,
+        eligibleWeeks: 0,
+        products: {},
+        allWeeks: true,
+      });
+    }
+
+    const item = agents.get(key);
+    item.revenue += row.revenue;
+    item.incentive += row.incentive;
+    item.transactions += row.transactions;
+    item.eligibleWeeks += row.eligible ? 1 : 0;
+
+    row.productDetails.forEach(product => {
+      if (!item.products[product.product]) {
+        item.products[product.product] = { product: product.product, revenue: 0, incentive: 0, txn: 0 };
+      }
+      item.products[product.product].revenue += product.revenue;
+      item.products[product.product].incentive += product.incentive;
+      item.products[product.product].txn += product.txn || 0;
+    });
+  });
+
+  return [...agents.values()].map(item => {
+    item.target = availableWeeks.reduce((sum, weekName) => sum + targetForAgentWeek(item.agent, WEEK_PERIODS.find(week => week.name === weekName)), 0);
+    item.th = item.target ? item.revenue / item.target : 0;
+    item.eligible = item.incentive > 0;
+    item.tier = null;
+    item.productDetails = Object.values(item.products).map(product => ({
+      ...product,
+      incentivePerTxn: product.txn ? product.incentive / product.txn : 0,
+    })).sort((a, b) => b.incentive - a.incentive);
+    return item;
+  }).sort((a, b) => b.incentive - a.incentive || b.revenue - a.revenue);
+}
+
+function filteredSummary() {
+  const month = el("monthFilter").value;
+  const week = el("weekFilter").value;
+  const query = el("searchFilter").value.trim().toLowerCase();
+  const status = el("statusFilter").value;
+  const monthRows = month === "all" ? summary : summary.filter(row => row.month === month);
+  const baseRows = week === "all" ? aggregateAllWeeks(monthRows) : monthRows.filter(row => row.week === week);
+  return baseRows.filter(row =>
+    (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query)) &&
+    (status === "all" || (status === "eligible") === row.eligible)
+  );
+}
+
+function render() {
+  const rows = filteredSummary();
+  const totalRevenue = rows.reduce((sum, row) => sum + row.revenue, 0);
+  const totalIncentive = rows.reduce((sum, row) => sum + row.incentive, 0);
+  const eligible = rows.filter(row => row.eligible).length;
+  const thValues = rows.map(row => row.th).sort((a, b) => a - b);
+  const median = thValues.length ? thValues[Math.floor(thValues.length / 2)] : 0;
+  const selectedWeek = el("weekFilter").value;
+  const selectedWeekMeta = WEEK_PERIODS.find(week => week.name === selectedWeek);
+  const minimum = selectedWeekMeta?.minimum || .5;
+  const selectedTarget = selectedWeekMeta ? weeklyTargetForWeek(selectedWeekMeta) : null;
+
+  el("revenueKpi").textContent = rupiah(totalRevenue);
+  el("revenueNote").textContent = `${rows.length} agent`;
+  el("incentiveKpi").textContent = rupiah(totalIncentive);
+  el("eligibleKpi").textContent = eligible.toLocaleString("id-ID");
+  el("eligibleNote").textContent = selectedWeek === "all" ? "Memiliki incentive pada minimal 1 week" : `TH minimum ${percent(minimum)}`;
+  el("medianKpi").textContent = percent(median);
+  el("rowCount").textContent = `${rows.length} agent`;
+  el("tableCaption").textContent = selectedWeek === "all" ? "Total akumulasi seluruh week yang tersedia" : `${selectedWeek} - target ${rupiah(selectedTarget)}`;
+
+  el("summaryBody").innerHTML = rows.map(row => `
+    <tr data-key="${row.key}" class="${row.key === selectedKey ? "selected" : ""}">
+      <td><strong>${escapeHtml(row.agent)}</strong></td>
+      <td>${escapeHtml(row.leader || "-")}</td>
+      <td class="money">${rupiah(row.revenue)}</td>
+      <td class="number">${percent(row.th)}</td>
+      <td class="number">${row.allWeeks ? "Per week" : row.tier ? percent(row.tier) : "-"}</td>
+      <td class="money"><strong>${rupiah(row.incentive)}</strong></td>
+      <td><span class="badge ${row.eligible ? "eligible" : "not-eligible"}">${row.eligible ? "CAIR" : "BELUM CAIR"}</span></td>
+    </tr>
+  `).join("");
+
+  document.querySelectorAll("#summaryBody tr").forEach(row => row.addEventListener("click", () => selectAgent(row.dataset.key)));
+  if (selectedKey && !rows.some(row => row.key === selectedKey)) clearDetail();
+}
+
+function filteredDodolanRows() {
+  const month = el("dodolanMonthFilter").value;
+  const week = el("dodolanWeekFilter").value;
+  const leader = el("dodolanLeaderFilter").value;
+  const query = el("dodolanSearchFilter").value.trim().toLowerCase();
+  return dodolanRows.filter(row =>
+    (month === "all" || row.month === month) &&
+    (week === "all" || row.week === week) &&
+    (leader === "all" || (row.leader || "-") === leader) &&
+    (!query || `${row.packageName} ${row.campaign} ${row.agent} ${row.leader}`.toLowerCase().includes(query))
+  );
+}
+
+function actionStatus(th, minimum = .5) {
+  if (th >= 1) return { key: "done", label: "Over Target" };
+  if (th >= minimum) return { key: "track", label: "On Track" };
+  if (th >= Math.max(0, minimum - .1)) return { key: "near", label: "Near Incentive" };
+  return { key: "need", label: "Need Push" };
+}
+
+function getISOWeekNumber(date) {
+  const copy = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = copy.getUTCDay() || 7;
+  copy.setUTCDate(copy.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(copy.getUTCFullYear(), 0, 1));
+  return Math.ceil((((copy - yearStart) / 86400000) + 1) / 7);
+}
+
+function weekDaysLeft(weekName) {
+  const currentWeek = WEEK_PERIODS.find(week => week.name === weekName);
+  const todayWeekNum = getISOWeekNumber(new Date());
+  if (!currentWeek || currentWeek.weekNum !== todayWeekNum) return 5;
+  const day = new Date().getDay() || 7;
+  const workdayWeights = { 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 0.5, 7: 0.5 };
+  let remaining = 0;
+  for (let currentDay = day; currentDay <= 7; currentDay += 1) {
+    remaining += workdayWeights[currentDay] || 0;
+  }
+  return Math.max(0.5, remaining);
+}
+
+function weekDaysPassed(weekName) {
+  const currentWeek = WEEK_PERIODS.find(week => week.name === weekName);
+  const todayWeekNum = getISOWeekNumber(new Date());
+  if (!currentWeek || currentWeek.weekNum !== todayWeekNum) return 5;
+  const day = new Date().getDay() || 7;
+  const workdayWeights = { 1: 1, 2: 1, 3: 1,
