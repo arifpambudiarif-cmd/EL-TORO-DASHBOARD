@@ -3199,7 +3199,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
 const WEEKLY_TARGET = 23400000;
-const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000, SEP: 9000000, SEP3: 9000000, SEP4: 9000000, OCT1: 8800000, NOV1: 9200000 };
+const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000, SEP: 9000000, SEP3: 9000000, SEP4: 9000000, OCT1: 8800000, NOV1: 9200000, NOV2: 9200000 };
 const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
 const SOURCE_TAB_NAME = "RAW_COMBINED";
 const SOURCE_GID = "0";
@@ -3249,7 +3249,7 @@ const WEEK_PERIODS = [
   { name: "W 3 OCT", weekNum: 43, minimum: 0.50, scheme: "OCT1", month: "Oktober" },
   { name: "W 4 OCT", weekNum: 44, minimum: 0.50, scheme: "OCT1", month: "Oktober" },
   { name: "W 1 NOV", weekNum: 45, minimum: 0.50, scheme: "NOV1", month: "November" },
-  { name: "W 2 NOV", weekNum: 46, minimum: 0.50, scheme: "NOV1", month: "November" },
+  { name: "W 2 NOV", weekNum: 46, minimum: 0.50, scheme: "NOV2", month: "November" },
   { name: "W 3 NOV", weekNum: 47, minimum: 0.50, scheme: "NOV1", month: "November" },
   { name: "W 4 NOV", weekNum: 48, minimum: 0.50, scheme: "NOV1", month: "November" },
 ];
@@ -3388,6 +3388,18 @@ const RATES = {
     "BAON Reg": { 0: 0, .5: .0243, .75: .0300, 1: .0585, 1.25: .0725 },
     "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
     "RB": { 0: 0, .5: .0250, .75: .0315, 1: .0610, 1.25: .0765 },
+    "RGP Online": { 0: 0, .5: .0090, .75: .0150, 1: .0300, 1.25: .0350 },
+    "RGP Offline": { 0: 0, .5: .0030, .75: .0050, 1: .0100, 1.25: .0100 },
+    "Math Champs Online": { 0: 0, .5: .0100, .75: .0100, 1: .0100, 1.25: .0100 },
+    "Skill Academy": { 0: 0, .5: .0200, .75: .0200, 1: .0200, 1.25: .0200 },
+  },
+  NOV2: {
+    "BAC & Mathchamps Offline": { 0: 0, .5: .0130, .75: .0158, 1: .0295, 1.25: .0340 },
+    "BAON Elite": { 0: 0, .5: .0140, .75: .0160, 1: .0275, 1.25: .0310 },
+    "BAON Prem": { 0: 0, .5: .0255, .75: .0300, 1: .0595, 1.25: .0715 },
+    "BAON Reg": { 0: 0, .5: .0220, .75: .0260, 1: .0515, 1.25: .0635 },
+    "Others": { 0: 0, .5: .0155, .75: .0175, 1: .0188, 1.25: .0198 },
+    "RB": { 0: 0, .5: .0230, .75: .0275, 1: .0535, 1.25: .0675 },
     "RGP Online": { 0: 0, .5: .0090, .75: .0150, 1: .0300, 1.25: .0350 },
     "RGP Offline": { 0: 0, .5: .0030, .75: .0050, 1: .0100, 1.25: .0100 },
     "Math Champs Online": { 0: 0, .5: .0100, .75: .0100, 1: .0100, 1.25: .0100 },
@@ -3730,7 +3742,7 @@ function weeklyTargetForWeek(week) {
 function leaderboardTargetForTeam(team, weekName = null) {
   const week = WEEK_PERIODS.find(item => item.name === weekName);
   const targets = week?.scheme === "W4" ? LEADERBOARD_WEEKLY_TARGETS_W4
-    : week?.scheme === "NOV1" ? LEADERBOARD_WEEKLY_TARGETS_NOV
+    : (week?.scheme === "NOV1" || week?.scheme === "NOV2") ? LEADERBOARD_WEEKLY_TARGETS_NOV
     : LEADERBOARD_WEEKLY_TARGETS;
   return targets[team] || 0;
 }
@@ -4095,7 +4107,7 @@ function aggregateAllWeeks(rows) {
 
 const SCHEME_LABELS = {
   W1: "Skema Juli W1", W2: "Skema Juli W2-W3", W4: "Skema Juli W4-W5", AUG1: "Skema Agustus W1-W2", AUG3: "Skema Agustus W3-W4",
-  SEP: "Skema September W1 & W5", SEP2: "Skema September W2", SEP3: "Skema September W3", SEP4: "Skema September W4", OCT1: "Skema Oktober",
+  SEP: "Skema September W1 & W5", SEP2: "Skema September W2", SEP3: "Skema September W3", SEP4: "Skema September W4", OCT1: "Skema Oktober", NOV1: "Skema November W1", NOV2: "Skema November W2",
 };
 const PRODUCT_COLORS = {
   "BAON Reg": "#18bfe8", "BAON Prem": "#ff2aa1", "BAON Elite": "#9650dc", RB: "#16c995", "BAC & Mathchamps Offline": "#ff9f2f",
