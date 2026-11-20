@@ -2252,6 +2252,26 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .mis-track .mis-ok { display: none; color: #047857; font-weight: 800; }
 .mis-track.hit .mis-ok { display: inline; }
 .mis-track.hit .mis-count { color: #047857; }
+.act-copy { padding: 5px 10px; border-radius: 8px; border: 1px solid #fdba74; background: #fff7ed; color: #c2410c; font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+.act-copy:hover { background: #ffedd5; }
+.act-head .act-copy { margin-left: auto; margin-right: 8px; }
+.mis-fu { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: #f4f8ff; border: 1px solid #cddcf5; }
+.mis-fu-head { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
+.mis-fu-head span { color: var(--muted); font-size: 10.5px; font-weight: 700; }
+.fu-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.fu-grid div { background: #fff; border: 1px solid #e1eaf8; border-radius: 8px; padding: 6px 8px; }
+.fu-grid strong { display: block; font-size: 17px; line-height: 1.1; color: #1d4ed8; }
+.fu-grid span { display: block; margin-top: 2px; color: var(--muted); font-size: 9.5px; font-weight: 800; line-height: 1.25; }
+.fu-prio { margin-top: 8px; color: #334155; font-size: 11.5px; line-height: 1.45; font-weight: 600; }
+@media (max-width: 560px) { .fu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.mis-inv { margin-top: 10px; padding: 9px 11px; border-radius: 10px; background: #fff8eb; border: 1px solid #f3d9a0; }
+.mis-inv.none { background: #f0fdf7; border-color: #bbebd4; color: #047857; font-size: 11.5px; font-weight: 700; }
+.mis-inv-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.mis-inv-head span { color: #b45309; font-size: 11px; font-weight: 700; }
+.mis-inv ul { display: grid; gap: 5px; margin: 8px 0 0; padding: 0; list-style: none; }
+.mis-inv li { display: grid; grid-template-columns: auto 1fr auto; gap: 4px 10px; align-items: center; font-size: 11.5px; color: #334155; }
+.mis-inv li code { font-size: 11px; font-weight: 800; color: #0b6f96; background: #e3f7ff; padding: 1px 6px; border-radius: 6px; }
+.mis-inv li small { grid-column: 2 / 4; color: var(--muted); font-size: 10.5px; margin-top: -3px; }
 .act-check { display: grid; gap: 6px; margin: 10px 12px 10px; padding: 0; list-style: none; }
 .act-check li { border: 1px solid #e5edf5; border-radius: 10px; background: #fff; }
 .act-check label { display: flex; align-items: flex-start; gap: 10px; padding: 9px 11px; cursor: pointer; font-size: 12px; line-height: 1.45; color: #334155; }
@@ -2284,7 +2304,10 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
   .rules-strip, .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .content-grid { grid-template-columns: 1fr; }
   .leader-summary { grid-template-columns: 24px minmax(140px, 1fr) 70px 120px; }
-  .action-layout { grid-template-columns: 1fr; }
+  .action-layout { grid-template-columns: minmax(0, 1fr); }
+  .action-layout > * { min-width: 0; }
+  .act-timeline { flex-wrap: wrap; }
+  .mis-top b { font-size: 17px; }
   .action-agent-card { grid-template-columns: 1fr; }
   .action-readout { grid-template-columns: repeat(3, 1fr); }
   .action-signal-grid { grid-template-columns: repeat(2, 1fr); }
@@ -2566,6 +2589,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
               <h2>Action List Agent</h2>
               <p id="actionAgentCaption">Urutan kerja agent tim Arif Pambudi.</p>
             </div>
+            <button id="actionCopyTeam" type="button" class="act-copy" title="Salin brief pagi seluruh agent untuk dikirim ke WhatsApp">Salin brief WA tim</button>
             <span id="actionAgentCount" class="count-chip">0 agent</span>
           </div>
           <div id="actionAgentList" class="action-list"></div>
@@ -3230,6 +3254,9 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 const WEEKLY_TARGET = 23400000;
 const WEEKLY_TARGET_BY_SCHEME = { W1: 23400000, W2: 23400000, W4: 18200000, AUG1: 23400000, AUG3: 10400000, SEP: 9000000, SEP3: 9000000, SEP4: 9000000, OCT1: 8800000, NOV1: 9200000, NOV2: 9200000, NOV3: 9200000 };
 const SOURCE_SHEET_ID = "1ksRXPpPbNAcmWbqWYajVLr9RWHkt7JVIGm98iOjiG-0";
+// Sheet daily presentasi (diisi agent realtime): tab QUERY! berisi log presentasi + Follow Up Date
+const FOLLOWUP_SHEET_ID = "10GJd1OsNdtCCiU_MUZYaY6bi4fjhek9jcKj6V4vP_mE";
+const FOLLOWUP_TAB = "QUERY!";
 const SOURCE_TAB_NAME = "RAW_COMBINED";
 const SOURCE_GID = "0";
 const JULY_WEEK_COUNT = 5;
@@ -3482,6 +3509,9 @@ let leaderboardRows = [];
 let layerOneRows = [];
 let allTransactionRows = [];
 let targetRows = [];
+let unpaidRows = [];
+let unpaidMeta = { loaded: false, pulledAt: null, coaches: new Set() };
+const UNPAID_MAX_AGE_DAYS = 14;
 let topCampaignGroups = [];
 let selectedKey = "";
 const SPV_ORDER = ["Deti Laharwati", "Yulfan Prihartanto", "Mark Johannes Hilman"];
@@ -3942,7 +3972,51 @@ async function loadWorkbook(buffer) {
   const targetSheetName = workbook.SheetNames.find(name => name.trim().toUpperCase() === "TARGET AGENT");
   const targetSheetRows = targetSheetName ? XLSX.utils.sheet_to_json(workbook.Sheets[targetSheetName], { defval: "" }) : [];
   if (!rows.length) throw new Error("Sheet tidak memiliki data.");
+  const unpaidSheetName = workbook.SheetNames.find(name => name.trim().toUpperCase() === "UNPAID");
+  loadUnpaid(unpaidSheetName ? XLSX.utils.sheet_to_json(workbook.Sheets[unpaidSheetName], { defval: "" }) : null);
   loadRows(rows, sheetName, targetSheetRows);
+}
+
+// Tab UNPAID (diisi manual tiap pagi dari CRM): invoice, agent, coach, paket, kategori, dibuat, nominal, ditarik
+function loadUnpaid(sheetRows) {
+  unpaidRows = [];
+  unpaidMeta = { loaded: false, pulledAt: null, coaches: new Set() };
+  if (!sheetRows) return;
+  const pick = (row, key) => {
+    const found = Object.keys(row).find(k => k.trim().toLowerCase() === key);
+    return found === undefined ? "" : row[found];
+  };
+  const cutoff = Date.now() - UNPAID_MAX_AGE_DAYS * 86400000;
+  sheetRows.forEach(row => {
+    const agent = String(pick(row, "agent")).trim();
+    const amount = Number(String(pick(row, "nominal")).replace(/[^\d]/g, "")) || 0;
+    if (!agent || !amount) return;
+    const coach = String(pick(row, "coach")).trim();
+    const pulled = parseDate(pick(row, "ditarik"));
+    if (pulled && (!unpaidMeta.pulledAt || pulled > unpaidMeta.pulledAt)) unpaidMeta.pulledAt = pulled;
+    if (coach) unpaidMeta.coaches.add(coach.toLowerCase());
+    const created = parseDate(pick(row, "dibuat"));
+    if (created && created.getTime() < cutoff) return;
+    unpaidRows.push({ invoice: String(pick(row, "invoice")).trim(), agent, coach, paket: String(pick(row, "paket")).trim(), kategori: String(pick(row, "kategori")).trim(), created, amount });
+  });
+  unpaidMeta.loaded = sheetRows.length > 0;
+}
+
+function unpaidFor(agent) {
+  const key = String(agent || "").toLowerCase();
+  return unpaidRows.filter(row => row.agent.toLowerCase() === key).sort((a, b) => b.amount - a.amount);
+}
+
+function invoiceAgeLabel(date) {
+  if (!date) return "";
+  const today = jktDay(new Date())?.key, then = jktDay(date)?.key;
+  if (!today || !then) return "";
+  const days = Math.round((new Date(today) - new Date(then)) / 86400000);
+  return days <= 0 ? "dibuat hari ini" : days === 1 ? "dibuat kemarin" : `dibuat ${days} hari lalu`;
+}
+
+function shortPackage(name) {
+  return String(name || "").replace(/\s*\+\s*GRATIS.*$/i, "").replace(/\s*s\.d\s.*$/i, "").slice(0, 70);
 }
 
 function loadCsv(text) {
@@ -4630,6 +4704,65 @@ function missionFor(row, timing, minimum, weekMeta) {
   };
 }
 
+// ---- Brief WhatsApp (salin & kirim) ----
+let lastActionRender = { agents: [], ctx: null };
+
+function briefDateLabel() {
+  try { return new Date().toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", timeZone: "Asia/Jakarta" }); } catch (e) { return ""; }
+}
+function plainText(html) { return String(html).replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\""); }
+
+function agentBriefText(row, ctx, withHeader = true) {
+  const { timing, minimum, weekMeta } = ctx;
+  const lines = [];
+  if (withHeader) lines.push(`*Brief ${briefDateLabel()}* - ${row.agent}`);
+  lines.push(`Target ${row.week}: ${rupiah(row.target)} | sekarang ${rupiah(row.revenue)} (${percent(row.th)})`);
+  const mission = missionFor(row, timing, minimum, weekMeta);
+  if (!mission) {
+    lines.push("Target week sudah tercapai. Jaga momentum dan kejar tier berikutnya.");
+  } else {
+    lines.push(`*Misi hari ini:* ${mission.todayTxn} TXN (sekitar ${rupiah(mission.todayAmount)}) untuk ${mission.milestoneLabel}`);
+  }
+  const fu = followupFor(row.agent);
+  if (fu) {
+    lines.push(`Bahan baku: ${fu.today} FU hari ini, ${fu.hold7} hold 1-7 hari, ${fu.hold14} hold 8-14 hari${fu.invoice ? `, ${fu.invoice} invoice belum paid` : ""}`);
+    if (fu.today + fu.hold7 > 0) lines.push(`Urutan hubungi: ${fu.ptp} Promise to Pay, ${fu.interest} Interest, ${fu.thinking} Thinking`);
+  }
+  const top = (ctx.topCampaigns || [])[0];
+  if (top && mission) lines.push(`Campaign prioritas: ${campaignCode(top.name)} (${top.txn} TXN di tim minggu ini)`);
+  if (mission) lines.push(mission.todayTxn >= 2 ? `Checkpoint: ${Math.ceil(mission.todayTxn / 2)} TXN sebelum jam 12.00, sisanya sebelum jam 16.00.` : "Checkpoint: usahakan 1 TXN sebelum jam 14.00.");
+  return lines.join("\n");
+}
+
+function teamBriefText(agents, ctx) {
+  const lines = [`*Brief tim ${briefDateLabel()}* (${ctx.weekMeta?.name || ""})`];
+  const need = agents.filter(row => row.gap > 0);
+  need.forEach((row, index) => {
+    const mission = missionFor(row, ctx.timing, ctx.minimum, ctx.weekMeta);
+    const fu = followupFor(row.agent);
+    lines.push(`${index + 1}. ${row.agent} - ${percent(row.th)} TH | misi ${mission ? `${mission.todayTxn} TXN (${compactRupiah(mission.todayAmount)})` : "-"}${fu ? ` | FU ${fu.today}, hold ${fu.hold7}` : ""}`);
+  });
+  const done = agents.filter(row => row.gap <= 0);
+  if (done.length) lines.push(`Sudah target: ${done.map(row => row.agent).join(", ")}`);
+  return lines.join("\n");
+}
+
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (e) {
+    try {
+      const area = document.createElement("textarea");
+      area.value = text; area.style.position = "fixed"; area.style.opacity = "0";
+      document.body.appendChild(area); area.select();
+      const ok = document.execCommand("copy");
+      area.remove();
+      return ok;
+    } catch (e2) { return false; }
+  }
+}
+
 function checklistHtml(row, items) {
   return `<ul class="act-check">${items.map((text, i) => {
     const key = actKey(row, "c" + i);
@@ -4640,7 +4773,23 @@ function checklistHtml(row, items) {
 
 function missionChecklist(row, mission, timing, ctx, plan) {
   const items = [];
-  items.push(`Tagih invoice yang masih menggantung. Closing dihitung dari <b>tanggal bayar</b>, jadi minta pembayaran <b>hari ini</b>.`);
+  const fu = followupFor(row.agent);
+  if (fu && (fu.today + fu.hold7 + fu.hold14) > 0) {
+    const parts = [];
+    if (fu.today) parts.push(`<b>${fu.today} FU hari ini</b>${fu.ptp ? ` (utamakan ${fu.ptp} Promise to Pay)` : ""}`);
+    if (fu.hold7) parts.push(`lanjut <b>${fu.hold7} hold 1-7 hari</b> yang belum paid`);
+    if (fu.hold14) parts.push(`${fu.hold14} hold 8-14 hari kalau masih ada waktu`);
+    items.push(`Hubungi bahan baku dulu: ${parts.join(", ")}. Catat hasilnya di daily presentasi supaya hold tidak menumpuk.`);
+  }
+  const pending = unpaidFor(row.agent);
+  if (pending.length) {
+    const sum = pending.reduce((s, item) => s + item.amount, 0);
+    items.push(`Tagih <b>${pending.length} invoice</b> yang menunggu bayar (${rupiah(sum)}): ${pending.slice(0, 3).map(item => `<b>${escapeHtml(item.invoice)}</b>`).join(", ")}${pending.length > 3 ? ", ..." : ""}. Closing dihitung dari <b>tanggal bayar</b>, jadi minta pembayaran <b>hari ini</b>.`);
+  } else if (fu && fu.invoice > 0) {
+    items.push(`Tagih <b>${fu.invoice} invoice</b> yang sudah dibuat tapi belum paid (dari catatan daily presentasi). Closing dihitung dari <b>tanggal bayar</b>, jadi minta pembayaran <b>hari ini</b>.`);
+  } else if (!fu) {
+    items.push(`Cek invoice yang masih menggantung di CRM. Closing dihitung dari <b>tanggal bayar</b>, jadi minta pembayaran <b>hari ini</b>.`);
+  }
   const top = (ctx.topCampaigns || [])[0];
   const own = campaignCode(row.historyCampaign);
   if (top) {
@@ -4661,6 +4810,118 @@ function missionChecklist(row, mission, timing, ctx, plan) {
   return items;
 }
 
+// ---- Bahan baku (follow up & hold) dari sheet daily presentasi ----
+let followupMeta = { loaded: false, agents: new Map(), covered: new Set(), latestLog: null };
+const FU_CLOSED = new Set(["paid", "reject others", "reject no money"]);
+const FU_INVOICE = "invoice created";
+
+function dayKeyToMs(key) { const [y, m, d] = key.split("-").map(Number); return Date.UTC(y, m - 1, d); }
+function parseFuDate(text) {
+  const m = String(text || "").trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); // gviz: m/d/yyyy
+  return m ? Date.UTC(Number(m[3]), Number(m[1]) - 1, Number(m[2])) : null;
+}
+function parseLogDate(text) {
+  const s = String(text || "").trim();
+  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (m) return Date.UTC(Number(m[3]), Number(m[2]) - 1, Number(m[1]));
+  m = s.match(/^(\d{1,2}) (\w{3}) (\d{4})$/);
+  const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Mei: 4, Jun: 5, Jul: 6, Aug: 7, Agu: 7, Sep: 8, Oct: 9, Okt: 9, Nov: 10, Dec: 11, Des: 11 };
+  return m && months[m[2]] !== undefined ? Date.UTC(Number(m[3]), months[m[2]], Number(m[1])) : null;
+}
+
+function buildFollowups(sheetRows) {
+  const todayMs = dayKeyToMs(jktDay(new Date())?.key || "1970-01-01");
+  const DAY = 86400000;
+  const agents = new Map();
+  const covered = new Set();
+  let latestLog = null;
+  sheetRows.forEach(row => {
+    const agent = String(row["Nama OEC"] ?? row["Nama Agent"] ?? row["Nama"] ?? "").trim();
+    if (!agent) return;
+    const key = agent.toLowerCase();
+    covered.add(key);
+    const logMs = parseLogDate(row["Tanggal"]);
+    if (logMs && (!latestLog || logMs > latestLog)) latestLog = logMs;
+    const status = String(row["Status"] || "").trim().toLowerCase();
+    const result = String(row["Hasil Follow Up"] || "").trim().toLowerCase();
+    const fuMs = parseFuDate(row["Follow Up Date"]);
+    if (!fuMs || status === "not interest" || FU_CLOSED.has(result)) return;
+    const age = Math.round((todayMs - fuMs) / DAY); // 0 = hari ini, >0 = lewat
+    const item = agents.get(key) || { today: 0, hold7: 0, hold14: 0, invoice: 0, ptp: 0, interest: 0, thinking: 0, packages: {} };
+    if (result === FU_INVOICE) {
+      if (age >= 0 && age <= 14) item.invoice += 1;
+      agents.set(key, item);
+      return;
+    }
+    let bucket = null;
+    if (age === 0) bucket = "today"; else if (age >= 1 && age <= 7) bucket = "hold7"; else if (age >= 8 && age <= 14) bucket = "hold14";
+    if (!bucket) return;
+    item[bucket] += 1;
+    if (bucket !== "hold14") {
+      const sub = String(row["Sub Status"] || "");
+      if (sub.startsWith("305")) item.ptp += 1; else if (status === "interest") item.interest += 1; else item.thinking += 1;
+      const pkg = String(row["Paket yang ditawarkan"] || "").trim();
+      if (pkg) item.packages[pkg] = (item.packages[pkg] || 0) + 1;
+    }
+    agents.set(key, item);
+  });
+  followupMeta = { loaded: agents.size > 0 || covered.size > 0, agents, covered, latestLog };
+}
+
+async function loadFollowups() {
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${FOLLOWUP_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(FOLLOWUP_TAB)}&_=${Date.now()}`;
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const text = await response.text();
+    const workbook = XLSX.read(text, { type: "string", raw: true });
+    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "", raw: true });
+    buildFollowups(rows);
+    renderActionCenter();
+  } catch (error) {
+    console.warn("Bahan baku (daily presentasi) tidak bisa dimuat:", error);
+  }
+}
+
+function followupFor(agent) {
+  if (!followupMeta.loaded) return null;
+  const key = String(agent || "").toLowerCase();
+  if (!followupMeta.covered.has(key)) return null;
+  return followupMeta.agents.get(key) || { today: 0, hold7: 0, hold14: 0, invoice: 0, ptp: 0, interest: 0, thinking: 0, packages: {} };
+}
+
+function followupBlockHtml(row) {
+  const f = followupFor(row.agent);
+  if (!f) return "";
+  const prio = f.today + f.hold7;
+  const pkgs = Object.entries(f.packages).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([n, c]) => `${escapeHtml(n)} ${c}`).join(", ");
+  return `<div class="mis-fu">
+    <div class="mis-fu-head"><b>Bahan baku hari ini</b><span>${followupMeta.latestLog ? `Log terakhir: ${shortDate(new Date(followupMeta.latestLog))}` : ""}</span></div>
+    <div class="fu-grid">
+      <div><strong>${f.today}</strong><span>FU hari ini</span></div>
+      <div><strong>${f.hold7}</strong><span>Hold 1-7 hari</span></div>
+      <div><strong>${f.hold14}</strong><span>Hold 8-14 hari</span></div>
+      <div><strong>${f.invoice}</strong><span>Invoice dibuat, belum paid</span></div>
+    </div>
+    ${prio ? `<div class="fu-prio">Urutan hubungi: <b>${f.ptp} Promise to Pay</b>, ${f.interest} Interest, ${f.thinking} Thinking (dari FU hari ini + hold 7 hari)${pkgs ? `. Paket ditawarkan: ${pkgs}` : ""}</div>` : `<div class="fu-prio">Belum ada FU atau hold aktif. Cari leads baru dan catat di daily presentasi.</div>`}
+  </div>`;
+}
+
+function invoiceBlockHtml(row, mission) {
+  if (!unpaidMeta.loaded) return "";
+  const list = unpaidFor(row.agent);
+  if (!list.length) {
+    return unpaidMeta.coaches.has(String(row.leader || "").toLowerCase())
+      ? `<div class="mis-inv none">Tidak ada invoice menunggu bayar tercatat di CRM.</div>` : "";
+  }
+  const total = list.reduce((sum, item) => sum + item.amount, 0);
+  const cover = mission.todayAmount > 0 ? Math.min(100, Math.round(total / mission.todayAmount * 100)) : 0;
+  return `<div class="mis-inv">
+    <div class="mis-inv-head"><b>${list.length} invoice menunggu bayar - ${rupiah(total)}</b><span>${cover >= 100 ? "Menagih ini saja sudah menutup misi hari ini" : `Menutup ${cover}% dari misi hari ini`}</span></div>
+    <ul>${list.slice(0, 5).map(item => `<li><code>${escapeHtml(item.invoice)}</code><span>${escapeHtml(shortPackage(item.paket))}</span><b>${rupiah(item.amount)}</b><small>${escapeHtml(invoiceAgeLabel(item.created))}</small></li>`).join("")}</ul>
+  </div>`;
+}
+
 function missionHtml(row, mission, timing) {
   const dayLabel = timing.phase === "future" ? "Senin" : "hari ini";
   const track = timing.phase === "current" ? (() => {
@@ -4675,6 +4936,8 @@ function missionHtml(row, mission, timing) {
     <div class="mis-top"><span class="mis-tag">MISI ${dayLabel.toUpperCase()}</span><b>${mission.todayTxn} TXN = ${rupiah(mission.todayAmount)}</b></div>
     <div class="mis-sub">Tujuan: ${mission.milestoneLabel}${mission.estIncentive > 0 ? ` - estimasi incentive sekitar <b>${rupiah(mission.estIncentive)}</b>` : ""}</div>
     ${mission.restGap > 0 ? `<div class="mis-next">Setelah itu: sisa ${rupiah(mission.restGap)} (sekitar ${mission.restTxn} TXN) menuju 100% TH</div>` : ""}
+    ${followupBlockHtml(row)}
+    ${invoiceBlockHtml(row, mission)}
     ${track}
   </div>`;
 }
@@ -4747,6 +5010,7 @@ function actionCardHtml(row, ctx) {
       <div class="act-head">
         <span class="avatar av-${avatarTone(row.agent)}">${escapeHtml(initialsOf(row.agent))}</span>
         <div class="act-who"><strong>${escapeHtml(row.agent)}</strong><small>${escapeHtml(row.leader || "-")} - ${row.txn.toLocaleString("id-ID")} TXN - AOV ${rupiah(row.aov)}</small></div>
+        ${isPast ? "" : `<button type="button" class="act-copy" data-brief="${escapeHtml(row.agent)}" title="Salin brief untuk dikirim ke agent lewat WhatsApp">Salin brief</button>`}
         <span class="action-status ${row.status.key}">${row.status.label}</span>
       </div>
       <div class="act-progress">
@@ -4850,6 +5114,8 @@ function renderActionCenter() {
   });
   const topCampaigns = [...campaignAgg.values()].sort((a, b) => b.txn - a.txn || b.revenue - a.revenue).slice(0, 2);
   const ctx = { timing, minimum, weekMeta, topCampaigns };
+  lastActionRender = { agents, ctx };
+  el("actionCopyTeam").style.display = isPast || !agents.length ? "none" : "";
   el("actionAgentList").innerHTML = agents.map(row => actionCardHtml(row, ctx)).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`;
 
   const weekRows = scopeRows.filter(row => row.week === selectedWeek && matchMulti(agentSet, row.agent));
@@ -4859,6 +5125,27 @@ function renderActionCenter() {
     <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(target / Math.max(1, everyone.length))} avg per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
     <div class="mini-row"><div><strong>Run rate tim</strong><span>${elapsed > 0 ? `Proyeksi Jumat ${rupiah(teamRunRate * 5)}` : "Belum ada data hari kerja"}</span></div><div class="mini-value">${elapsed > 0 ? `${rupiah(teamRunRate)}/hari` : "-"}</div></div>
   `;
+  if (unpaidMeta.loaded && !isPast) {
+    const teamNames = new Set(everyone.map(row => row.agent.toLowerCase()));
+    const teamUnpaid = unpaidRows.filter(row => teamNames.has(row.agent.toLowerCase()));
+    const pulled = unpaidMeta.pulledAt;
+    const stalePull = !pulled || jktDay(pulled)?.key !== jktDay(new Date())?.key;
+    el("actionCoachList").insertAdjacentHTML("beforeend", `<div class="mini-row"><div><strong>Invoice menunggu bayar</strong><span>${pulled ? `Ditarik dari CRM: ${shortDate(pulled)}` : "Waktu tarik data belum diisi"}${stalePull ? " - belum ditarik hari ini" : ""}</span></div><div class="mini-value">${teamUnpaid.length} / ${rupiah(teamUnpaid.reduce((sum, row) => sum + row.amount, 0))}</div></div>`);
+  }
+  if (followupMeta.loaded && !isPast) {
+    const names = new Set(everyone.map(row => row.agent.toLowerCase()));
+    let today = 0, hold7 = 0, hold14 = 0, covered = 0;
+    names.forEach(name => {
+      if (!followupMeta.covered.has(name)) return;
+      covered += 1;
+      const f = followupMeta.agents.get(name);
+      if (f) { today += f.today; hold7 += f.hold7; hold14 += f.hold14; }
+    });
+    const latest = followupMeta.latestLog;
+    const todayMs = dayKeyToMs(jktDay(new Date())?.key || "1970-01-01");
+    const stale = latest && todayMs - latest > 86400000;
+    el("actionCoachList").insertAdjacentHTML("beforeend", `<div class="mini-row"><div><strong>Bahan baku tim (${covered} agent)</strong><span>FU hari ini ${today} - hold 1-7 hari ${hold7} - hold 8-14 hari ${hold14}${stale ? ` - log daily terakhir ${shortDate(new Date(latest))}, belum update?` : ""}</span></div><div class="mini-value">${today + hold7}</div></div>`);
+  }
   renderMiniAggregate("actionCampaignList", weekRows, row => row.campaign || "No Campaign", 5, name => CAMPAIGN_KINDS[campaignClass(name)].color);
   renderMiniAggregate("actionProductList", weekRows, row => productBucket(row), 5, name => productColor(name));
 }
@@ -6573,6 +6860,7 @@ async function loadFromGoogleSheet(isManual) {
     if (!response.ok) throw new Error(`Google Sheet tidak bisa diakses (HTTP ${response.status}). Pastikan sharing: "Anyone with the link - Viewer".`);
     const buffer = await response.arrayBuffer();
     await loadWorkbook(buffer);
+    loadFollowups();
     if (isManual) showToast("Data berhasil diperbarui dari Google Sheet");
   } catch (error) {
     status.textContent = "Gagal memuat data - klik refresh untuk coba lagi";
@@ -6748,7 +7036,16 @@ el("actionAgentFilter").addEventListener("change", renderActionCenter);
 el("trendSearchFilter").addEventListener("input", renderTrendPanel);
 el("compareSearch").exportResults;
 el("exportButton").addEventListener("click", exportResults);
-el("actionAgentList").addEventListener("click", event => {
+el("actionAgentList").addEventListener("click", async event => {
+  const copyButton = event.target.closest("[data-brief]");
+  if (copyButton) {
+    const row = lastActionRender.agents.find(item => item.agent === copyButton.dataset.brief);
+    if (row && lastActionRender.ctx) {
+      const ok = await copyText(agentBriefText(row, lastActionRender.ctx));
+      showToast(ok ? `Brief ${row.agent} disalin, tinggal paste di WhatsApp` : "Gagal menyalin brief");
+    }
+    return;
+  }
   const button = event.target.closest("[data-step]");
   if (!button) return;
   const wrap = button.closest(".mis-track");
@@ -6763,6 +7060,11 @@ el("actionAgentList").addEventListener("change", event => {
   if (!box) return;
   actStoreSet(box.dataset.store, box.checked ? "1" : "0");
   box.closest("li").classList.toggle("done", box.checked);
+});
+el("actionCopyTeam").addEventListener("click", async () => {
+  if (!lastActionRender.ctx || !lastActionRender.agents.length) return;
+  const ok = await copyText(teamBriefText(lastActionRender.agents, lastActionRender.ctx));
+  showToast(ok ? "Brief tim disalin, tinggal paste di WhatsApp" : "Gagal menyalin brief");
 });
 el("refreshButton").addEventListener("click", () => loadFromGoogleSheet(true));
 loadFromGoogleSheet();
