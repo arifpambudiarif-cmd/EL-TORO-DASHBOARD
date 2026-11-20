@@ -2236,6 +2236,35 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .alb-table tfoot td { position: static; background: #12315c; border-color: #2c4c7c; color: #fff; font-weight: 800; }
 .alb-table tfoot td.c-rank, .alb-table tfoot td.c-coach, .alb-table tfoot td.c-agent { position: sticky; background: #12315c; color: #fff; }
 
+.act-mission { margin: 10px 12px 0; padding: 12px 14px; border-radius: 12px; background: #fff; border: 1.5px solid #f2b6ab; box-shadow: 0 6px 16px rgba(244,63,94,.07); }
+.plan-near .act-mission { border-color: #f0d089; }
+.plan-track .act-mission { border-color: #a9dcee; }
+.plan-done .act-mission { border-color: #a6e6cd; }
+.mis-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.mis-tag { font-size: 10px; font-weight: 800; letter-spacing: .08em; color: #c2410c; }
+.mis-top b { font-size: 19px; letter-spacing: -.01em; }
+.mis-sub { margin-top: 4px; color: #334155; font-size: 11.5px; font-weight: 600; }
+.mis-next { margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 600; }
+.mis-track { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e2e8f0; font-size: 12px; font-weight: 700; color: #334155; }
+.mis-track button { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f8fafc; font-size: 16px; font-weight: 800; line-height: 1; cursor: pointer; color: #0f172a; }
+.mis-track button:hover { background: #e0f2fe; border-color: #7dd3fc; }
+.mis-track .mis-count { margin-left: auto; }
+.mis-track .mis-ok { display: none; color: #047857; font-weight: 800; }
+.mis-track.hit .mis-ok { display: inline; }
+.mis-track.hit .mis-count { color: #047857; }
+.act-check { display: grid; gap: 6px; margin: 10px 12px 10px; padding: 0; list-style: none; }
+.act-check li { border: 1px solid #e5edf5; border-radius: 10px; background: #fff; }
+.act-check label { display: flex; align-items: flex-start; gap: 10px; padding: 9px 11px; cursor: pointer; font-size: 12px; line-height: 1.45; color: #334155; }
+.act-check input { margin-top: 2px; width: 16px; height: 16px; accent-color: #0ea5c6; flex: none; }
+.act-check li.done { background: #f0fdf7; border-color: #bbebd4; }
+.act-check li.done span { text-decoration: line-through; color: #64748b; }
+.act-more { margin: 0 12px 12px; border: 1px solid #e5edf5; border-radius: 10px; background: rgba(255,255,255,.7); }
+.act-more > summary { cursor: pointer; padding: 8px 12px; font-size: 11px; font-weight: 800; color: var(--accent-dark); list-style: none; }
+.act-more > summary::-webkit-details-marker { display: none; }
+.act-more > summary::before { content: "+ "; }
+.act-more[open] > summary::before { content: "- "; }
+.act-more .act-goal { padding-top: 4px; }
+.act-note { margin: 0 12px 10px; color: var(--muted); font-size: 10.5px; font-weight: 600; }
 .act-sub { padding: 2px 12px 6px; color: var(--muted); font-size: 10px; font-weight: 700; }
 .act-timeline { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 6px; }
 .tl-chip { flex: 1; min-width: 80px; padding: 6px 8px; border: 1px solid #e3ebf3; border-radius: 10px; background: #fff; text-align: center; }
@@ -2527,7 +2556,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
       <div class="kpi-grid action-kpis">
         <article class="kpi"><span>Need Push</span><strong id="actionNeedPushKpi">0</strong><small>Di bawah pace menuju minimum TH</small></article>
         <article class="kpi"><span>Near Incentive</span><strong id="actionNearKpi">0</strong><small>Sesuai pace menuju minimum TH</small></article>
-        <article class="kpi"><span>Daily Gap</span><strong id="actionDailyNeedKpi">Rp0</strong><small id="actionDailyNeedNote">Estimasi per hari</small></article>
+        <article class="kpi"><span>Misi Tim Hari Ini</span><strong id="actionDailyNeedKpi">Rp0</strong><small id="actionDailyNeedNote">Estimasi per hari</small></article>
         <article class="kpi"><span>Next Action</span><strong id="actionTopCoachKpi">-</strong><small id="actionTopCoachGap">Rp0</small></article>
       </div>
       <div class="action-layout">
@@ -4572,6 +4601,84 @@ function defaultActionWeek(month = "all") {
   return latestActiveWeek(month === "all" ? new Set() : new Set([month]));
 }
 
+function todayKeyJkt() { return jktDay(new Date())?.key || ""; }
+function actStoreGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+function actStoreSet(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
+function actKey(row, suffix) { return `elt|${todayKeyJkt()}|${row.week}|${String(row.agent).toLowerCase()}|${suffix}`; }
+
+// Misi harian realistis: kejar milestone terdekat (minimum TH dulu, baru 100%), dibagi sisa hari kerja.
+function missionFor(row, timing, minimum, weekMeta) {
+  if (!row || row.th >= 1 || row.gap <= 0) return null;
+  const arpu = Math.max(1, row.historyArpu || row.aov || 1);
+  const days = Math.max(1, planDays(timing).length);
+  const belowMin = row.th < minimum;
+  const milestoneGap = belowMin ? Math.max(0, row.target * minimum - row.revenue) : row.gap;
+  const todayAmount = milestoneGap / days;
+  const todayTxn = Math.max(1, Math.ceil(todayAmount / arpu));
+  const restGap = belowMin ? Math.max(0, row.gap - milestoneGap) : 0;
+  let estIncentive = 0;
+  if (belowMin && weekMeta) {
+    const product = row.topProduct && row.topProduct !== "-" ? row.topProduct : (row.historyProduct || "Others");
+    const rate = (getRateTable(weekMeta.scheme, product, row.agent) || {})[minimum] || 0;
+    estIncentive = row.target * minimum * rate;
+  }
+  return {
+    arpu, days, belowMin, milestoneGap, todayAmount, todayTxn, restGap,
+    restTxn: restGap > 0 ? Math.ceil(restGap / arpu) : 0,
+    milestoneLabel: belowMin ? `${percent(minimum)} TH (incentive cair)` : "100% TH (target week)",
+    estIncentive,
+  };
+}
+
+function checklistHtml(row, items) {
+  return `<ul class="act-check">${items.map((text, i) => {
+    const key = actKey(row, "c" + i);
+    const on = actStoreGet(key) === "1";
+    return `<li class="${on ? "done" : ""}"><label><input type="checkbox" data-store="${key}"${on ? " checked" : ""}><span>${text}</span></label></li>`;
+  }).join("")}</ul>`;
+}
+
+function missionChecklist(row, mission, timing, ctx, plan) {
+  const items = [];
+  items.push(`Tagih invoice yang masih menggantung. Closing dihitung dari <b>tanggal bayar</b>, jadi minta pembayaran <b>hari ini</b>.`);
+  const top = (ctx.topCampaigns || [])[0];
+  const own = campaignCode(row.historyCampaign);
+  if (top) {
+    const topCode = campaignCode(top.name);
+    items.push(`Prioritaskan leads campaign <b title="${escapeHtml(top.name)}">${escapeHtml(topCode)}</b>, yang paling banyak closing di tim minggu ini (${top.txn} TXN, AOV ${rupiah(top.revenue / Math.max(1, top.txn))}).${own && own !== topCode && own !== "No Campaign" ? ` Campaign andalanmu: <b title="${escapeHtml(row.historyCampaign)}">${escapeHtml(own)}</b>.` : ""}`);
+  } else {
+    items.push(`Follow-up leads panas dari campaign andalanmu <b title="${escapeHtml(row.historyCampaign)}">${escapeHtml(own)}</b> dan closing produk <b>${escapeHtml(row.historyProduct)}</b>.`);
+  }
+  const n = mission.todayTxn;
+  items.push(n >= 2
+    ? `Checkpoint: minimal <b>${Math.ceil(n / 2)} TXN sebelum jam 12.00</b>, sisanya sebelum jam 16.00. Catat di counter "Closing hari ini".`
+    : `Checkpoint: usahakan <b>1 TXN sebelum jam 14.00</b>, lalu catat di counter "Closing hari ini".`);
+  if (timing.phase === "current" && timing.todayIndex === 4) {
+    items.push(`Ini hari kerja terakhir minggu ini.${plan.weekendDays ? ` Weekend hanya cadangan (butuh ${rupiah(plan.withWeekendNeed)}/hari kalau ikut closing).` : ""}`);
+  } else if (row.status.key === "need" && timing.elapsed > 0) {
+    items.push("Pace masih di bawah ideal: tambah kontak baru hari ini, jangan hanya mengandalkan leads lama.");
+  }
+  return items;
+}
+
+function missionHtml(row, mission, timing) {
+  const dayLabel = timing.phase === "future" ? "Senin" : "hari ini";
+  const track = timing.phase === "current" ? (() => {
+    const key = actKey(row, "n");
+    const n = Math.max(0, parseInt(actStoreGet(key), 10) || 0);
+    return `<div class="mis-track${n >= mission.todayTxn ? " hit" : ""}" data-key="${key}" data-need="${mission.todayTxn}">
+      <button type="button" data-step="dec" aria-label="Kurangi">-</button><button type="button" data-step="inc" aria-label="Tambah">+</button>
+      <span class="mis-ok">Misi tercapai</span>
+      <span class="mis-count">Closing hari ini: <b>${n}</b> / ${mission.todayTxn} TXN</span></div>`;
+  })() : "";
+  return `<div class="act-mission">
+    <div class="mis-top"><span class="mis-tag">MISI ${dayLabel.toUpperCase()}</span><b>${mission.todayTxn} TXN = ${rupiah(mission.todayAmount)}</b></div>
+    <div class="mis-sub">Tujuan: ${mission.milestoneLabel}${mission.estIncentive > 0 ? ` - estimasi incentive sekitar <b>${rupiah(mission.estIncentive)}</b>` : ""}</div>
+    ${mission.restGap > 0 ? `<div class="mis-next">Setelah itu: sisa ${rupiah(mission.restGap)} (sekitar ${mission.restTxn} TXN) menuju 100% TH</div>` : ""}
+    ${track}
+  </div>`;
+}
+
 function actionCardHtml(row, ctx) {
   const { timing, minimum, weekMeta } = ctx;
   const isPast = timing.phase === "past";
@@ -4613,13 +4720,27 @@ function actionCardHtml(row, ctx) {
         ${plan.timeline.map(item => `<div class="tl-chip${item.bonus ? " bonus" : ""}"><b>${item.day.slice(0, 3)}</b><span>${percent(item.pct)}</span><small>${compactRupiah(item.cum)}</small></div>`).join("")}
         ${plan.weekendDays ? `<div class="tl-chip bonus off"><b>Sab-Min</b><span>bonus</span><small>cadangan</small></div>` : ""}
       </div>` : "";
-    planHtml = `
+    if (isDone) {
+      planHtml = `
       <div class="act-plan plan-${row.status.key}">
-        <div class="act-plan-head"><b>${isDone ? "Jaga momentum" : `Rencana ${planRangeLabel(timing)}`}</b><span>${timing.phase === "current" ? `Data per kemarin: ${timing.dataThroughLabel}` : "Week belum berjalan"}</span></div>
+        <div class="act-plan-head"><b>Jaga momentum</b><span>${timing.phase === "current" ? `Data per kemarin: ${timing.dataThroughLabel}` : "Week belum berjalan"}</span></div>
         <div class="act-goal">${goals.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</div>
-        ${timeline}
         <ol class="act-steps">${planSteps(row, plan, timing, minimum).map(item => `<li>${item}</li>`).join("")}</ol>
       </div>`;
+    } else {
+      const mission = missionFor(row, timing, minimum, weekMeta);
+      planHtml = `
+      <div class="act-plan plan-${row.status.key}">
+        <div class="act-plan-head"><b>Rencana ${planRangeLabel(timing)}</b><span>${timing.phase === "current" ? `Data pembayaran sampai kemarin: ${timing.dataThroughLabel}` : "Week belum berjalan"}</span></div>
+        ${missionHtml(row, mission, timing)}
+        ${timing.phase === "current" ? `<div class="act-note">Closing hari ini belum masuk sheet. Catat sendiri di counter supaya tahu posisi misi.</div>` : ""}
+        ${checklistHtml(row, missionChecklist(row, mission, timing, ctx, plan))}
+        <details class="act-more"><summary>Detail perhitungan target</summary>
+          <div class="act-goal">${goals.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</div>
+          ${timeline}
+        </details>
+      </div>`;
+    }
   }
   return `
     <article class="act-card st-${row.status.key}">
@@ -4684,8 +4805,9 @@ function renderActionCenter() {
   el("actionTotalGap").textContent = rupiah(totalGap);
   el("actionNeedPushKpi").textContent = counts.need.toLocaleString("id-ID");
   el("actionNearKpi").textContent = counts.near.toLocaleString("id-ID");
-  el("actionDailyNeedKpi").textContent = isPast ? "-" : rupiah(totalGap / Math.max(1, planDays(timing).length));
-  el("actionDailyNeedNote").textContent = isPast ? "Week sudah selesai" : `Per hari, ${planLabel}`;
+  const missionTotal = isPast ? 0 : everyone.reduce((sum, row) => { const m = missionFor(row, timing, minimum, weekMeta); return sum + (m ? m.todayAmount : 0); }, 0);
+  el("actionDailyNeedKpi").textContent = isPast ? "-" : rupiah(missionTotal);
+  el("actionDailyNeedNote").textContent = isPast ? "Week sudah selesai" : `Menuju minimum TH / 100%, ${planLabel}`;
   el("actionTopCoachKpi").textContent = nextAction ? nextAction.agent : "Semua aman";
   el("actionTopCoachGap").textContent = nextAction ? `Next action - ${rupiah(nextAction.gap)} gap` : "Tidak ada gap";
   el("actionAgentCount").textContent = `${agents.length} agent`;
@@ -4716,7 +4838,18 @@ function renderActionCenter() {
       ${notice}
     </div>`;
 
-  const ctx = { timing, minimum, weekMeta };
+  const weekRowsAll = scopeRows.filter(row => row.week === selectedWeek);
+  const campaignAgg = new Map();
+  weekRowsAll.forEach(row => {
+    const name = row.campaign || "No Campaign";
+    if (name.toLowerCase() === "no campaign") return;
+    if (!campaignAgg.has(name)) campaignAgg.set(name, { name, txn: 0, revenue: 0 });
+    const item = campaignAgg.get(name);
+    item.txn += 1;
+    item.revenue += row.revenue;
+  });
+  const topCampaigns = [...campaignAgg.values()].sort((a, b) => b.txn - a.txn || b.revenue - a.revenue).slice(0, 2);
+  const ctx = { timing, minimum, weekMeta, topCampaigns };
   el("actionAgentList").innerHTML = agents.map(row => actionCardHtml(row, ctx)).join("") || `<div class="detail-empty">Tidak ada agent pada filter ini.</div>`;
 
   const weekRows = scopeRows.filter(row => row.week === selectedWeek && matchMulti(agentSet, row.agent));
@@ -6615,6 +6748,22 @@ el("actionAgentFilter").addEventListener("change", renderActionCenter);
 el("trendSearchFilter").addEventListener("input", renderTrendPanel);
 el("compareSearch").exportResults;
 el("exportButton").addEventListener("click", exportResults);
+el("actionAgentList").addEventListener("click", event => {
+  const button = event.target.closest("[data-step]");
+  if (!button) return;
+  const wrap = button.closest(".mis-track");
+  const need = Number(wrap.dataset.need) || 0;
+  const next = Math.max(0, (parseInt(actStoreGet(wrap.dataset.key), 10) || 0) + (button.dataset.step === "inc" ? 1 : -1));
+  actStoreSet(wrap.dataset.key, String(next));
+  wrap.querySelector(".mis-count b").textContent = String(next);
+  wrap.classList.toggle("hit", next >= need);
+});
+el("actionAgentList").addEventListener("change", event => {
+  const box = event.target.closest("input[data-store]");
+  if (!box) return;
+  actStoreSet(box.dataset.store, box.checked ? "1" : "0");
+  box.closest("li").classList.toggle("done", box.checked);
+});
 el("refreshButton").addEventListener("click", () => loadFromGoogleSheet(true));
 loadFromGoogleSheet();
 // Auto-refresh tiap 30 menit selama tab terbuka
