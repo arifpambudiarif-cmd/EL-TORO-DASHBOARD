@@ -2258,12 +2258,12 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .mis-fu { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: #f4f8ff; border: 1px solid #cddcf5; }
 .mis-fu-head { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
 .mis-fu-head span { color: var(--muted); font-size: 10.5px; font-weight: 700; }
-.fu-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.fu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-top: 8px; }
 .fu-grid div { background: #fff; border: 1px solid #e1eaf8; border-radius: 8px; padding: 6px 8px; }
 .fu-grid strong { display: block; font-size: 17px; line-height: 1.1; color: #1d4ed8; }
 .fu-grid span { display: block; margin-top: 2px; color: var(--muted); font-size: 9.5px; font-weight: 800; line-height: 1.25; }
 .fu-prio { margin-top: 8px; color: #334155; font-size: 11.5px; line-height: 1.45; font-weight: 600; }
-@media (max-width: 560px) { .fu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .fu-grid { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); } }
 .mis-inv { margin-top: 10px; padding: 9px 11px; border-radius: 10px; background: #fff8eb; border: 1px solid #f3d9a0; }
 .mis-inv.none { background: #f0fdf7; border-color: #bbebd4; color: #047857; font-size: 11.5px; font-weight: 700; }
 .mis-inv-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; }
@@ -4901,7 +4901,7 @@ function followupBlockHtml(row) {
       <div><strong>${f.today}</strong><span>FU hari ini</span></div>
       <div><strong>${f.hold7}</strong><span>Hold 1-7 hari</span></div>
       <div><strong>${f.hold14}</strong><span>Hold 8-14 hari</span></div>
-      <div><strong>${f.invoice}</strong><span>Invoice dibuat, belum paid</span></div>
+      ${f.invoice ? `<div><strong>${f.invoice}</strong><span>Invoice dibuat, belum paid</span></div>` : ""}
     </div>
     ${prio ? `<div class="fu-prio">Urutan hubungi: <b>${f.ptp} Promise to Pay</b>, ${f.interest} Interest, ${f.thinking} Thinking (dari FU hari ini + hold 7 hari)${pkgs ? `. Paket ditawarkan: ${pkgs}` : ""}</div>` : `<div class="fu-prio">Belum ada FU atau hold aktif. Cari leads baru dan catat di daily presentasi.</div>`}
   </div>`;
@@ -4996,7 +4996,6 @@ function actionCardHtml(row, ctx) {
       <div class="act-plan plan-${row.status.key}">
         <div class="act-plan-head"><b>Rencana ${planRangeLabel(timing)}</b><span>${timing.phase === "current" ? `Data pembayaran sampai kemarin: ${timing.dataThroughLabel}` : "Week belum berjalan"}</span></div>
         ${missionHtml(row, mission, timing)}
-        ${timing.phase === "current" ? `<div class="act-note">Closing hari ini belum masuk sheet. Catat sendiri di counter supaya tahu posisi misi.</div>` : ""}
         ${checklistHtml(row, missionChecklist(row, mission, timing, ctx, plan))}
         <details class="act-more"><summary>Detail perhitungan target</summary>
           <div class="act-goal">${goals.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</div>
