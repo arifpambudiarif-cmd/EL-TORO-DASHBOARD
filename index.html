@@ -1873,6 +1873,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .tier-chip { display: inline-block; padding: 2px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-dark); font-size: 10px; font-weight: 800; }
 .incentive-cell strong { color: #047857; font-size: 12.5px; }
 .incentive-cell.zero strong { color: #98a2b3; }
+#topCampaignPodium { grid-template-columns: 1fr !important; }
 .inc-podium { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 10px; }
 .podium-card {
   display: grid;
@@ -2264,6 +2265,37 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .fu-grid span { display: block; margin-top: 2px; color: var(--muted); font-size: 9.5px; font-weight: 800; line-height: 1.25; }
 .fu-prio { margin-top: 8px; color: #334155; font-size: 11.5px; line-height: 1.45; font-weight: 600; }
 @media (max-width: 560px) { .fu-grid { grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); } }
+.act-rank { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; padding: 6px 10px; border-radius: 9px; background: #f4f8fd; border: 1px solid #dbe6f5; font-size: 11.5px; font-weight: 700; color: #334155; }
+.act-rank .rk { flex: none; min-width: 26px; text-align: center; padding: 2px 6px; border-radius: 7px; background: #1d4ed8; color: #fff; font-weight: 800; }
+.act-rank.up { background: #effbf5; border-color: #bfead3; color: #047857; }
+.act-rank.up .rk { background: #059669; }
+.act-rank.down { background: #fff3f1; border-color: #f6cdc7; color: #b42318; }
+.act-rank.down .rk { background: #dc2626; }
+.act-month { margin: 8px 0 0; padding: 9px 11px; border-radius: 10px; background: #f6f8fc; border: 1px solid #dbe6f5; display: grid; gap: 5px; font-size: 11.5px; }
+.act-month .am-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px; }
+.act-month .am-head span { color: var(--muted); font-weight: 700; font-size: 11px; }
+.act-month small { color: var(--muted); font-size: 10.5px; font-weight: 600; line-height: 1.4; }
+.act-month .am-l2 { font-weight: 800; font-size: 11.5px; }
+.act-month.lvl-top, .act-month.lvl-good { background: #effbf5; border-color: #bfead3; }
+.act-month.lvl-top .am-l2, .act-month.lvl-good .am-l2 { color: #047857; }
+.act-month.lvl-mid { background: #fff8eb; border-color: #f3d9a0; }
+.act-month.lvl-mid .am-l2 { color: #b45309; }
+.act-month.lvl-low { background: #fff3f1; border-color: #f6cdc7; }
+.act-month.lvl-low .am-l2 { color: #b42318; }
+.snap-tv .tv-block { padding: 8px 10px; margin-top: 6px; border-radius: 10px; background: #f6f8fc; border: 1px solid #dbe6f5; display: grid; gap: 3px; }
+.snap-tv .tv-block.first { background: #effbf5; border-color: #bfead3; }
+.snap-tv .tv-block.chase { background: #fff8eb; border-color: #f3d9a0; }
+.snap-tv .tv-head { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
+.snap-tv .tv-head span { font-weight: 800; color: #1d4ed8; }
+.snap-tv .tv-nums { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.snap-tv .tv-nums strong { font-size: 15px; }
+.snap-tv .tv-nums span, .snap-tv small { color: var(--muted); font-size: 10.5px; font-weight: 700; line-height: 1.4; }
+.snap-rank { margin-top: 10px; padding: 10px 12px; border-radius: 12px; background: #fff; border: 1px solid #dbe6f5; }
+.snap-rank-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; margin-bottom: 6px; }
+.snap-rank-head span { color: var(--muted); font-size: 10.5px; font-weight: 700; }
+.snap-rank-row { display: grid; grid-template-columns: 20px 1fr auto; gap: 8px; align-items: center; padding: 4px 0; font-size: 11.5px; border-top: 1px dashed #e3ebf6; }
+.snap-rank-row b { color: #1d4ed8; }
+.snap-rank-row em { font-style: normal; color: var(--muted); font-weight: 700; font-size: 10.5px; }
 .mis-inv { margin-top: 10px; padding: 9px 11px; border-radius: 10px; background: #fff8eb; border: 1px solid #f3d9a0; }
 .mis-inv.none { background: #f0fdf7; border-color: #bbebd4; color: #047857; font-size: 11.5px; font-weight: 700; }
 .mis-inv-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; }
@@ -2296,6 +2328,7 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .data-note { display: block; margin-top: 6px; color: var(--muted); font-size: 10.5px; font-weight: 700; }
 .data-note b { color: var(--ink); }
 .data-note.stale { color: #b42318; }
+.data-note.stale-banner { color: #8a4b00; background: #fff4d6; border: 1px solid #f3d38a; border-radius: 8px; padding: 6px 9px; line-height: 1.4; }
 
 @media (max-width: 980px) {
   .control-band { grid-template-columns: 1fr; }
@@ -3307,7 +3340,7 @@ const WEEK_PERIODS = [
   { name: "W 1 NOV", weekNum: 45, minimum: 0.50, scheme: "NOV1", month: "November" },
   { name: "W 2 NOV", weekNum: 46, minimum: 0.50, scheme: "NOV2", month: "November" },
   { name: "W 3 NOV", weekNum: 47, minimum: 0.50, scheme: "NOV3", month: "November" },
-  { name: "W 4 NOV", weekNum: 48, minimum: 0.50, scheme: "NOV1", month: "November" },
+  { name: "W 4 NOV", weekNum: 48, minimum: 0.50, scheme: "NOV1", month: "November", provisional: true },
 ];
 
 const DEDICATED_RGP_AGENTS = ["Rizqi Nafiah", "Triana Novita Antari", "Ayu Apriliani Pramuningtyas"];
@@ -3705,7 +3738,13 @@ function parseAmount(value) {
 }
 
 function parseDate(value) {
-  if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
+  if (value instanceof Date) {
+    if (Number.isNaN(value.getTime())) return null;
+    // SheetJS (cellDates) returns the sheet's wall-clock in the browser's own timezone, with small drift.
+    // Rebuild it as the same wall-clock in Asia/Jakarta so the day never shifts by timezone.
+    const w = new Date(value.getTime() + 5 * 60000);
+    return new Date(Date.UTC(w.getFullYear(), w.getMonth(), w.getDate(), w.getHours() - 7, w.getMinutes(), 0));
+  }
   if (typeof value === "number") return new Date(Math.round((value - 25569) * 86400 * 1000));
   const text = String(value ?? "").trim();
   if (!text) return null;
@@ -4070,11 +4109,12 @@ function loadRows(rows, sheetName, targetSheetRows = []) {
   prepareDashboard(sheetName, rows.length);
 }
 
+let incentiveDefaultApplied = false;
 function prepareDashboard(sheetName, rawCount) {
   el("emptyState").hidden = true;
   el("dashboard").hidden = false;
   el("exportButton").disabled = false;
-  el("dataStatus").textContent = `Update ${formatUpdateTime(new Date())}`;
+  { const ld = latestDataDate(); el("dataStatus").textContent = ld ? `Data s.d. ${shortDate(ld)} - dibuka ${formatUpdateTime(new Date())}` : `Update ${formatUpdateTime(new Date())}`; }
   el("dataStatus").classList.add("ready");
   const months = availableMonths();
   ["actionMonthFilter", "trendMonthFilter"].forEach(id => {
@@ -4095,6 +4135,13 @@ function prepareDashboard(sheetName, rawCount) {
   syncWeekMulti("compareWeek", "compareMonth");
   populateActionWeeks("all");
   const startWeek = defaultActionWeek();
+  if (startWeek && !incentiveDefaultApplied) {
+    incentiveDefaultApplied = true;
+    const startMonth = WEEK_PERIODS.find(week => week.name === startWeek)?.month;
+    setMultiSelected("weekFilter", [startWeek]);
+    ["topCampaignWeek", "dodolanWeekFilter"].forEach(id => setMultiSelected(id, [startWeek]));
+    if (startMonth) ["leaderboardMonthFilter", "spvMonthFilter", "agentLeaderboardMonth", "compareMonth"].forEach(id => setMultiSelected(id, [startMonth]));
+  }
   if (startWeek && [...el("actionWeekFilter").options].some(option => option.value === startWeek)) el("actionWeekFilter").value = startWeek;
   const leaders = [...new Set(dodolanRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
   const allLeaders = [...new Set(allTransactionRows.map(row => row.leader || "-"))].sort((a, b) => a.localeCompare(b));
@@ -4296,7 +4343,7 @@ function render() {
   const scopeLabel = scope.singleWeek || (scope.weekSet.size ? `${scope.weekSet.size} week dipilih` : scope.monthSet.size ? multiText("monthFilter", "") : "Semua week");
 
   const minimums = [...new Set(scope.metas.map(week => week.minimum))].sort((a, b) => a - b);
-  const schemes = [...new Set(scope.metas.map(week => SCHEME_LABELS[week.scheme] || week.scheme))];
+  const schemes = [...new Set(scope.metas.map(week => (SCHEME_LABELS[week.scheme] || week.scheme) + (week.provisional ? " (sementara, skema week ini belum final)" : "")))];
   el("incRulePeriod").textContent = singleMeta ? `${singleMeta.name} (${weekRangeLabel(singleMeta.weekNum)})` : scope.metas.length ? `${scope.metas.length} week (${scope.metas[0].name} - ${scope.metas[scope.metas.length - 1].name})` : "-";
   el("incRuleTarget").textContent = singleMeta ? rupiah(weeklyTargetForWeek(singleMeta)) : "Sesuai sheet Target Agent";
   el("incRuleMin").textContent = !minimums.length ? "-" : minimums.length === 1 ? percent(minimums[0]) : `${percent(minimums[0])} - ${percent(minimums[minimums.length - 1])}`;
@@ -4305,7 +4352,8 @@ function render() {
   const hasOctoberScheme = scope.metas.some(week => week.scheme === "OCT1");
   el("dedicatedRgpRule").innerHTML = hasOctoberScheme
     ? "Week 3 Oktober: <b>0% (0% TH), 0,90% (50% TH), 1,50% (75% TH), 3,00% (100% TH), 3,50% (125% TH)</b>. Berlaku untuk: Rizqi Nafiah, Triana Novita Antari, dan Ayu Apriliani Pramuningtyas."
-    : "Skema khusus RGP Online Dedicated aktif untuk periode Oktober. Berlaku untuk: Rizqi Nafiah, Triana Novita Antari, dan Ayu Apriliani Pramuningtyas.";
+    : "";
+  el("dedicatedRgpRule").parentElement.style.display = hasOctoberScheme ? "" : "none";
 
   el("incHeroTotal").textContent = rupiah(totalIncentive);
   el("incHeroSubtitle").textContent = `${scopeLabel} - ${rows.length} agent - ${eligible} agent cair`;
@@ -4316,7 +4364,7 @@ function render() {
   el("eligibleNote").textContent = `dari ${rows.length} agent (${percent(rows.length ? eligible / rows.length : 0)})`;
   el("medianKpi").textContent = percent(median);
   el("rowCount").textContent = `${rows.length} agent`;
-  el("tableCaption").textContent = singleMeta ? `${singleMeta.name} - ${SCHEME_LABELS[singleMeta.scheme] || singleMeta.scheme} - min TH ${percent(singleMeta.minimum)}` : `Akumulasi ${scopeLabel} - klik baris untuk detail`;
+  el("tableCaption").textContent = singleMeta ? `${singleMeta.name} - ${SCHEME_LABELS[singleMeta.scheme] || singleMeta.scheme}${singleMeta.provisional ? " (sementara, belum final)" : ""} - min TH ${percent(singleMeta.minimum)}` : `Akumulasi ${scopeLabel} - klik baris untuk detail`;
 
   const podium = rows.filter(row => row.incentive > 0).slice(0, 3);
   el("incPodium").hidden = podium.length === 0;
@@ -4439,19 +4487,49 @@ function estimateUpsideIncentive(row) {
 
 const FULL_DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
+function latestDataDate() {
+  let max = null;
+  (layerOneRows || []).forEach(row => { if (row.date instanceof Date && (!max || row.date > max)) max = row.date; });
+  return max;
+}
+
 function actionTiming(weekMeta) {
   const currentWeekNum = getISOWeekNumber(new Date());
   const today = jktDay(new Date());
   const t = today ? today.index : 0;
-  if (!weekMeta || weekMeta.weekNum < currentWeekNum) return { phase: "past", elapsed: 5, weekdaysLeft: 0, bonusLeft: 0, todayIndex: 6, dataThroughLabel: "" };
-  if (weekMeta.weekNum > currentWeekNum) return { phase: "future", elapsed: 0, weekdaysLeft: 5, bonusLeft: 2, todayIndex: -1, dataThroughLabel: "" };
+  if (!weekMeta || weekMeta.weekNum < currentWeekNum) return { phase: "past", elapsed: 5, weekdaysLeft: 0, bonusLeft: 0, todayIndex: 6, dataThroughLabel: "", stale: false };
+  if (weekMeta.weekNum > currentWeekNum) return { phase: "future", elapsed: 0, weekdaysLeft: 5, bonusLeft: 2, todayIndex: -1, dataThroughLabel: "", stale: false };
+  const nominalLabel = t === 0 ? dayDateLabel(weekMeta.weekNum - 1, 6) : dayDateLabel(weekMeta.weekNum, t - 1);
+  let elapsed = Math.min(5, t);
+  let daysDone = t;
+  let dataThroughLabel = nominalLabel;
+  let stale = false, missingLabel = "", latestLabel = "";
+  const latest = latestDataDate();
+  const latestKey = latest ? jktDay(latest)?.key : "";
+  if (latestKey) {
+    const mondayMs = isoWeekMonday(weekMeta.weekNum);
+    const diff = Math.round((Date.parse(latestKey + "T00:00:00Z") - mondayMs) / 86400000);
+    const dataIdx = Math.min(6, diff);
+    if (dataIdx < t - 1) {
+      stale = true;
+      elapsed = Math.max(0, Math.min(5, dataIdx + 1));
+      daysDone = Math.max(0, Math.min(7, dataIdx + 1));
+      dataThroughLabel = dataIdx < 0 ? shortDate(latest) : dayDateLabel(weekMeta.weekNum, dataIdx);
+      latestLabel = dataThroughLabel;
+      const from = Math.max(0, dataIdx + 1);
+      const names = [];
+      for (let i = from; i <= t - 1; i++) names.push(dayDateLabel(weekMeta.weekNum, i));
+      missingLabel = names.length > 2 ? `${names[0]} s.d. ${names[names.length - 1]}` : names.join(" dan ");
+    }
+  }
   return {
     phase: "current",
     todayIndex: t,
-    elapsed: Math.min(5, t),
+    elapsed, daysDone,
     weekdaysLeft: t <= 4 ? 5 - t : 0,
     bonusLeft: t <= 5 ? 2 : 1,
-    dataThroughLabel: t === 0 ? dayDateLabel(weekMeta.weekNum - 1, 6) : dayDateLabel(weekMeta.weekNum, t - 1),
+    dataThroughLabel,
+    stale, missingLabel, latestLabel,
   };
 }
 
@@ -4534,9 +4612,9 @@ function planSteps(row, plan, timing, minimum) {
 function paceInfo(row, elapsed) {
   if (!row.target || elapsed <= 0) return null;
   const expectedByNow = row.target * Math.min(1, elapsed / 5);
-  if (row.revenue >= expectedByNow * 1.02) return { key: "ahead", label: `Di atas pace menuju 100% - ideal sampai kemarin ${rupiah(expectedByNow)}` };
-  if (row.revenue >= expectedByNow * 0.92) return { key: "onpace", label: `Sesuai pace menuju 100% - ideal sampai kemarin ${rupiah(expectedByNow)}` };
-  return { key: "behind", label: `Di bawah pace menuju 100% - seharusnya sudah ${rupiah(expectedByNow)} sampai kemarin` };
+  if (row.revenue >= expectedByNow * 1.02) return { key: "ahead", label: `Di atas pace menuju 100% - ideal sampai data terakhir ${rupiah(expectedByNow)}` };
+  if (row.revenue >= expectedByNow * 0.92) return { key: "onpace", label: `Sesuai pace menuju 100% - ideal sampai data terakhir ${rupiah(expectedByNow)}` };
+  return { key: "behind", label: `Di bawah pace menuju 100% - seharusnya sudah ${rupiah(expectedByNow)} sampai data terakhir` };
 }
 
 function aggregateActionAgents(rows, selectedWeek, roster = [], timing = null) {
@@ -4723,6 +4801,12 @@ function agentBriefText(row, ctx, withHeader = true) {
   } else {
     lines.push(`*Misi hari ini:* ${mission.todayTxn} TXN (sekitar ${rupiah(mission.todayAmount)}) untuk ${mission.milestoneLabel}`);
   }
+  if (row.rank && rankDeltaText(row, false)) lines.push(rankDeltaText(row, false));
+  if (row.monthly && row.monthly.target) {
+    const m = row.monthly;
+    lines.push(`Bulan ${m.month}: ${rupiah(m.revenue)} (${percent(m.th)} dari target bulanan, ideal ${percent(m.bench.idealPct)})`);
+    if (m.bench.count) lines.push(m.above > 0 ? `Standar L1: ${m.above} dari ${m.bench.count} agent L2 sudah melewati revenue bulananmu. Jaga posisi di atas L2.` : "Standar L1: revenue bulananmu masih di atas semua agent L2, pertahankan.");
+  }
   const fu = followupFor(row.agent);
   if (fu) {
     lines.push(`Bahan baku: ${fu.today} FU hari ini, ${fu.hold7} hold 1-7 hari, ${fu.hold14} hold 8-14 hari${fu.invoice ? `, ${fu.invoice} invoice belum paid` : ""}`);
@@ -4736,6 +4820,7 @@ function agentBriefText(row, ctx, withHeader = true) {
 
 function teamBriefText(agents, ctx) {
   const lines = [`*Brief tim ${briefDateLabel()}* (${ctx.weekMeta?.name || ""})`];
+  teamVsBriefLines(ctx.weekMeta?.name).forEach(item => lines.push(item));
   const need = agents.filter(row => row.gap > 0);
   need.forEach((row, index) => {
     const mission = missionFor(row, ctx.timing, ctx.minimum, ctx.weekMeta);
@@ -4986,7 +5071,7 @@ function actionCardHtml(row, ctx) {
     if (isDone) {
       planHtml = `
       <div class="act-plan plan-${row.status.key}">
-        <div class="act-plan-head"><b>Jaga momentum</b><span>${timing.phase === "current" ? `Data per kemarin: ${timing.dataThroughLabel}` : "Week belum berjalan"}</span></div>
+        <div class="act-plan-head"><b>Jaga momentum</b><span>${timing.phase === "current" ? `Data sampai: ${timing.dataThroughLabel}` : "Week belum berjalan"}</span></div>
         <div class="act-goal">${goals.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</div>
         <ol class="act-steps">${planSteps(row, plan, timing, minimum).map(item => `<li>${item}</li>`).join("")}</ol>
       </div>`;
@@ -4994,7 +5079,7 @@ function actionCardHtml(row, ctx) {
       const mission = missionFor(row, timing, minimum, weekMeta);
       planHtml = `
       <div class="act-plan plan-${row.status.key}">
-        <div class="act-plan-head"><b>Rencana ${planRangeLabel(timing)}</b><span>${timing.phase === "current" ? `Data pembayaran sampai kemarin: ${timing.dataThroughLabel}` : "Week belum berjalan"}</span></div>
+        <div class="act-plan-head"><b>Rencana ${planRangeLabel(timing)}</b><span>${timing.phase === "current" ? `Data pembayaran sampai: ${timing.dataThroughLabel}` : "Week belum berjalan"}</span></div>
         ${missionHtml(row, mission, timing)}
         ${checklistHtml(row, missionChecklist(row, mission, timing, ctx, plan))}
         <details class="act-more"><summary>Detail perhitungan target</summary>
@@ -5016,7 +5101,7 @@ function actionCardHtml(row, ctx) {
         ${ringHtml(row.th, TONE_COLORS[tone], 70)}
         <div class="act-nums">
           <div class="act-main"><strong>${rupiah(row.revenue)}</strong><small>dari target ${rupiah(row.target)}</small></div>
-          <div class="meter"><i style="width:${barWidth}%"></i>${isPast ? "" : `<u style="left:calc(${(expectedPct * 100).toFixed(1)}% - 1px)" title="Posisi ideal sampai kemarin"></u>`}</div>
+          <div class="meter"><i style="width:${barWidth}%"></i>${isPast ? "" : `<u style="left:calc(${(expectedPct * 100).toFixed(1)}% - 1px)" title="Posisi ideal sampai data terakhir"></u>`}</div>
           <div class="act-trio">
             <div><span>${isPast ? "Selisih ke target" : "Sisa gap"}</span><b>${rupiah(row.gap)}</b></div>
             <div><span>${isPast ? "Rata-rata / hari" : "Run rate (hari kerja)"}</span><b>${isPast ? rupiah(row.revenue / 5) : elapsed > 0 ? rupiah(runRate) : "-"}${isPast || elapsed > 0 ? "/hari" : ""}</b></div>
@@ -5025,8 +5110,176 @@ function actionCardHtml(row, ctx) {
         </div>
       </div>
       ${pace ? `<div class="pace-note pace-${pace.key}">${pace.label}</div>` : ""}
+      ${row.rank && rankDeltaText(row) ? `<div class="act-rank${row.delta > 0 ? " up" : row.delta < 0 ? " down" : ""}"><span class="rk">${row.revenue > 0 ? "#" + row.rank : "-"}</span><span>${escapeHtml(rankDeltaText(row))}</span></div>` : ""}
+      ${monthlyBlockHtml(row)}
       ${planHtml}
     </article>`;
+}
+
+function attachRankAndDelta(scopeRows, selectedWeek, roster, timing, everyone) {
+  const full = aggregateActionAgents(scopeRows, selectedWeek, roster, timing);
+  const ordered = [...full].sort((a, b) => b.revenue - a.revenue || b.th - a.th);
+  const rankOf = new Map(ordered.map((row, index) => [row.agent, index + 1]));
+  const idx = WEEK_PERIODS.findIndex(week => week.name === selectedWeek);
+  const prevName = idx > 0 ? WEEK_PERIODS[idx - 1].name : null;
+  const canDelta = prevName && timing.phase === "current" && timing.daysDone > 0;
+  const prevSame = new Map();
+  if (canDelta) {
+    scopeRows.forEach(row => {
+      if (row.week !== prevName) return;
+      const d = jktDay(row.date);
+      if (!d || d.index >= timing.daysDone) return;
+      prevSame.set(row.agent, (prevSame.get(row.agent) || 0) + row.revenue);
+    });
+  }
+  everyone.forEach(row => {
+    row.rank = rankOf.get(row.agent) || null;
+    row.rankTotal = ordered.length;
+    row.prevSame = canDelta ? (prevSame.get(row.agent) || 0) : null;
+    row.delta = canDelta ? row.revenue - row.prevSame : null;
+  });
+  everyone.rankedTop = ordered.slice(0, 5);
+  everyone.rankedAll = ordered;
+}
+
+function pctile(sorted, q) {
+  if (!sorted.length) return 0;
+  const pos = (sorted.length - 1) * q;
+  const lo = Math.floor(pos), hi = Math.ceil(pos);
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+}
+
+function computeMonthly(selectedWeek, everyone) {
+  const meta = WEEK_PERIODS.find(week => week.name === selectedWeek);
+  if (!meta) return null;
+  const month = meta.month;
+  const weeksM = WEEK_PERIODS.filter(week => week.month === month);
+  const currentNum = getISOWeekNumber(new Date());
+  const done = weeksM.filter(week => week.weekNum < currentNum).length;
+  const curMeta = weeksM.find(week => week.weekNum === currentNum);
+  const frac = curMeta ? Math.min(5, actionTiming(curMeta).elapsed) / 5 : 0;
+  const idealPct = weeksM.length ? Math.min(1, (done + frac) / weeksM.length) : 0;
+  const weeksLeft = Math.max(0, weeksM.length - done - (curMeta ? 1 : 0)) + (curMeta ? 1 - frac : 0);
+  const revByAgent = new Map();
+  layerOneRows.forEach(row => { if (row.month === month) revByAgent.set(row.agent.toLowerCase(), (revByAgent.get(row.agent.toLowerCase()) || 0) + row.revenue); });
+  const l2Rev = new Map();
+  allTransactionRows.forEach(row => { if (row.team === "Layer 2" && row.month === month) l2Rev.set(row.agent.toLowerCase(), (l2Rev.get(row.agent.toLowerCase()) || 0) + row.revenue); });
+  const l2Active = [...l2Rev.entries()].filter(([, value]) => value > 0);
+  const l2Rows = l2Active.map(([agent, revenue]) => {
+    const target = weeksM.reduce((sum, week) => sum + targetForAgentWeek(agent, week), 0);
+    return { revenue, th: target ? revenue / target : 0 };
+  });
+  const l2Sorted = l2Rows.map(item => item.revenue).sort((a, b) => a - b);
+  const l2ThSorted = l2Rows.map(item => item.th).sort((a, b) => a - b);
+  const bench = { month, count: l2Rows.length, median: pctile(l2Sorted, 0.5), p75: pctile(l2Sorted, 0.75), max: l2Sorted[l2Sorted.length - 1] || 0, thMedian: pctile(l2ThSorted, 0.5), thP75: pctile(l2ThSorted, 0.75), idealPct, weeksLeft, weeksTotal: weeksM.length };
+  everyone.forEach(row => {
+    const revenue = revByAgent.get(row.agent.toLowerCase()) || 0;
+    const target = weeksM.reduce((sum, week) => sum + targetForAgentWeek(row.agent, week), 0);
+    const above = l2Rows.filter(item => item.revenue > revenue).length;
+    const abovePct = bench.count ? above / bench.count : 0;
+    const level = !bench.count ? "none" : above === 0 ? "top" : abovePct <= 0.25 ? "good" : revenue >= bench.median ? "mid" : "low";
+    const remaining = Math.max(0, target - revenue);
+    row.monthly = { month, revenue, target, th: target ? revenue / target : 0, remaining, perWeek: weeksLeft > 0 ? remaining / weeksLeft : remaining, above, level, bench };
+  });
+  everyone.monthBench = bench;
+}
+
+function teamStanding(weekNames, monthName, myCoach) {
+  const weeks = new Set(weekNames);
+  const byCoach = new Map();
+  layerOneRows.forEach(row => {
+    const leader = row.leader || "-";
+    const inScope = monthName ? row.month === monthName : weeks.has(row.week);
+    if (!inScope) return;
+    byCoach.set(leader, (byCoach.get(leader) || 0) + row.revenue);
+  });
+  const list = [...byCoach.entries()].map(([leader, revenue]) => {
+    const target = targetForLeaderTeamWeeks(leader, "Layer 1", weekNames);
+    const agents = new Set(layerOneRows.filter(row => (row.leader || "-") === leader && (monthName ? row.month === monthName : weeks.has(row.week))).map(row => row.agent.toLowerCase())).size;
+    return { leader, revenue, target, th: target ? revenue / target : 0, agents };
+  }).filter(item => item.target > 0 && item.revenue > 0).sort((a, b) => b.revenue - a.revenue);
+  const idx = list.findIndex(item => item.leader.toLowerCase() === String(myCoach).toLowerCase());
+  if (idx < 0) return null;
+  const thRank = [...list].sort((a, b) => b.th - a.th).findIndex(item => item.leader === list[idx].leader) + 1;
+  return { list, me: list[idx], rank: idx + 1, total: list.length, thRank, above: idx > 0 ? list[idx - 1] : null, below: idx < list.length - 1 ? list[idx + 1] : null, leaderTeam: list[0] };
+}
+
+function teamVsHtml(selectedWeek) {
+  const meta = WEEK_PERIODS.find(week => week.name === selectedWeek);
+  if (!meta) return "";
+  const coaches = getMulti("actionCoachFilter");
+  const myCoach = coaches.length === 1 ? coaches[0] : "Arif Pambudi";
+  const weekly = teamStanding([meta.name], null, myCoach);
+  const monthWeeks = WEEK_PERIODS.filter(week => week.month === meta.month).map(week => week.name);
+  const monthly = teamStanding(monthWeeks, meta.month, myCoach);
+  if (!weekly && !monthly) return "";
+  const block = (label, st) => {
+    if (!st) return "";
+    const gapUp = st.above ? st.above.revenue - st.me.revenue : 0;
+    const lead = st.below ? st.me.revenue - st.below.revenue : 0;
+    const msg = st.rank === 1
+      ? `Tim di posisi 1${st.below ? `, unggul ${compactRupiah(lead)} dari ${escapeHtml(st.below.leader)}` : ""}.`
+      : `Kurang <b>${compactRupiah(gapUp)}</b> untuk menyalip ${escapeHtml(st.above.leader)} (#${st.rank - 1})${st.rank > 1 ? `; posisi 1: ${escapeHtml(st.leaderTeam.leader)} ${compactRupiah(st.leaderTeam.revenue - st.me.revenue)} di atas` : ""}.`;
+    return `<div class="tv-block ${st.rank === 1 ? "first" : st.rank <= 3 ? "top3" : "chase"}">
+      <div class="tv-head"><b>${label}</b><span>#${st.rank} dari ${st.total} tim L1</span></div>
+      <div class="tv-nums"><strong>${compactRupiah(st.me.revenue)}</strong><span>${percent(st.me.th)} target - peringkat % target #${st.thRank}</span></div>
+      <small>${msg}</small>
+    </div>`;
+  };
+  return `<div class="snap-rank snap-tv"><div class="snap-rank-head"><strong>${escapeHtml(myCoach)} vs tim L1 lain</strong><span>revenue Layer 1</span></div>${block(escapeHtml(meta.name), weekly)}${block(escapeHtml(meta.month), monthly)}</div>`;
+}
+
+function teamVsBriefLines(selectedWeek) {
+  const meta = WEEK_PERIODS.find(week => week.name === selectedWeek);
+  if (!meta) return [];
+  const coaches = getMulti("actionCoachFilter");
+  const myCoach = coaches.length === 1 ? coaches[0] : "Arif Pambudi";
+  const out = [];
+  const line = (label, st) => {
+    if (!st) return;
+    out.push(st.rank === 1
+      ? `${label}: tim peringkat #1 dari ${st.total} tim L1${st.below ? `, unggul ${compactRupiah(st.me.revenue - st.below.revenue)}` : ""}`
+      : `${label}: tim peringkat #${st.rank} dari ${st.total} tim L1, kurang ${compactRupiah(st.above.revenue - st.me.revenue)} untuk menyalip #${st.rank - 1}`);
+  };
+  line(meta.name, teamStanding([meta.name], null, myCoach));
+  line(meta.month, teamStanding(WEEK_PERIODS.filter(week => week.month === meta.month).map(week => week.name), meta.month, myCoach));
+  return out;
+}
+
+const L2_LEVEL = {
+  top: "Di atas semua agent L2",
+  good: "Di atas 75% agent L2",
+  mid: "Di atas median L2, tapi belum unggul",
+  low: "Di bawah median L2 - standar L1 harus lebih tinggi",
+};
+
+function monthlyBlockHtml(row) {
+  const m = row.monthly;
+  if (!m || !m.target) return "";
+  const benchTxt = m.bench.count
+    ? `<span class="am-l2">${L2_LEVEL[m.level]}${m.above > 0 ? ` - <b>${m.above} dari ${m.bench.count}</b> agent L2 sudah melewati revenue bulananmu` : ""}</span><small>Median L2 ${compactRupiah(m.bench.median)}, 25% teratas L2 mulai ${compactRupiah(m.bench.p75)}${m.revenue < m.bench.p75 ? ` (kurang ${compactRupiah(m.bench.p75 - m.revenue)} untuk masuk 25% teratas)` : ""}</small>`
+    : "";
+  return `<div class="act-month lvl-${m.level}">
+    <div class="am-head"><b>Bulan ${escapeHtml(m.month)}</b><span>${rupiah(m.revenue)} dari ${rupiah(m.target)} (${percent(m.th)}) - ideal hari ini ${percent(m.bench.idealPct)}</span></div>
+    <div class="meter"><i style="width:${Math.min(100, Math.max(1, m.th * 100))}%"></i><u style="left:calc(${(Math.min(1, m.bench.idealPct) * 100).toFixed(1)}% - 1px)" title="Posisi ideal bulan ini"></u></div>
+    ${m.remaining > 0 && m.bench.weeksLeft > 0 ? `<small>Sisa ${rupiah(m.remaining)} - rata-rata ${compactRupiah(m.perWeek)} per week untuk sisa bulan</small>` : ""}
+    ${benchTxt}
+  </div>`;
+}
+
+function rankDeltaText(row, long = true) {
+  const parts = [];
+  const hasPrev = row.delta !== null && row.delta !== undefined && row.prevSame !== null;
+  if (row.revenue > 0) {
+    if (row.rank) parts.push(`Peringkat #${row.rank} dari ${row.rankTotal} di tim`);
+  } else {
+    parts.push("Belum ada closing minggu ini");
+  }
+  if (hasPrev) {
+    if (Math.abs(row.delta) < 1) { if (row.revenue > 0) parts.push(long ? "sama dengan minggu lalu (periode sama)" : "sama dgn minggu lalu"); }
+    else parts.push(`${row.delta > 0 ? "naik" : "turun"} ${compactRupiah(Math.abs(row.delta))} dibanding minggu lalu${long ? " (periode sama)" : ""}`);
+  }
+  return parts.join(" - ");
 }
 
 function renderActionCenter() {
@@ -5053,6 +5306,8 @@ function renderActionCenter() {
     matchMulti(agentSet, row.agent) && (!query || `${row.agent} ${row.leader}`.toLowerCase().includes(query))
   );
   const agents = everyone.filter(row => statusSet.size === 0 || statusSet.has(row.status.key));
+  attachRankAndDelta(scopeRows, selectedWeek, roster, timing, everyone);
+  if (!isPast && timing.phase !== "future") computeMonthly(selectedWeek, everyone);
   const totalGap = everyone.filter(row => row.gap > 0).reduce((sum, row) => sum + row.gap, 0);
   const totalRevenue = everyone.reduce((sum, row) => sum + row.revenue, 0);
   const target = everyone.reduce((sum, row) => sum + row.target, 0);
@@ -5076,19 +5331,17 @@ function renderActionCenter() {
   el("actionAgentCount").textContent = `${agents.length} agent`;
   el("actionAgentCaption").textContent = isPast
     ? `${coachLabel} - ${selectedWeek} - week sudah selesai (hasil akhir)`
-    : `${coachLabel} - ${selectedWeek} - rencana ${planLabel}${timing.phase === "current" ? ` - data per kemarin (${timing.dataThroughLabel})` : ""}`;
+    : `${coachLabel} - ${selectedWeek} - rencana ${planLabel}${timing.phase === "current" ? ` - data sampai ${timing.dataThroughLabel}` : ""}`;
 
   let notice = "";
-  const allDates = scopeRows.map(row => row.date).filter(date => date instanceof Date);
   if (!isPast) {
-    if (!allDates.length) notice = "Belum ada data pembayaran.";
-    else {
-      const latest = allDates.reduce((max, date) => (date > max ? date : max));
-      const latestKey = jktDay(latest)?.key || "";
-      const yesterdayKey = jktDay(new Date(Date.now() - 86400000))?.key || "";
-      const stale = timing.phase === "current" && latestKey && latestKey < yesterdayKey;
-      notice = `<span class="data-note${stale ? " stale" : ""}">Pembayaran terakhir masuk: <b>${shortDate(latest)}</b>${stale ? " - belum update sampai kemarin?" : ""}</span>`;
+    if (timing.phase === "current" && timing.stale) {
+      notice = `<span class="data-note stale-banner">Data terakhir di sheet: <b>${timing.latestLabel}</b>. Closing <b>${timing.missingLabel}</b> belum masuk, jadi sisa gap dan misi hari ini bisa lebih besar dari kondisi sebenarnya.</span>`;
+    } else {
+      const latest = latestDataDate();
+      notice = latest ? `<span class="data-note">Pembayaran terakhir masuk: <b>${shortDate(latest)}</b></span>` : "Belum ada data pembayaran.";
     }
+    if (weekMeta?.provisional) notice += `<span class="data-note stale-banner">Skema incentive ${weekMeta.name} belum final, estimasi incentive memakai skema sementara.</span>`;
   }
   el("actionStatusStrip").innerHTML = `
     <span class="status-chip need"><b>${counts.need}</b> Need Push</span>
@@ -5097,7 +5350,7 @@ function renderActionCenter() {
     <span class="status-chip done"><b>${counts.done}</b> Over Target</span>
     <div class="team-meter">
       <div class="team-meter-head"><span>Pencapaian tim ${percent(teamPct)}</span><span>${rupiah(totalRevenue)} / ${rupiah(target)}</span></div>
-      <div class="meter"><i style="width:${Math.min(100, Math.max(1, teamPct * 100))}%"></i>${isPast ? "" : `<u style="left:calc(${(Math.min(1, elapsed / 5) * 100).toFixed(1)}% - 1px)" title="Posisi ideal sampai kemarin"></u>`}</div>
+      <div class="meter"><i style="width:${Math.min(100, Math.max(1, teamPct * 100))}%"></i>${isPast ? "" : `<u style="left:calc(${(Math.min(1, elapsed / 5) * 100).toFixed(1)}% - 1px)" title="Posisi ideal sampai data terakhir"></u>`}</div>
       ${notice}
     </div>`;
 
@@ -5124,6 +5377,33 @@ function renderActionCenter() {
     <div class="mini-row"><div><strong>Target week tim</strong><span>${rupiah(target / Math.max(1, everyone.length))} avg per agent</span></div><div class="mini-value">${rupiah(target)}</div></div>
     <div class="mini-row"><div><strong>Run rate tim</strong><span>${elapsed > 0 ? `Proyeksi Jumat ${rupiah(teamRunRate * 5)}` : "Belum ada data hari kerja"}</span></div><div class="mini-value">${elapsed > 0 ? `${rupiah(teamRunRate)}/hari` : "-"}</div></div>
   `;
+  el("actionCoachList").insertAdjacentHTML("beforeend", teamVsHtml(selectedWeek));
+  if (everyone.monthBench && everyone.monthBench.count) {
+    const b = everyone.monthBench;
+    const rows = everyone.filter(row => row.monthly);
+    const low = rows.filter(row => row.monthly.level === "low").length;
+    const mid = rows.filter(row => row.monthly.level === "mid").length;
+    const avgRev = rows.length ? rows.reduce((sum, row) => sum + row.monthly.revenue, 0) / rows.length : 0;
+    const avgTh = rows.length ? rows.reduce((sum, row) => sum + row.monthly.th, 0) / rows.length : 0;
+    el("actionCoachList").insertAdjacentHTML("beforeend", `
+      <div class="snap-rank snap-l2">
+        <div class="snap-rank-head"><strong>Standar L1 vs L2 - ${escapeHtml(b.month)}</strong><span>${b.count} agent L2 aktif</span></div>
+        <div class="snap-rank-row"><span></span><span>Rata-rata tim ini</span><em>${compactRupiah(avgRev)} (${percent(avgTh)} target)</em></div>
+        <div class="snap-rank-row"><span></span><span>Median L2</span><em>${compactRupiah(b.median)} (${percent(b.thMedian)} target)</em></div>
+        <div class="snap-rank-row"><span></span><span>25% teratas L2 mulai</span><em>${compactRupiah(b.p75)} (${percent(b.thP75)} target)</em></div>
+        <div class="snap-rank-row"><span></span><span><b>${low}</b> agent di bawah median L2, <b>${mid}</b> belum unggul</span><em></em></div>
+      </div>`);
+  }
+  if (everyone.rankedTop && everyone.rankedTop.length) {
+    const upN = everyone.filter(row => row.delta > 0).length;
+    const downN = everyone.filter(row => row.delta < 0).length;
+    const medals = ["1", "2", "3", "4", "5"];
+    el("actionCoachList").insertAdjacentHTML("beforeend", `
+      <div class="snap-rank">
+        <div class="snap-rank-head"><strong>Peringkat tim minggu ini</strong>${everyone.some(row => row.delta !== null) ? `<span>${upN} naik, ${downN} turun vs minggu lalu</span>` : ""}</div>
+        ${(everyone.rankedTop.filter(row => row.revenue > 0).length ? everyone.rankedTop.filter(row => row.revenue > 0) : []).map((row, index) => `<div class="snap-rank-row"><b>${medals[index]}</b><span>${escapeHtml(row.agent)}</span><em>${rupiah(row.revenue)} - ${percent(row.th)}</em></div>`).join("") || `<div class="snap-rank-row"><span></span><span>Belum ada closing minggu ini</span><em></em></div>`}
+      </div>`);
+  }
   if (unpaidMeta.loaded && !isPast) {
     const teamNames = new Set(everyone.map(row => row.agent.toLowerCase()));
     const teamUnpaid = unpaidRows.filter(row => teamNames.has(row.agent.toLowerCase()));
@@ -5275,8 +5555,9 @@ function renderTopCampaign() {
 
   const totalRevenue = campaigns.reduce((sum, row) => sum + row.revenue, 0);
   const totalTxn = campaigns.reduce((sum, row) => sum + row.txn, 0);
-  const top = campaigns[0];
-  const byTxn = [...campaigns].sort((a, b) => b.txn - a.txn)[0];
+  const ranked = campaigns.filter(row => String(row.campaign).trim().toLowerCase() !== "no campaign");
+  const top = ranked[0] || campaigns[0];
+  const byTxn = [...(ranked.length ? ranked : campaigns)].sort((a, b) => b.txn - a.txn)[0];
   const periodText = periodLabel("topCampaignMonth", "topCampaignWeek");
   const familyText = multiLabelText("topCampaignFamily", "Semua product family");
   const productText = multiText("topCampaignProduct", "Semua paket / produk");
@@ -5296,7 +5577,7 @@ function renderTopCampaign() {
     ? `<b>${escapeHtml(top.campaign)}</b> adalah campaign dengan revenue tertinggi: <b>${rupiah(top.revenue)}</b> (${percent(totalRevenue ? top.revenue / totalRevenue : 0)} dari total) lewat ${top.txn.toLocaleString("id-ID")} transaksi, produk andalan <b>${escapeHtml(top.topProduct)}</b>. ${escapeHtml(top.assignmentSummary)}. Campaign dengan transaksi terbanyak: <b>${escapeHtml(byTxn.campaign)}</b> (${byTxn.txn.toLocaleString("id-ID")} TXN). Prioritaskan follow-up leads dari campaign ini lebih dulu.`
     : "Belum ada transaksi pada filter ini.";
 
-  const podium = campaigns.slice(0, 3);
+  const podium = (ranked.length ? ranked : campaigns).slice(0, 3);
   el("topCampaignPodium").hidden = podium.length === 0;
   el("topCampaignPodium").innerHTML = podiumHtml(podium.map(row => ({
     name: row.campaign,
