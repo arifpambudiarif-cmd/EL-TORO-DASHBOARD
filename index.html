@@ -2296,6 +2296,27 @@ tbody tr:hover, tbody tr.selected { background: var(--accent-soft); }
 .snap-rank-row { display: grid; grid-template-columns: 20px 1fr auto; gap: 8px; align-items: center; padding: 4px 0; font-size: 11.5px; border-top: 1px dashed #e3ebf6; }
 .snap-rank-row b { color: #1d4ed8; }
 .snap-rank-row em { font-style: normal; color: var(--muted); font-weight: 700; font-size: 10.5px; }
+.sch { margin-top: 10px; display: grid; gap: 8px; }
+.sch-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px; font-size: 13px; }
+.sch-head span { color: var(--muted); font-size: 11.5px; font-weight: 700; }
+.sch-rate { font-size: 11.5px; line-height: 1.45; color: #475569; background: #f1f5f9; border-radius: 9px; padding: 7px 10px; }
+.sch-blk { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; padding: 10px; border: 1px solid #dbe6f5; border-radius: 12px; background: #fff; }
+.sch-blk.done { background: #effbf5; border-color: #bfead3; }
+.sch-time { font-size: 12px; font-weight: 800; color: #1d4ed8; line-height: 1.3; }
+.sch-body { display: grid; gap: 5px; min-width: 0; }
+.sch-body b { font-size: 13.5px; }
+.sch-body p { margin: 0; font-size: 12px; line-height: 1.5; color: #475569; }
+.sch-targets { display: flex; flex-wrap: wrap; gap: 6px; }
+.sch-targets > span { padding: 3px 9px; border-radius: 999px; background: #eef4ff; border: 1px solid #d3e0fb; font-size: 11.5px; font-weight: 700; color: #1e3a8a; }
+.sch-targets small { font-weight: 600; opacity: .75; }
+.sch-targets .carry { background: #fff4d6; border-color: #f3d38a; color: #8a4b00; }
+.sch-ctl { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 2px; font-size: 12px; font-weight: 700; color: #334155; }
+.sch-ctl label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.sch-paid { display: inline-flex; align-items: center; gap: 8px; }
+.sch-paid button { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f8fafc; font-size: 16px; font-weight: 800; line-height: 1; cursor: pointer; color: #0f172a; }
+.sch-paid button:hover { background: #e0f2fe; border-color: #7dd3fc; }
+.sch-foot { font-size: 11px; color: var(--muted); line-height: 1.45; }
+@media (max-width: 640px) { .sch-blk { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
 .mis-inv { margin-top: 10px; padding: 9px 11px; border-radius: 10px; background: #fff8eb; border: 1px solid #f3d9a0; }
 .mis-inv.none { background: #f0fdf7; border-color: #bbebd4; color: #047857; font-size: 11.5px; font-weight: 700; }
 .mis-inv-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; }
@@ -4807,6 +4828,9 @@ function agentBriefText(row, ctx, withHeader = true) {
     lines.push(`Bulan ${m.month}: ${rupiah(m.revenue)} (${percent(m.th)} dari target bulanan, ideal ${percent(m.bench.idealPct)})`);
     if (m.bench.count) lines.push(m.above > 0 ? `Standar L1: ${m.above} dari ${m.bench.count} agent L2 sudah melewati revenue bulananmu. Jaga posisi di atas L2.` : "Standar L1: revenue bulananmu masih di atas semua agent L2, pertahankan.");
   }
+  const hb = habitFor(row.agent);
+  if (hb && hb.lowResult) lines.push(`Catatan: Hasil Follow Up baru ${Math.round(hb.resultPct * 100)}% terisi, lengkapi hari ini.`);
+  if (hb && hb.lowContacts) lines.push(`Catatan: kontak baru ${hb.perDay.toFixed(1).replace(".", ",")}/hari, target minimal ${MIN_DAILY_CONTACTS}.`);
   const fu = followupFor(row.agent);
   if (fu) {
     lines.push(`Bahan baku: ${fu.today} FU hari ini, ${fu.hold7} hold 1-7 hari, ${fu.hold14} hold 8-14 hari${fu.invoice ? `, ${fu.invoice} invoice belum paid` : ""}`);
@@ -4814,7 +4838,14 @@ function agentBriefText(row, ctx, withHeader = true) {
   }
   const top = (ctx.topCampaigns || [])[0];
   if (top && mission) lines.push(`Campaign prioritas: ${campaignCode(top.name)} (${top.txn} TXN di tim minggu ini)`);
-  if (mission) lines.push(mission.todayTxn >= 2 ? `Checkpoint: ${Math.ceil(mission.todayTxn / 2)} TXN sebelum jam 12.00, sisanya sebelum jam 16.00.` : "Checkpoint: usahakan 1 TXN sebelum jam 14.00.");
+  if (mission && timing.phase === "current" && followupMeta.loaded) {
+    const sch = scheduleFor(row, mission, timing);
+    lines.push(`*Jadwal:* (success rate hold ${percent(sch.rt.rate)}${sch.rt.own ? "" : ", rata-rata tim"})`);
+    sch.blocks.forEach(b => { if (!sch.hasStock || b.contacts > 0) lines.push(`${b.time.replace(" - ", "-")} ${b.title}${sch.hasStock ? `: hubungi ${b.contacts}, target paid ${Math.max(b.target, 0)}` : ""}`); });
+    lines.push(`16.00-17.00 Lead baru min ${sch.newContacts}, tagih invoice, isi Hasil Follow Up`);
+  } else if (mission) {
+    lines.push(mission.todayTxn >= 2 ? `Checkpoint: ${Math.ceil(mission.todayTxn / 2)} TXN sebelum jam 12.00, sisanya sebelum jam 16.00.` : "Checkpoint: usahakan 1 TXN sebelum jam 14.00.");
+  }
   return lines.join("\n");
 }
 
@@ -4866,6 +4897,13 @@ function missionChecklist(row, mission, timing, ctx, plan) {
     if (fu.hold14) parts.push(`${fu.hold14} hold 8-14 hari kalau masih ada waktu`);
     items.push(`Hubungi bahan baku dulu: ${parts.join(", ")}. Catat hasilnya di daily presentasi supaya hold tidak menumpuk.`);
   }
+  const habit = habitFor(row.agent);
+  if (habit && habit.lowResult) {
+    items.push(`Isi kolom <b>Hasil Follow Up</b>: baru <b>${Math.round(habit.resultPct * 100)}%</b> lead jatuh tempo 7 hari terakhir yang tercatat hasilnya (${habit.filled} dari ${habit.due}). Isi hasil tiap lead sebelum akhir hari supaya hold tidak menumpuk dan terlihat mana yang perlu ditutup.`);
+  }
+  if (habit && habit.lowContacts) {
+    items.push(`Tambah kontak baru: rata-rata <b>${habit.perDay.toFixed(1).replace(".", ",")}</b> lead tercatat per hari (7 hari terakhir). Target minimal <b>${MIN_DAILY_CONTACTS} per hari</b>.`);
+  }
   const pending = unpaidFor(row.agent);
   if (pending.length) {
     const sum = pending.reduce((s, item) => s + item.amount, 0);
@@ -4896,7 +4934,8 @@ function missionChecklist(row, mission, timing, ctx, plan) {
 }
 
 // ---- Bahan baku (follow up & hold) dari sheet daily presentasi ----
-let followupMeta = { loaded: false, agents: new Map(), covered: new Set(), latestLog: null };
+let followupMeta = { loaded: false, agents: new Map(), covered: new Set(), latestLog: null, habits: new Map() };
+const MIN_DAILY_CONTACTS = 6;
 const FU_CLOSED = new Set(["paid", "reject others", "reject no money"]);
 const FU_INVOICE = "invoice created";
 
@@ -4919,6 +4958,7 @@ function buildFollowups(sheetRows) {
   const DAY = 86400000;
   const agents = new Map();
   const covered = new Set();
+  const habits = new Map();
   let latestLog = null;
   sheetRows.forEach(row => {
     const agent = String(row["Nama OEC"] ?? row["Nama Agent"] ?? row["Nama"] ?? "").trim();
@@ -4930,19 +4970,24 @@ function buildFollowups(sheetRows) {
     const status = String(row["Status"] || "").trim().toLowerCase();
     const result = String(row["Hasil Follow Up"] || "").trim().toLowerCase();
     const fuMs = parseFuDate(row["Follow Up Date"]);
+    const habit = habits.get(key) || { logged: 0, days: new Set(), due: 0, filled: 0, r30due: 0, r30paid: 0, r30filled: 0 };
+    if (fuMs && status !== "not interest" && todayMs - fuMs >= DAY && todayMs - fuMs <= 30 * DAY) { habit.r30due += 1; if (result) habit.r30filled += 1; if (result === "paid") habit.r30paid += 1; }
+    if (logMs && todayMs - logMs >= DAY && todayMs - logMs <= 7 * DAY) { habit.logged += 1; habit.days.add(logMs); }
+    if (fuMs && status !== "not interest" && todayMs - fuMs >= DAY && todayMs - fuMs <= 7 * DAY) { habit.due += 1; if (result) habit.filled += 1; }
+    habits.set(key, habit);
     if (!fuMs || status === "not interest" || FU_CLOSED.has(result)) return;
     const age = Math.round((todayMs - fuMs) / DAY); // 0 = hari ini, >0 = lewat
-    const item = agents.get(key) || { today: 0, hold7: 0, hold14: 0, invoice: 0, ptp: 0, interest: 0, thinking: 0, packages: {} };
+    const item = agents.get(key) || { today: 0, hold7: 0, hold14: 0, hold30: 0, invoice: 0, ptp: 0, interest: 0, thinking: 0, packages: {} };
     if (result === FU_INVOICE) {
       if (age >= 0 && age <= 14) item.invoice += 1;
       agents.set(key, item);
       return;
     }
     let bucket = null;
-    if (age === 0) bucket = "today"; else if (age >= 1 && age <= 7) bucket = "hold7"; else if (age >= 8 && age <= 14) bucket = "hold14";
+    if (age === 0) bucket = "today"; else if (age >= 1 && age <= 7) bucket = "hold7"; else if (age >= 8 && age <= 14) bucket = "hold14"; else if (age >= 15 && age <= 30) bucket = "hold30";
     if (!bucket) return;
     item[bucket] += 1;
-    if (bucket !== "hold14") {
+    if (bucket === "today" || bucket === "hold7") {
       const sub = String(row["Sub Status"] || "");
       if (sub.startsWith("305")) item.ptp += 1; else if (status === "interest") item.interest += 1; else item.thinking += 1;
       const pkg = String(row["Paket yang ditawarkan"] || "").trim();
@@ -4950,7 +4995,7 @@ function buildFollowups(sheetRows) {
     }
     agents.set(key, item);
   });
-  followupMeta = { loaded: agents.size > 0 || covered.size > 0, agents, covered, latestLog };
+  followupMeta = { loaded: agents.size > 0 || covered.size > 0, agents, covered, latestLog, habits };
 }
 
 async function loadFollowups() {
@@ -4972,7 +5017,139 @@ function followupFor(agent) {
   if (!followupMeta.loaded) return null;
   const key = String(agent || "").toLowerCase();
   if (!followupMeta.covered.has(key)) return null;
-  return followupMeta.agents.get(key) || { today: 0, hold7: 0, hold14: 0, invoice: 0, ptp: 0, interest: 0, thinking: 0, packages: {} };
+  return followupMeta.agents.get(key) || { today: 0, hold7: 0, hold14: 0, hold30: 0, invoice: 0, ptp: 0, interest: 0, thinking: 0, packages: {} };
+}
+
+function habitFor(agent) {
+  if (!followupMeta.loaded) return null;
+  const habit = followupMeta.habits.get(String(agent || "").toLowerCase());
+  if (!habit) return null;
+  const days = habit.days.size;
+  return {
+    perDay: days ? habit.logged / days : 0,
+    days,
+    lowContacts: days >= 3 && habit.logged / days < MIN_DAILY_CONTACTS,
+    resultPct: habit.due ? habit.filled / habit.due : null,
+    lowResult: habit.due >= 5 && habit.filled / habit.due < 0.5,
+    due: habit.due, filled: habit.filled,
+  };
+}
+
+function holdRate(agent) {
+  const reliable = [];
+  followupMeta.habits.forEach((h, key) => { if (h.r30due >= 20 && h.r30filled / h.r30due >= 0.5) reliable.push({ key, ...h }); });
+  const pooledPaid = reliable.reduce((sum, h) => sum + h.r30paid, 0);
+  const pooledDue = reliable.reduce((sum, h) => sum + h.r30due, 0);
+  const teamRate = pooledDue ? pooledPaid / pooledDue : 0.15;
+  const mine = followupMeta.habits.get(String(agent || "").toLowerCase());
+  const clamp = value => Math.min(0.35, Math.max(0.08, value));
+  if (mine && mine.r30due >= 20 && mine.r30filled / mine.r30due >= 0.5) {
+    return { rate: clamp(mine.r30paid / mine.r30due), own: true, paid: mine.r30paid, due: mine.r30due, fill: mine.r30filled / mine.r30due, teamRate: clamp(teamRate), known: pooledDue > 0 };
+  }
+  return { rate: clamp(teamRate), own: false, paid: mine ? mine.r30paid : 0, due: mine ? mine.r30due : 0, fill: mine && mine.r30due ? mine.r30filled / mine.r30due : 0, teamRate: clamp(teamRate), known: pooledDue > 0 };
+}
+
+const SCHED_CAP = 20;
+function scheduleFor(row, mission, timing) {
+  const fu = followupFor(row.agent);
+  const rt = holdRate(row.agent);
+  const r = rt.rate;
+  const need = Math.max(1, mission ? mission.todayTxn : 1);
+  const total = Math.max(10, Math.ceil(need / r * 1.25));
+  const avail = [fu ? fu.today : 0, fu ? fu.hold7 : 0, fu ? fu.hold14 + (fu.hold30 || 0) : 0];
+  const defs = [
+    { id: "b1", time: "09.00 - 11.30", title: "Follow up hari ini", how: "Telepon dulu. Kalau tidak diangkat, kirim WA. Urutan: Promise to Pay, Interest, lalu Thinking." },
+    { id: "b2", time: "11.30 - 14.00", title: "Hold 1-7 hari ke belakang", how: "Lanjutkan hold minggu ini yang belum paid. Tanya dulu keberatannya (biaya, waktu, diskusi keluarga), baru tawarkan opsi yang pas." },
+    { id: "b3", time: "14.00 - 16.00", title: "Backdate 8-30 hari", how: "Lead lama yang masih menggantung. Sapa ulang dengan promo atau opsi cicilan yang masih berlaku." },
+  ];
+  let carry = 0;
+  let overflow = 0;
+  let c1used = 0, c2used = 0;
+  const blocks = defs.map((def, i) => {
+    const available = avail[i];
+    const doneKey = actKey(row, "sd" + i), paidKey = actKey(row, "sp" + i);
+    const done = actStoreGet(doneKey) === "1";
+    const paid = Math.max(0, parseInt(actStoreGet(paidKey), 10) || 0);
+    let want = i === 0 ? Math.min(available, 25) : i === 1 ? Math.min(available, SCHED_CAP, Math.max(10, total - c1used)) : Math.min(available, SCHED_CAP, Math.max(5, total - c1used - c2used));
+    let carryAdded = 0;
+    if (carry > 0 && i > 0) {
+      const extra = Math.ceil(carry / r);
+      const room = Math.max(0, Math.min(available, 25) - want);
+      carryAdded = Math.min(extra, room);
+      overflow += extra - carryAdded;
+      want += carryAdded;
+    }
+    if (i === 0) c1used = want;
+    if (i === 1) c2used = want;
+    const target = Math.round(want * r);
+    carry = done ? Math.max(0, target - paid) : 0;
+    return { ...def, index: i, available, contacts: want, target, carryAdded, done, paid, doneKey, paidKey, shortfall: done ? Math.max(0, target - paid) : 0 };
+  });
+  const finalOverflow = overflow + (carry > 0 ? Math.ceil(carry / r) : 0);
+  const newContacts = MIN_DAILY_CONTACTS + finalOverflow;
+  return {
+    rt, blocks, newContacts, overflow: finalOverflow, need, hasStock: !!fu,
+    invoice: fu ? fu.invoice : 0,
+    paidTotal: blocks.reduce((sum, b) => sum + b.paid, 0),
+    contactsTotal: blocks.reduce((sum, b) => sum + b.contacts, 0) + newContacts,
+  };
+}
+
+function scheduleHtml(row, mission, timing) {
+  if (!mission) return "";
+  const sch = scheduleFor(row, mission, timing);
+  const rt = sch.rt;
+  const rateLine = !rt.known && !rt.own
+    ? `Success rate hold belum bisa dihitung, memakai perkiraan <b>${percent(rt.rate)}</b>.`
+    : rt.own
+      ? `Success rate hold kamu <b>${percent(rt.rate)}</b> (${rt.paid} paid dari ${rt.due} lead, 30 hari terakhir).`
+      : `Success rate memakai rata-rata tim <b>${percent(rt.rate)}</b>, karena Hasil Follow Up kamu baru ${percent(rt.fill)} terisi. Isi hasilnya supaya angka ini jadi milikmu.`;
+  const blockHtml = sch.blocks.map(b => {
+    const none = sch.hasStock && b.contacts === 0;
+    const targets = !sch.hasStock
+      ? `<span>Ikuti daftar lead di daily presentasi</span>`
+      : none
+        ? `<span>Tidak ada lead di kelompok ini</span>`
+        : `<span>Hubungi <b>${b.contacts}</b> lead${b.available > b.contacts ? ` <small>(dari ${b.available})</small>` : ""}</span><span>${b.target >= 1 ? `Target paid <b>${b.target}</b>` : "Tutup yang siap bayar"}</span>`;
+    const carryTxt = b.carryAdded > 0 ? `<span class="carry">+${b.carryAdded} kontak karena blok sebelumnya kurang ${sch.blocks[b.index - 1].shortfall} paid</span>` : "";
+    return `<div class="sch-blk${b.done ? " done" : ""}">
+      <div class="sch-time">${b.time}</div>
+      <div class="sch-body">
+        <b>${b.title}</b>
+        <p>${b.how}</p>
+        <div class="sch-targets">${targets}${carryTxt}</div>
+        <div class="sch-ctl">
+          <label><input type="checkbox" data-sdone="${b.doneKey}"${b.done ? " checked" : ""}> Selesai</label>
+          <span class="sch-paid">Paid: <button type="button" data-sstep="dec" data-skey="${b.paidKey}">-</button><b>${b.paid}</b><button type="button" data-sstep="inc" data-skey="${b.paidKey}">+</button></span>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  const last = `<div class="sch-blk">
+      <div class="sch-time">16.00 - 17.00</div>
+      <div class="sch-body">
+        <b>Lead baru, tagih invoice, tutup hari</b>
+        <p>${sch.invoice ? `Tagih ${sch.invoice} invoice yang sudah dibuat dan minta bayar hari ini. ` : ""}Hubungi lead baru, lalu isi kolom Hasil Follow Up untuk semua lead yang kamu hubungi hari ini.</p>
+        <div class="sch-targets"><span>Kontak baru minimal <b>${sch.newContacts}</b></span><span>Hasil Follow Up terisi <b>100%</b></span>${sch.overflow > 0 ? `<span class="carry">termasuk +${sch.overflow} karena stok hold tidak cukup</span>` : ""}</div>
+      </div>
+    </div>`;
+  return `<div class="sch">
+    <div class="sch-head"><b>Jadwal hari ini</b><span>Misi ${sch.need} TXN - paid tercatat <b>${sch.paidTotal}</b></span></div>
+    <div class="sch-rate">${rateLine}</div>
+    ${blockHtml}${last}
+    <div class="sch-foot">Misi minimum hari ini ${sch.need} TXN. Target paid per blok adalah perkiraan hasil kalau semua kontaknya dikerjakan (berdasarkan success rate di atas). Tandai Selesai setelah satu blok habis, kalau paid-nya kurang dari target, blok berikutnya otomatis menambah jumlah kontak.</div>
+  </div>`;
+}
+
+function missionNotes(row, mission, timing, ctx, plan) {
+  const items = [];
+  const habit = habitFor(row.agent);
+  if (habit && habit.lowResult) items.push(`Hasil Follow Up baru <b>${Math.round(habit.resultPct * 100)}%</b> terisi (${habit.filled} dari ${habit.due} lead jatuh tempo 7 hari terakhir). Isi tiap lead sebelum akhir hari.`);
+  const top = (ctx.topCampaigns || [])[0];
+  const own = campaignCode(row.historyCampaign);
+  if (top) items.push(`Utamakan campaign <b title="${escapeHtml(top.name)}">${escapeHtml(campaignCode(top.name))}</b>, paling banyak closing di tim minggu ini (${top.txn} TXN).${own && own !== campaignCode(top.name) ? ` Campaign andalanmu: ${escapeHtml(own)}.` : ""}`);
+  if (timing.phase === "current" && timing.todayIndex === 4) items.push(`Ini hari kerja terakhir minggu ini.${plan.weekendDays ? ` Weekend hanya cadangan (butuh ${rupiah(plan.withWeekendNeed)}/hari kalau ikut closing).` : ""}`);
+  return items;
 }
 
 function followupBlockHtml(row) {
@@ -5017,13 +5194,12 @@ function missionHtml(row, mission, timing) {
       <span class="mis-ok">Misi tercapai</span>
       <span class="mis-count">Closing hari ini: <b>${n}</b> / ${mission.todayTxn} TXN</span></div>`;
   })() : "";
+  const scheduleMode = timing.phase === "current" && followupMeta.loaded;
   return `<div class="act-mission">
     <div class="mis-top"><span class="mis-tag">MISI ${dayLabel.toUpperCase()}</span><b>${mission.todayTxn} TXN = ${rupiah(mission.todayAmount)}</b></div>
     <div class="mis-sub">Tujuan: ${mission.milestoneLabel}${mission.estIncentive > 0 ? ` - estimasi incentive sekitar <b>${rupiah(mission.estIncentive)}</b>` : ""}</div>
     ${mission.restGap > 0 ? `<div class="mis-next">Setelah itu: sisa ${rupiah(mission.restGap)} (sekitar ${mission.restTxn} TXN) menuju 100% TH</div>` : ""}
-    ${followupBlockHtml(row)}
-    ${invoiceBlockHtml(row, mission)}
-    ${track}
+    ${scheduleMode ? scheduleHtml(row, mission, timing) : `${followupBlockHtml(row)}${invoiceBlockHtml(row, mission)}${track}`}
   </div>`;
 }
 
@@ -5081,7 +5257,7 @@ function actionCardHtml(row, ctx) {
       <div class="act-plan plan-${row.status.key}">
         <div class="act-plan-head"><b>Rencana ${planRangeLabel(timing)}</b><span>${timing.phase === "current" ? `Data pembayaran sampai: ${timing.dataThroughLabel}` : "Week belum berjalan"}</span></div>
         ${missionHtml(row, mission, timing)}
-        ${checklistHtml(row, missionChecklist(row, mission, timing, ctx, plan))}
+        ${timing.phase === "current" && followupMeta.loaded ? checklistHtml(row, missionNotes(row, mission, timing, ctx, plan)) : checklistHtml(row, missionChecklist(row, mission, timing, ctx, plan))}
         <details class="act-more"><summary>Detail perhitungan target</summary>
           <div class="act-goal">${goals.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</div>
           ${timeline}
@@ -7326,6 +7502,13 @@ el("actionAgentList").addEventListener("click", async event => {
     }
     return;
   }
+  const sbtn = event.target.closest("[data-sstep]");
+  if (sbtn) {
+    const next = Math.max(0, (parseInt(actStoreGet(sbtn.dataset.skey), 10) || 0) + (sbtn.dataset.sstep === "inc" ? 1 : -1));
+    actStoreSet(sbtn.dataset.skey, String(next));
+    renderActionCenter();
+    return;
+  }
   const button = event.target.closest("[data-step]");
   if (!button) return;
   const wrap = button.closest(".mis-track");
@@ -7336,6 +7519,8 @@ el("actionAgentList").addEventListener("click", async event => {
   wrap.classList.toggle("hit", next >= need);
 });
 el("actionAgentList").addEventListener("change", event => {
+  const sbox = event.target.closest("input[data-sdone]");
+  if (sbox) { actStoreSet(sbox.dataset.sdone, sbox.checked ? "1" : "0"); renderActionCenter(); return; }
   const box = event.target.closest("input[data-store]");
   if (!box) return;
   actStoreSet(box.dataset.store, box.checked ? "1" : "0");
